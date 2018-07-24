@@ -1,0 +1,2 @@
+# architecture
+TEEP architecture draft
