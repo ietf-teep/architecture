@@ -116,7 +116,7 @@ regular operating system is referred to as an Untrusted Application
 
 The TEE uses hardware to enforce protections on the TA and its data, but
 also presents a more limited set of services to applications inside the
-TEE than is normally available to UA’s running in the normal operating
+TEE than is normally available to UA's running in the normal operating
 system.
    
 But not all TEEs are the same, and different vendors may have different
@@ -133,7 +133,7 @@ there often arises a need for an external trusted party to verify the
 identity, claims, and rights of SPs, devices, and their TEEs. This
 trusted third party is the Trusted Application Manager (TAM).   
 
-The This protocol addresses the following problems:
+This protocol addresses the following problems:
 
   - A Service Provider (SP) intending to provide services through a TA
     to users of a device needs to determine security-relevant
@@ -142,7 +142,7 @@ The This protocol addresses the following problems:
     'root of trust' and the type of TEE included in a device.
 
   - A TEE in a device needs to determine whether a Service Provider (SP)
-    that wants to manage an TA in the device is authorized to manage TAs
+    that wants to manage a TA in the device is authorized to manage TAs
     in the TEE, and what TAs the SP is permitted to manage.
 
   - The parties involved in the protocol must be able to attest that a
@@ -154,17 +154,17 @@ The This protocol addresses the following problems:
     the TEE.
 
   - A Service Provider (SP) must be able to check whether a TA in a
-    device’s TEE is the most up-to-date version, and if not, update the
+    device's TEE is the most up-to-date version, and if not, update the
     TA in the TEE.
 
-  - A Service Provider (SP) must be able to remove a TA in a device’s
+  - A Service Provider (SP) must be able to remove a TA in a device's
     TEE if the SP is no longer offering such services or the services
     are being revoked from a particular user (or device). For example,
     if a subscription or contract for a particular service has expired,
     or a payment by the user has not been completed or has been recinded.
 
   - A Service Provider (SP) must be able to define the relationship
-    between cooperating TAs under the SP’s control, and specify whether
+    between cooperating TAs under the SP's control, and specify whether
     the TAs can communicate, share data, and/or share key material.
 
 #  Terminology
