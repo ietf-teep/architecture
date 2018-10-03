@@ -194,19 +194,21 @@ The following terms are used:
     and hypervisors; it is outside of the TEE. This environment and 
     applications running on it are considered un-trusted.
 
-  - Secure Boot Module (SBM): A firmware in a device that delivers 
-    secure boot functionality. It is generally signed and can be 
-    verified whether it can be trusted.
-
-  - Service Provider (SP): An entity that wishes to supply Trusted 
-    Applications to remote devices. A Service Provider requires the 
+  - Service Provider (SP): An entity that wishes to sign Trusted 
+    Applications. A Service Provider requires the 
     help of a TAM in order to provision the Trusted Applications to 
-    the devices.
+    remote devices.
 
-  - Trust Anchor: A root certificate that can be used to validate its 
-    children certificates. It is usually embedded in a device or 
-    configured by a TAM for validating the trust of a remote 
-    entity's certificate.
+  - Trust Anchor: A public key in a device whose corresponding private
+    key is held by an entity implicitly trusted by the device. The
+    Trust Anchor may be a certificate or it may be a raw public key.
+    The trust anchor is normally stored in a location that resists
+    unauthorized modification, insertion, or replacment.   
+    The trust anchor private key owner can sign certificates of other
+    public keys, which conveys trust about those keys to the device. 
+    A certificate signed by the trust anchor communicates that the
+    private key holder of the signed certificate is trusted by the
+    trust anchor holder, and can therefore be trusted by the device.
 
   - Trusted Application (TA): An Application that runs in a TEE.
 
@@ -227,8 +229,26 @@ The following terms are used:
     There are multiple technologies that can be used to implement 
     a TEE, and the level of security achieved varies accordingly.
 
-  - Trusted Firmware (TFW): A signed SBM firmware that can be verified 
-    and is trusted by a TEE in a device.
+  - Root-of-Trust (RoT): A hardware or software component in a device
+    that is inherently trusted to perform a certain security-critical
+    function. A RoT should be secure by design, small, and protected
+    by hardware against modification or interference. Examples of
+    RoTs include software/firmware measurement and verification using
+    a trust anchor (RoT for Verification), provide signed assertions
+    using a protected attestation key (RoT for Reporting), or protect the
+    storage and/or use of cryptograhic keys (RoT for Storage). Other
+    RoTs are possible, including RoT for Integrity, and RoT for Measurement.
+    Reference: NIST SP800-164 (Draft).  
+
+  - Trusted Firmware (TFW): A firmware in a device that is signed
+    by a trust anchor, and which can be verified locally by the 
+    device using an RoT for Verification before the firmware is executed. 
+
+  - Secure Boot Module (SBM): A special TFW that executes during
+    device power-on to ensure the device boots into a trusted or 
+    known configuration. A SBM typically allows the boot state of
+    the device to be recorded by a RoT for Integrity, and later
+    verified remotely through a RoT for Measure and Reporting.
 
 This document uses the following abbreviations:
 
@@ -236,19 +256,21 @@ This document uses the following abbreviations:
 
   - REE: Rich Execution Environment
 
+  - RoT: Root of Trust
+
+  - SBM: Secure Boot Module
+
   - SD: Security Domain 
 
   - SP: Service Provider
 
-  - SBM: Secure Boot Module
-
   - TA: Trusted Application
+
+  - TAM: Trusted Application Manager
 
   - TEE: Trusted Execution Environment
 
   - TFW: Trusted Firmware
-
-  - TAM: Trusted Application Manager
 
 # Scope and Assumptions 
 
@@ -259,6 +281,8 @@ public/private key pair, which is securely stored. This key pair is
 referred to as the 'root of trust' for remote attestation of
 the associated TEE in a device by an TAM.
 
+New note: SD is for managing keys for TAs
+
 A Security Domain (SD) concept is used as the security boundary inside
 a TEE for trusted applications. Each SD is typically associated with
 one TA provider as the owner, which is a logical space that contains a
@@ -267,6 +291,7 @@ One SD may contain multiple TAs. Each Security Domain requires the
 management operations of TAs in the form of installation, update and
 deletion.
 
+(Ming to reword)
 A TA binary and configuration data can be from two sources:
 
 1. A TAM supplies the signed and encrypted TA binary
@@ -376,6 +401,7 @@ The following are the main components in the system.
     architecture does not assume or require that the REE or Client
     Applications is secure.
 
+** Change to Broker
   - Agent:  A Client Application is expected to communicate with a TAM to
     request TAs that it needs to use.  The Client Application needs
     to pass the messages from the TAM to TEEs in the device.  This
@@ -605,6 +631,7 @@ security.
 2. TEE key pair and certificate:  It is used for device attestation
     to a remote TAM and SP.
 
+** too specific - generalize - management of the the key is out of scope
       - This key pair is burned into the device at device manufacturer.
        The key pair and its certificate are valid for the expected
        lifetime of the device.
@@ -726,6 +753,8 @@ future request from the TAM must present itself as a way that the TEE
 can verify it is the true owner.  The certificate itself cannot
 reliably used as the owner because TAM may change its certificate.
 
+** need to handle the normal key roll-over case, as well as the less frequent key compromise case
+
 To this end, each TAM will be associated with a trusted identifier
 defined as an attribute in the TAM certificate.  This field is kept
 the same when the TAM renew its certificates.  A TAM CA is
@@ -823,6 +852,7 @@ a Client Application to transparently support different TEEs, it is
 imperative to have a common interface for a Client Application to
 invoke for exchanging messages with TEEs.
 
+** Discuss REST API and internal app interface
 A shared agent comes to meed this need.  An agent is an application
 running in the REE of the device or a SDK that facilitates
 communication between a TAM and TEE.  It also provides interfaces for
