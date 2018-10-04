@@ -138,7 +138,7 @@ The following terms are used:
     an appropriate reponse.
 
   - Rich Execution Environment (REE): An environment that is provided 
-    and governed by a typical OS (Linux, Windows, Android, iOS, etc.), 
+    and governed by a typical OS (e.g., Linux, Windows, Android, iOS), 
     potentially in conjunction with other supporting operating systems 
     and hypervisors; it is outside of the TEE. This environment and 
     applications running on it are considered un-trusted.
