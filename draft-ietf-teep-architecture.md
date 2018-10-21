@@ -35,6 +35,12 @@ author:
        email: hannes.tschofenig@arm.com
 
  -
+       ins: D. Wheeler
+       name: David Wheeler
+       organization: Intel
+       email: david.m.wheeler@intel.com
+
+ -
        ins: A. Atyeo
        name: Andrew Atyeo
        organization: Intercede
@@ -62,7 +68,7 @@ informative:
 
 --- abstract
 
-A Trusted Execution Environment (TEE) was designed to provide a 
+A Trusted Execution Environment (TEE) is designed to provide a 
 hardware-isolation mechanism to separate a regular operating system 
 from security-sensitive applications.
 
@@ -83,38 +89,83 @@ https://github.com/teep/teep-architecture-spec. Instructions are on that
 page as well. Editorial changes can be managed in GitHub, but any 
 substantive change should be discussed on the TEEP mailing list.
 
-The Trusted Execution Environment (TEE) concept has been designed to
-separate a regular operating system, also referred as a Rich Execution
-Environment (REE), from security-sensitive applications. A TEE 
-provides hardware-enforcement so that any data inside the TEE 
-cannot be read by code outside of the TEE. Compromising a REE and 
-normal applications in the REE do not affect code inside the TEE, 
-which is called a Trusted Application (TA), running inside the TEE.
+Applications executing in a device are exposed to many different attacks 
+intended to compromise the execution of the application, or reveal the
+data upon which those applications are operating. These attacks increase
+with the number of other applications on the device, with such other
+applications coming from potentially untrustworthy sources. The 
+potential for attacks further increase with the complexity of features
+and applications on devices, and the unintented interactions among those
+features and applications. The danger of attacks on a system increases 
+as the sensitivity of the applications or data on the device increases.
+As an example, exposure of emails from a mail client is likely to be of 
+concern to its owner, but a compromise of a banking application raises 
+even greater concerns.
 
-In an TEE ecosystem, a Trusted Application Manager (TAM) is commonly 
-used to manage keys and TAs that run in a device. Different device 
-vendors may use different TEE implementations. Different application 
-providers or device administrators may choose to use different TAM
-providers.
+The Trusted Execution Environment (TEE) concept is designed to execute
+applications in a protected environment that separates applications
+inside the TEE from the regular operating system and from other 
+applications on the device. This separation reduces the possibility
+of a successful attack on applications and the data contained inside the
+TEE. Typically, applications are chosen to execute inside a TEE because
+those applications perform security sensitive operations or operate on
+sensitive data. An application running inside a TEE is referred to as a 
+Trusted Applications (TA), while a normal application running in the 
+regular operating system is referred to as an Untrusted Application 
+(UA).
 
-To simplify the life of developers an interoperable protocol for 
-managing TAs running in different TEEs of various devices
-is needed.
+The TEE uses hardware to enforce protections on the TA and its data, but
+also presents a more limited set of services to applications inside the
+TEE than is normally available to UA's running in the normal operating
+system.
+   
+But not all TEEs are the same, and different vendors may have different
+implementations of TEEs with different security properties, different
+features, and different control mechanisms to operate on TAs. Some
+vendors may themsleves market multiple different TEEs with different
+properties atuned to different markets. A device vendor may integrate
+one or more TEEs into their devices depending on market needs.
 
-The protocol addresses the following problems.
+To simplify the life of developers and service providers interacting
+with TAs in a TEE, an interoperable protocol for managing TAs running in
+different TEEs of various devices is needed. In this TEE ecosystem,
+there often arises a need for an external trusted party to verify the
+identity, claims, and rights of SPs, devices, and their TEEs. This
+trusted third party is the Trusted Application Manager (TAM).   
 
-  - A Device Administrator (DA) or Service Provider (SP) of the
-    device users needs to determine security-relevant information of
-    a device before provisioning the TA to the device with a TEE.
-    Examples include the verification of the device 'root of trust'
-    and the type of TEE included in a device.
+This protocol addresses the following problems:
 
-  - A TEE in a device needs to determine whether a Device
-    Administrator (DA) or a Service Provider (SP) that wants to
-    manage an TA in the device is authorized to manage
-    applications in the TEE.
+  - A Service Provider (SP) intending to provide services through a TA
+    to users of a device needs to determine security-relevant
+    information of a device before provisioning their TA to the TEE
+    within the device. Examples include the verification of the device
+    'root of trust' and the type of TEE included in a device.
 
-  - Attestation must be able to ensure a TEE is genuine.
+  - A TEE in a device needs to determine whether a Service Provider (SP)
+    that wants to manage a TA in the device is authorized to manage TAs
+    in the TEE, and what TAs the SP is permitted to manage.
+
+  - The parties involved in the protocol must be able to attest that a
+    TEE is genuine and capable of providing the security protections
+    required by a particular TA.
+
+  - A Service Provider (SP) must be able to deterine if a TA exists (is
+    installed) on a device (in the TEE), and if not, install the TA in
+    the TEE.
+
+  - A Service Provider (SP) must be able to check whether a TA in a
+    device's TEE is the most up-to-date version, and if not, update the
+    TA in the TEE.
+
+  - A Service Provider (SP) must be able to remove a TA in a device's
+    TEE if the SP is no longer offering such services or the services
+    are being revoked from a particular user (or device). For example,
+    if a subscription or contract for a particular service has expired,
+    or a payment by the user has not been completed or has been recinded.
+
+  - A Service Provider (SP) must be able to define the relationship
+    between cooperating TAs under the SP's control, and specify whether
+    the TAs can communicate, share data, and/or share key material.
 
 #  Terminology
 
@@ -143,19 +194,21 @@ The following terms are used:
     and hypervisors; it is outside of the TEE. This environment and 
     applications running on it are considered un-trusted.
 
-  - Secure Boot Module (SBM): A firmware in a device that delivers 
-    secure boot functionality. It is generally signed and can be 
-    verified whether it can be trusted.
-
-  - Service Provider (SP): An entity that wishes to supply Trusted 
-    Applications to remote devices. A Service Provider requires the 
+  - Service Provider (SP): An entity that wishes to sign Trusted 
+    Applications. A Service Provider requires the 
     help of a TAM in order to provision the Trusted Applications to 
-    the devices.
+    remote devices.
 
-  - Trust Anchor: A root certificate that can be used to validate its 
-    children certificates. It is usually embedded in a device or 
-    configured by a TAM for validating the trust of a remote 
-    entity's certificate.
+  - Trust Anchor: A public key in a device whose corresponding private
+    key is held by an entity implicitly trusted by the device. The
+    Trust Anchor may be a certificate or it may be a raw public key.
+    The trust anchor is normally stored in a location that resists
+    unauthorized modification, insertion, or replacment.   
+    The trust anchor private key owner can sign certificates of other
+    public keys, which conveys trust about those keys to the device. 
+    A certificate signed by the trust anchor communicates that the
+    private key holder of the signed certificate is trusted by the
+    trust anchor holder, and can therefore be trusted by the device.
 
   - Trusted Application (TA): An Application that runs in a TEE.
 
@@ -176,8 +229,26 @@ The following terms are used:
     There are multiple technologies that can be used to implement 
     a TEE, and the level of security achieved varies accordingly.
 
-  - Trusted Firmware (TFW): A signed SBM firmware that can be verified 
-    and is trusted by a TEE in a device.
+  - Root-of-Trust (RoT): A hardware or software component in a device
+    that is inherently trusted to perform a certain security-critical
+    function. A RoT should be secure by design, small, and protected
+    by hardware against modification or interference. Examples of
+    RoTs include software/firmware measurement and verification using
+    a trust anchor (RoT for Verification), provide signed assertions
+    using a protected attestation key (RoT for Reporting), or protect the
+    storage and/or use of cryptograhic keys (RoT for Storage). Other
+    RoTs are possible, including RoT for Integrity, and RoT for Measurement.
+    Reference: NIST SP800-164 (Draft).  
+
+  - Trusted Firmware (TFW): A firmware in a device that is signed
+    by a trust anchor, and which can be verified locally by the 
+    device using an RoT for Verification before the firmware is executed. 
+
+  - Secure Boot Module (SBM): A special TFW that executes during
+    device power-on to ensure the device boots into a trusted or 
+    known configuration. A SBM typically allows the boot state of
+    the device to be recorded by a RoT for Integrity, and later
+    verified remotely through a RoT for Measure and Reporting.
 
 This document uses the following abbreviations:
 
@@ -185,19 +256,21 @@ This document uses the following abbreviations:
 
   - REE: Rich Execution Environment
 
+  - RoT: Root of Trust
+
+  - SBM: Secure Boot Module
+
   - SD: Security Domain 
 
   - SP: Service Provider
 
-  - SBM: Secure Boot Module
-
   - TA: Trusted Application
+
+  - TAM: Trusted Application Manager
 
   - TEE: Trusted Execution Environment
 
   - TFW: Trusted Firmware
-
-  - TAM: Trusted Application Manager
 
 # Scope and Assumptions 
 
@@ -208,6 +281,8 @@ public/private key pair, which is securely stored. This key pair is
 referred to as the 'root of trust' for remote attestation of
 the associated TEE in a device by an TAM.
 
+New note: SD is for managing keys for TAs
+
 A Security Domain (SD) concept is used as the security boundary inside
 a TEE for trusted applications. Each SD is typically associated with
 one TA provider as the owner, which is a logical space that contains a
@@ -216,6 +291,7 @@ One SD may contain multiple TAs. Each Security Domain requires the
 management operations of TAs in the form of installation, update and
 deletion.
 
+(Ming to reword)
 A TA binary and configuration data can be from two sources:
 
 1. A TAM supplies the signed and encrypted TA binary
@@ -325,6 +401,7 @@ The following are the main components in the system.
     architecture does not assume or require that the REE or Client
     Applications is secure.
 
+** Change to Broker
   - Agent:  A Client Application is expected to communicate with a TAM to
     request TAs that it needs to use.  The Client Application needs
     to pass the messages from the TAM to TEEs in the device.  This
@@ -554,6 +631,7 @@ security.
 2. TEE key pair and certificate:  It is used for device attestation
     to a remote TAM and SP.
 
+** too specific - generalize - management of the the key is out of scope
       - This key pair is burned into the device at device manufacturer.
        The key pair and its certificate are valid for the expected
        lifetime of the device.
@@ -675,6 +753,8 @@ future request from the TAM must present itself as a way that the TEE
 can verify it is the true owner.  The certificate itself cannot
 reliably used as the owner because TAM may change its certificate.
 
+** need to handle the normal key roll-over case, as well as the less frequent key compromise case
+
 To this end, each TAM will be associated with a trusted identifier
 defined as an attribute in the TAM certificate.  This field is kept
 the same when the TAM renew its certificates.  A TAM CA is
@@ -772,6 +852,7 @@ a Client Application to transparently support different TEEs, it is
 imperative to have a common interface for a Client Application to
 invoke for exchanging messages with TEEs.
 
+** Discuss REST API and internal app interface
 A shared agent comes to meed this need.  An agent is an application
 running in the REE of the device or a SDK that facilitates
 communication between a TAM and TEE.  It also provides interfaces for
