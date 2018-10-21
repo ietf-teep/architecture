@@ -1,7 +1,7 @@
 ---
 title: Trusted Execution Environment Provisioning (TEEP) Architecture
 abbrev: TEEP Architecture
-docname: draft-ietf-teep-architecture-latest
+docname: draft-ietf-teep-architecture-01
 category: info
 
 ipr: pre5378Trust200902
@@ -70,25 +70,16 @@ informative:
 
 A Trusted Execution Environment (TEE) is designed to provide a 
 hardware-isolation mechanism to separate a regular operating system 
-from security-sensitive applications.
+from security-sensitive application components.
 
 This architecture document motivates the design and standardization 
-of a protocol for managing the lifecyle of trusted applications 
+of a protocol for managing the lifecycle of trusted applications 
 running inside a TEE.
 
 --- middle
 
 
 #  Introduction
-
-RFC EDITOR: PLEASE REMOVE THE FOLLOWING PARAGRAPH
-
-The source for this draft is maintained in GitHub. Suggested changes
-should be submitted as pull requests at 
-https://github.com/teep/teep-architecture-spec. Instructions are on that 
-page as well. Editorial changes can be managed in GitHub, but any 
-substantive change should be discussed on the TEEP mailing list.
-
 Applications executing in a device are exposed to many different attacks 
 intended to compromise the execution of the application, or reveal the
 data upon which those applications are operating. These attacks increase
@@ -177,16 +168,18 @@ in all capitals, as shown here.
 
 The following terms are used:
 
-  - Client Application: An application running on a rich OS, such 
-    as an Android, Windows, or iOS  application.
+  - Client Application: An application running in a Rich Execution
+    Environment, such
+    as an Android, Windows, or iOS application.
 
   - Device: A physical piece of hardware that hosts a TEE along with
-    a rich OS.
+    a Rich Execution Environment.
 
-  - Agent: An application running in the rich OS allowing the message 
+  - Agent: An application running in a Rich Execution Environment
+    allowing the message 
     protocol exchange between a TAM and a TEE in a device. A TEE is 
-    responsible to processing relayed messages and for returning
-    an appropriate reponse.
+    responsible for processing relayed messages and for returning
+    an appropriate response.
 
   - Rich Execution Environment (REE): An environment that is provided 
     and governed by a typical OS (e.g., Linux, Windows, Android, iOS), 
@@ -210,7 +203,7 @@ The following terms are used:
     private key holder of the signed certificate is trusted by the
     trust anchor holder, and can therefore be trusted by the device.
 
-  - Trusted Application (TA): An Application that runs in a TEE.
+  - Trusted Application (TA): An application component that runs in a TEE.
 
   - Trusted Execution Environment (TEE): An execution environment that 
     runs alongside of, but is isolated from, an REE. A TEE has security 
@@ -224,7 +217,7 @@ The following terms are used:
     
     (b) Assurance that only authorized code can run in the TEE;
     
-    (c) Memory that cannot be read by code outside of TEE.
+    (c) Memory that cannot be read by code outside the TEE.
 
     There are multiple technologies that can be used to implement 
     a TEE, and the level of security achieved varies accordingly.
@@ -285,16 +278,15 @@ New note: SD is for managing keys for TAs
 
 A Security Domain (SD) concept is used as the security boundary inside
 a TEE for trusted applications. Each SD is typically associated with
-one TA provider as the owner, which is a logical space that contains a
+one TA provider as the owner, which is a logical space that contains an
 SP's TAs. One TA provider may request to have multiple SDs in a TEE.
 One SD may contain multiple TAs. Each Security Domain requires the
 management operations of TAs in the form of installation, update and
 deletion.
 
-(Ming to reword)
-A TA binary and configuration data can be from two sources:
+Each TA binary and configuration data can be from either of two sources:
 
-1. A TAM supplies the signed and encrypted TA binary
+1. A TAM supplies the signed and encrypted TA binary and any required configuration data
 
 2. A Client Application supplies the TA binary
 
@@ -302,39 +294,36 @@ The architecture covers the first case where the TA binary and
 configuration data are delivered from a TAM. The second case calls 
 for an extension when a TAM is absent.
 
-Messages exchange with a TAM require some transport and HTTPS is one 
-commonly used transport.
-
 # Use Cases
 
 ## Payment
 
 A payment application in a mobile device requires high security and
 trust about the hosting device. Payments initiated from a mobile
-device can use a Trusted Application running inside TEE in the device
+device can use a Trusted Application
 to provide strong identification and proof of transaction.
 
 For a mobile payment application, some biometric identification
-information could also be stored in the TEE. The mobile payment
+information could also be stored in a TEE. The mobile payment
 application can use such information for authentication.
-
 
 A secure user interface (UI) may be used in a mobile device to
 prevent malicious software from stealing sensitive user input data.
-Such an application implementation often relies on TEE for user
+Such an application implementation often relies on a TEE for user
 input protection.
 
 ## Authentication
 
-For better security of authentication, a devices may store its 
-sensitive authentication keys inside a TEE of the device, providing
-hardware-protected security key strength and trusted execution code.
+For better security of authentication, a device may store its 
+sensitive authentication keys inside a TEE, providing
+hardware-protected security key strength and trusted code execution.
 
 ## Internet of Things
 
-Internet of Things (IoT) has been posing threats to networks and 
+The Internet of Things (IoT) has been posing threats to networks and 
 national infrastructures because of existing weak security in devices. 
-It is very desirable that IoT devices can prevent a malware from 
+It is very desirable that IoT devices can prevent malware from 
+manipulating actuators (e.g., unlocking a door), or
 stealing or modifying sensitive data such as authentication credentials 
 in the device. A TEE can be the best way to implement such IoT 
 security functions.
@@ -342,17 +331,16 @@ security functions.
 TEEs could be used to store variety of sensitive data for IoT devices.
 For example, a TEE could be used in smart door locks to store a user's
 biometric information for identification, and for protecting access
-the locking mechanism. Bike-sharing is another example that shares
-a similar usage scenario.
+the locking mechanism.
 
 ## Confidential Cloud Computing
 
 A tenant can store sensitive data in a TEE in a cloud computing
 server such that only the tenant can access the data, preventing
-the cloud host provider from accessing the data. A tenant can
+the cloud hosting provider from accessing the data. A tenant can
 run TAs inside a server TEE for secure operation and enhanced
 data security. This provides benefits not only to tenants with
-better data security but also to cloud host provider for reduced
+better data security but also to cloud hosting provider for reduced
 liability and increased cloud adoption.
 
 # Architecture
@@ -369,7 +357,7 @@ The following are the main components in the system.
     that it runs or a third party TAM service to distribute and
     update its payment TA application in payment user devices.  The
     payment SP isn't a device administrator of the user devices.  A
-    user who chooses to download the payment TA into its devices acts
+    user who chooses to download the payment TA into a device acts
     as the device administrator, authorizing the TA installation via
     the downloading consent.  The device manufacturer is typically
     responsible for embedding the TAM trust verification capability
@@ -378,12 +366,12 @@ The following are the main components in the system.
     A TAM may be used by one SP or many SPs where a TAM may run as a
     Software-as-a-Service (SaaS).  A TAM may provide Security Domain
     management and TA management in a device for the SD and TAs that
-    a SP owns.  In particular, a TAM typically offers over-the-air
-    update to keep a SP's TAs up-to-date and clean up when a version
+    an SP owns.  In particular, a TAM typically offers over-the-air
+    updates to keep an SP's TAs up-to-date and clean up when a version
     should be removed.  A TEE administrator or device administrator
-    may decide TAMs that it trusts to manage its devices.
+    may choose TAMs that it trusts to manage its devices.
 
-  - Certification Authority (CA):  Certificate-based credentials used for
+  - Certificate Authority (CA):  Certificate-based credentials used for
     authenticating a device, a TAM and an SP.  A device embeds a list
     of root certificates (trust anchors), from trusted CAs that a TAM
     will be validated against.  A TAM will remotely attest a device
@@ -405,14 +393,14 @@ The following are the main components in the system.
   - Agent:  A Client Application is expected to communicate with a TAM to
     request TAs that it needs to use.  The Client Application needs
     to pass the messages from the TAM to TEEs in the device.  This
-    calls for a component in REE that the Client Application can use
-    to pass messages to TEEs.  An Agent is this component to fill the
-    role.  In other words, an Agent is an application in the REE or
-    software library that can simply relays messages from a Client
+    calls for a component in the REE that Client Applications can use
+    to pass messages to TEEs.  An 
+    Agent is thus an application in the REE or
+    software library that can relay messages from a Client
     Application to a TEE in the device.  A device usually comes with
-    only one active TEE.  A TEE that supports may provide such an
+    only one active TEE.  A TEE may provide such an
     Agent to the device manufacturer to be bundled in devices.  Such
-    a compliant TEE must also include an Agent counterpart, namely, a
+    a TEE must also include an Agent counterpart, namely, a
     processing module inside the TEE, to parse TAM messages sent
     through the Agent.  An Agent is generally acting as a dummy
     relaying box with just the TEE interacting capability; it doesn't
@@ -422,21 +410,20 @@ The following are the main components in the system.
     manage what TAs allowed to run in its devices.  A default list of
     allowed TA trust root CA certificates is included in a device by
     the device's manufacturer, which may be governed by the device
-    carriers sometimes.  There may be needs to expose overriding
-    capability for a device owner to decide the list of allowed TAs
+    carriers sometimes.  A device owner can decide the list of allowed TAMs
     by updating the list of trusted CA certificates.
 
-  - Secure Boot:  Secure boot must enable authenticity checking of TEEs
+  - Secure Boot:  Secure boot enables authenticity checking of TEEs
     by the TAM.  Note that some TEE implementations do not require
     secure boot functionality.
 
 ## Entity Relations
 
 This architecture leverages asymmetric cryptography to
-authenticate a device towards a TAM. Additionally, a TEE
-in a device authenticates a TAM provider and TA signer. The
+authenticate a device to a TAM. Additionally, a TEE
+in a device authenticates a TAM and TA signer. The
 provisioning of trust anchors to a device may different from
-one use case to the other. The device administrator may want to
+one use case to the other. A device administrator may want to
 have the capability to control what TAs are allowed.
 A device manufacturer enables verification of the TA signers
 and TAM providers; it may embed a list of default trust anchors
@@ -489,12 +476,12 @@ the application developer may provide its TA to a TAM provider
 that will be managing the TA in various devices. 3. A user
 will go to an Application Store to download the Client
 Application. The Client Application will trigger TA installation
-by calling TAM. This is the step 4. The Client Application
+by initiating communicaton with a TAM. This is the step 4. The Client Application
 will get messages from TAM, and interacts with device
 TEE via an Agent.
 
-The following diagram will show a system diagram about
-the entity relationships between CAs, TAM, SP and devices.
+The following diagram shows a system diagram about
+the entity relationships between CAs, TAMs, SPs and devices.
 
 ~~~~
         ------- Message Protocol  -----
@@ -507,7 +494,7 @@ the entity relationships between CAs, TAM, SP and devices.
  | Client | SD (TAs)|           |   SD / TA   |   |  TA    |
  |  Apps  |         |           |     Mgmt    |   |        |
  |   |    |         |           |             |   |        |
- |   |    |         |           |             |   |        |
+ |   |    | List of |           |  List of    |   |        |
  |        | Trusted |           |  Trusted    |   |        |
  | Agent  |  TAM/SP |           |   FW/TEE    |   |        |
  |        |   CAs   |           |    CAs      |   |        |
@@ -528,7 +515,7 @@ the entity relationships between CAs, TAM, SP and devices.
 In the previous diagram, different CAs can be used for different
 types of certificates.  Messages are always signed, where the signer
 key is the message originator's private key such as that of a TAM,
-the private key of a trusted firmware (TFW), or a TEE's private key.
+the private key of trusted firmware (TFW), or a TEE's private key.
 
 The main components consist of a set of standard messages created by
 a TAM to deliver device SD and TA management commands to a device,
@@ -541,14 +528,14 @@ functionality must be delegated to a rich Client Application.  Client
 Applications will need to rely on an agent in the REE to interact
 with a TEE for message exchanges.  Consequently, a TAM generally
 communicates with a Client Application about how it gets messages
-that originates from TEE inside a device.  Similarly, a TA or TEE
+that originate from a TEE inside a device.  Similarly, a TA or TEE
 generally gets messages from a TAM via some Client Application,
 namely, an agent in this protocol architecture, not directly from the
-internet.
+network.
 
 It is imperative to have an interoperable protocol to communicate
-with different TEEs in different devices that a Client Application
-needs to run and access a TA inside a TEE.  This is the role of the
+with different TAMs and different TEEs in different devices.
+This is the role of the
 agent, which is a software component that bridges communication
 between a TAM and a TEE.  The agent does not need to know the actual
 content of messages except for the TEE routing information.
@@ -558,7 +545,7 @@ content of messages except for the TEE routing information.
 Each TEE comes with a trust store that contains a whitelist of root
 CA certificates that are used to validate a TAM's certificate.  A TEE
 will accept a TAM to create new Security Domains and install new TAs
-on behalf of a SP only if the TAM's certificate is chained to one of
+on behalf of an SP only if the TAM's certificate is chained to one of
 the root CA certificates in the TEE's trust store.
 
 A TEE's trust store is typically preloaded at manufacturing time.  It
@@ -568,8 +555,8 @@ existing one should be updated or removed.  A device manufacturer is
 expected to provide its TEE trust store live update or out-of-band
 update to devices.
 
-Before a TAM can begin operation in the marketplace to support TEE-
-powered devices with a particular TEE, it must obtain a TAM
+Before a TAM can begin operation in the marketplace to support a
+device with a particular TEE, it must obtain a TAM
 certificate from a CA that is listed in the trust store of the TEE.
 
 ## Trust Anchors in TAM
@@ -589,16 +576,16 @@ security.
 | Key Entity  | Location | Issuer | Checked Against   | Cardinality |
 | Name        |          |        |                   |             |
 +-------------+----------+--------+-------------------+-------------+
-| 1. TFW key  | Device   | FW CA  | A white list of   | 1 per       |
+| 1. TFW key  | Device   | FW CA  | A whitelist of    | 1 per       |
 | pair and    | secure   |        | FW root CA        | device      |
 | certificate | storage  |        | trusted by TAMs   |             |
 |             |          |        |                   |             |
-| 2. TEE key  | Device   | TEE CA | A white list of   | 1 per       |
+| 2. TEE key  | Device   | TEE CA | A whitelist of    | 1 per       |
 | pair and    | TEE      | under  | TEE root CA       | device      |
 | certificate |          | a root | trusted by TAMs   |             |
 |             |          | CA     |                   |             |
 |             |          |        |                   |             |
-| 3. TAM key  | TAM      | TAM CA | A white list of   | 1 or        |
+| 3. TAM key  | TAM      | TAM CA | A whitelist of    | 1 or        |
 | pair and    | provider | under  | TAM root CA       | multiple    |
 | certificate |          | a root | embedded in TEE   | can be used |
 |             |          | CA     |                   | by a TAM    |
@@ -624,15 +611,14 @@ security.
 
       - Issuer:   OEM CA
 
-      - Checked Against:   A white list of FW root CA trusted by TAMs
+      - Checked Against:   A whitelist of FW root CA trusted by TAMs
 
       - Cardinality:   One per device
 
 2. TEE key pair and certificate:  It is used for device attestation
     to a remote TAM and SP.
 
-** too specific - generalize - management of the the key is out of scope
-      - This key pair is burned into the device at device manufacturer.
+      - This key pair is burned into the device by the device manufacturer.
        The key pair and its certificate are valid for the expected
        lifetime of the device.
 
@@ -642,7 +628,7 @@ security.
 
       - Issuer:   A CA that chains to a TEE root CA
 
-      - Checked Against:   A white list of TEE root CA trusted by TAMs
+      - Checked Against:   A whitelist of TEE root CAs trusted by TAMs
 
       - Cardinality:   One per device
 
@@ -658,11 +644,11 @@ security.
 
       - Issuer:   TAM CA that chains to a root CA
 
-      - Checked Against:   A white list of TAM root CA embedded in TEE
+      - Checked Against:   A whitelist of TAM root CAs embedded in a TEE
 
       - Cardinality:   One or multiple can be used by a TAM
 
-4. SP key pair and certificate:  an SP uses its own key pair and
+4. SP key pair and certificate:  An SP uses its own key pair and
     certificate to sign a TA.
 
       - Location:   SP
@@ -672,11 +658,11 @@ security.
       - Supported Key Size:   RSA 2048-bit, ECC P-256 and P-384.  Other
         sizes should be anticipated in future.
 
-      - Issuer:   an SP signer CA that chains to a root CA
+      - Issuer:   An SP signer CA that chains to a root CA
 
-      - Checked Against:   A SP uses a TAM.  A TEE trusts an SP by
+      - Checked Against:   An SP uses a TAM.  A TEE trusts an SP by
         validating trust against a TAM that the SP uses.  A TEE trusts
-        TAM to ensure that a TA from the TAM is trustworthy.
+        a TAM to ensure that a TA is trustworthy.
 
       - Cardinality:   One or multiple can be used by an SP
 
@@ -684,7 +670,7 @@ security.
 
 This architecture uses a PKI.  Trust anchors exist on the devices to
 enable the TEE to authenticate TAMs, and TAMs use trust anchors to
-authenticate TEEs.  Since a PKI is used, many intermediate CAs
+authenticate TEEs.  Since a PKI is used, many intermediate CA
 certificates can chain to a root certificate, each of which can issue
 many certificates.  This makes the protocol highly scalable.  New
 factories that produce TEEs can join the ecosystem.  In this case,
@@ -700,8 +686,8 @@ centralized databases of all TEEs produced or all TAMs that exist.
 ## Message Security
 
 Messages created by a TAM are used to deliver device SD and TA
-management commands to a device, and device attestation and response
-messages created by the TEE to respond to TAM messages.
+management commands to a device, and device attestation and
+messages created by the device TEE to respond to TAM messages.
 
 These messages are signed end-to-end and are typically encrypted such
 that only the targeted device TEE or TAM is able to decrypt and view
@@ -724,11 +710,11 @@ TAM.  The TEE will maintain a registry of TAM ID and SP SD ID
 mapping.
 
 From an SD ownership perspective, the SD tree is flat and there is
-only one level.  An SD is associated with its owner.  It is up to TEE
+only one level.  An SD is associated with its owner.  It is up to the TEE
 implementation how it maintains SD binding information for a TAM and
 different SPs under the same TAM.
 
-It is an important decision in this protocol specification that a TEE
+It is an important decision in this architecture that a TEE
 doesn't need to know whether a TAM is authorized to manage the SD for
 an SP.  This authorization is implicitly triggered by an SP Client
 Application, which instructs what TAM it wants to use.  An SD is
@@ -738,7 +724,7 @@ another TAM.
 
 Since a TAM may support multiple SPs, sharing the same SD name for
 different SPs creates a dependency in deleting an SD.  An SD can be
-deleted only after all TAs associated with this SD is deleted.  An SP
+deleted only after all TAs associated with the SD are deleted.  An SP
 cannot delete a Security Domain on its own with a TAM if a TAM
 decides to introduce such sharing.  There are cases where multiple
 virtual SPs belong to the same organization, and a TAM chooses to use
@@ -798,7 +784,7 @@ A sample Security Domain hierarchy for the TEE is shown in {{SD}}.
            |----------| SP2 SD1 |
                       ----------
 ~~~~
-{: #SD title="Security Domain Hiearchy"}
+{: #SD title="Security Domain Hierarchy"}
 
 The architecture separates SDs and TAs such that a TAM can only
 manage or retrieve data for SDs and TAs that it previously created
@@ -822,7 +808,7 @@ Step 2: Inject Key Pairs and Images to Devices
   * 2.  [OEM] Flash signed TFW Image and signed TEE Image onto devices
        (signed by Secure Boot Key)
 
-Step 3: Setup attestation key pairs in devices
+Step 3: Set up attestation key pairs in devices
 
   * 1.  [OEM]  Flash Secure Boot Public Key and eFuse Key (eFuse key is
        unique per device)
@@ -830,7 +816,7 @@ Step 3: Setup attestation key pairs in devices
   * 2.  [TFW/TEE] Generate a unique attestation key pair and get a
        certificate for the device.
 
-Step 4: Setup trust anchors in devices
+Step 4: Set up trust anchors in devices
 
   * 1.  [TFW/TEE] Store the key and certificate encrypted with the eFuse
        key
@@ -841,26 +827,25 @@ Step 4: Setup trust anchors in devices
 
 # Agent
 
-A TEE and TAs do not generally have capability to communicate to the
-outside of the hosting device.  For example, the Global Platform
+A TEE and TAs do not generally have the capability to communicate to the
+outside of the hosting device.  For example, GlobalPlatform
 {{GPTEE}} specifies one such architecture.  This calls for a software
 module in the REE world to handle the network communication.  Each
-Client Application in REE may carry this communication functionality
-but it must also interact with the TEE for the message exchange.  The
+Client Application in the REE might carry this communication functionality
+but such functionality must also interact with the TEE for the message exchange.  The
 TEE interaction will vary according to different TEEs.  In order for
 a Client Application to transparently support different TEEs, it is
 imperative to have a common interface for a Client Application to
 invoke for exchanging messages with TEEs.
 
-** Discuss REST API and internal app interface
-A shared agent comes to meed this need.  An agent is an application
-running in the REE of the device or a SDK that facilitates
-communication between a TAM and TEE.  It also provides interfaces for
+A shared agent comes to meet this need.  An agent is an application
+running in the REE of the device or an SDK that facilitates
+communication between a TAM and a TEE.  It also provides interfaces for
 TAM SDK or Client Applications to query and trigger TA installation
 that the application needs to use.
 
-This interface for Client Applications may be commonly an Android
-service call for an Android powered device.  A Client Application
+This interface for Client Applications may be commonly an OS
+service call for an REE OS.  A Client Application
 interacts with a TAM, and turns around to pass messages received from
 TAM to agent.
 
@@ -871,11 +856,11 @@ agent that it can use.
 ## Role of the Agent 
 
 An agent abstracts the message exchanges with the TEE in a device.
-The input data is originated from a TAM that a Client Application
-connects.  A Client Application may also directly call Agent for some
+The input data is originated from a TAM to which a Client Application
+connects.  A Client Application may also directly call an Agent for some
 TA query functions.
 
-The agent may internally process a request from TAM.  At least, it
+The agent may internally process a message from a TAM.  At least, it
 needs to know where to route a message, e.g., TEE instance.  It does
 not need to process or verify message content.
 
@@ -891,7 +876,7 @@ the TAM.
 ## Agent Implementation Consideration
 
    A Provider should consider methods of distribution, scope and
-   concurrency on device and runtime options when implementing an agent.
+   concurrency on devices and runtime options when implementing an agent.
    Several non-exhaustive options are discussed below.  Providers are
    encouraged to take advantage of the latest communication and platform
    capabilities to offer the best user experience.
@@ -903,23 +888,23 @@ can dynamically download and install an agent on-demand.
 
 It is important to ensure a legitimate agent is installed and used.
 If an agent is compromised it may drop messages and thereby
-introducing a denial of service.
+introduce a denial of service.
 
 ### Number of Agents
 
 We anticipate only one shared agent instance in a device.  The
-device's TEE vendor will most probably supply one aent.
+device's TEE vendor will most probably supply one agent.
 
 With one shared agent, the agent provider is responsible to allow
 multiple TAMs and TEE providers to achieve interoperability.  With a
-standard agent interface, TAM can implement its own SDK for its SP
+standard agent interface, each TAM can implement its own SDK for its SP
 Client Applications to work with this agent.
 
 Multiple independent agent providers can be used as long as they have
 standard interface to a Client Application or TAM SDK.  Only one
 agent is expected in a device.
 
-TAM providers are generally expected to provide SDK for SP
+TAM providers are generally expected to provide an SDK for SP
 applications to interact with an agent for the TAM and TEE
 interaction.
 
@@ -937,9 +922,9 @@ signatures.  The only encryption that takes place may be the use of a
 so-called eFuse to release the SBM signing key and later during the
 protocol lifecycle management interchange with the TAM.
 
-SBM attestation can be optional in TEEP architecture where the
-starting point of device attestion can be at TEE certfificates.  TAM
-can define its policies on what kind of TEE it trusts if TFW
+SBM attestation can be optional where the
+starting point of device attestation can be at TEE certificates.  A TAM
+can define its policies on what kinds of TEE it trusts if TFW
 attestation isn't included during the TEE attestation.
 
 ###  Attestation Hierarchy Establishment: Manufacture
@@ -978,16 +963,16 @@ During device boot the following steps are required:
 
 ### Attestation Hierarchy Establishment: TAM
 
-Before a TAM can begin operation in the marketplace to support
-devices of a given TEE, it must obtain a TAM certificate from a CA
-that is registered in the trust store of devices with that TEE.  In
+Before a TAM can begin operation in the marketplace,
+it must obtain a TAM certificate from a CA
+that is registered in the trust store of devices.  In
 this way, the TEE can check the intermediate and root CA and verify
 that it trusts this TAM to perform operations on the TEE.
 
 # Acknowledgements
 
 The authors thank Dave Thaler for his very thorough review and many
-important suggestions.  Most content of this document are split from
+important suggestions.  Most content of this document is split from
 a previously combined OTrP protocol document
 {{I-D.ietf-teep-opentrustprotocol}}.  We thank the former co-authors
 Nick Cook and Minho Yoo for the initial document content, and
@@ -1024,7 +1009,7 @@ will be installed in a different SD for each respective SP.
 
 ## Agent Trust Model
 
-An agent could be malware in the vulnerable Rich OS.  A Client
+An agent could be malware in the vulnerable REE.  A Client
 Application will connect its TAM provider for required TA
 installation.  It gets command messages from the TAM, and passes the
 message to the agent.
@@ -1042,7 +1027,7 @@ is the responsibility of the TAM to protect data on its servers.
 ## Compromised CA
 
 A root CA for TAM certificates might get compromised.  Some TEE trust
-anchor update mechanism is expected from device OEM.  A compromised
+anchor update mechanism is expected from device OEMs.  A compromised
 intermediate CA is covered by OCSP stapling and OCSP validation check
 in the protocol.  A TEE should validate certificate revocation about
 a TAM certificate chain.
