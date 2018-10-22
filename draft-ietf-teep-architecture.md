@@ -1038,15 +1038,29 @@ that is registered in the trust store of devices.  In
 this way, the TEE can check the intermediate and root CA and verify
 that it trusts this TAM to perform operations on the TEE.
 
-# Acknowledgements
+# Algorithm and Attestation Agility  
 
-The authors thank Dave Thaler for his very thorough review and many
-important suggestions.  Most content of this document is split from
-a previously combined OTrP protocol document
-{{I-D.ietf-teep-opentrustprotocol}}.  We thank the former co-authors
-Nick Cook and Minho Yoo for the initial document content, and
-contributors Brian Witten, Tyler Kim, and Alin Mutu.
+RFC 7696 outlines the requirements to migrate from one 
+mandatory-to-implement algorithm suite to another over time. 
+This feature is also known as crypto agility. Protocol evolution 
+is greatly simplified when crypto agility is already considered 
+during the design of the protocol. In the case of Open Trust 
+Protocol (OTrP) the diverse range of use cases, from trusted app 
+updates for smart phones and tablets to updates of code on 
+higher-end IoT devices, creates the need for different 
+mandatory-to-implement algorithms already from the start. 
 
+Crypto agility in the OTrP concerns the use of symmetric as well 
+as asymmetric algorithms. Symmetric algorithms are used for 
+encryption of content whereas the asymmetric algorithms are 
+mostly used for signing messages.
+
+In addition to the use of cryptographic algorithms in OTrP there 
+is also the need to make use of different attestation technologies. 
+A Device must provide techniques to inform a TAM about the 
+attestation technology it supports. For many deployment cases it 
+is more likely for the TAM to support one or more attestation 
+techniques whereas the Device may only support one. 
 
 # Security Considerations
 
@@ -1133,6 +1147,16 @@ support of trust anchor update in their shipped devices.
 #  IANA Considerations
 
 This document does not require actions by IANA.
+
+# Acknowledgements
+
+The authors thank Dave Thaler for his very thorough review and many
+important suggestions.  Most content of this document is split from
+a previously combined OTrP protocol document
+{{I-D.ietf-teep-opentrustprotocol}}.  We thank the former co-authors
+Nick Cook and Minho Yoo for the initial document content, and
+contributors Brian Witten, Tyler Kim, and Alin Mutu.
+
 
 --- back
 
