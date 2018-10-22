@@ -466,17 +466,6 @@ all components are further explained in the following paragraphs.
     different CAs can be chosen by each TAM, and different device CAs
     can be used by different device manufacturers.
 
-\[Editor's Note:
- * Move this paragraph below -- too much information at this point
-
-    The payment SP isn't a device administrator of the user devices.  A
-    user who chooses to download the payment TA into a device acts
-    as the device administrator, authorizing the TA installation via
-    the downloading consent.  The device manufacturer is typically
-    responsible for embedding the TAM trust verification capability
-    in its device TEE.
-]
-
 ## Different Renditions of TEEP Architecture
 
 
