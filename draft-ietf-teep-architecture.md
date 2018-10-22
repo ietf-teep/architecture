@@ -57,6 +57,7 @@ normative:
   RFC8174:
 informative:
   I-D.ietf-teep-opentrustprotocol:
+  RFC7696: 
   GPTEE:
     author:
       org: Global Platform
@@ -1040,7 +1041,7 @@ that it trusts this TAM to perform operations on the TEE.
 
 # Algorithm and Attestation Agility  
 
-RFC 7696 outlines the requirements to migrate from one 
+RFC 7696 {{RFC7696}} outlines the requirements to migrate from one 
 mandatory-to-implement algorithm suite to another over time. 
 This feature is also known as crypto agility. Protocol evolution 
 is greatly simplified when crypto agility is already considered 
