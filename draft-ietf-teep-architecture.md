@@ -54,13 +54,13 @@ author:
 
 normative:
   RFC2119:
-  RFC8174: 
+  RFC8174:
 informative:
   I-D.ietf-teep-opentrustprotocol:
   GPTEE:
     author:
       org: Global Platform
-    title: "GlobalPlatform Device Technology: TEE System Architecture, v1.1" 
+    title: "GlobalPlatform Device Technology: TEE System Architecture, v1.1"
     date: 2017-01
     target: https://globalplatform.org/specs-library/tee-system-architecture-v1-1/
     seriesinfo:
@@ -68,61 +68,61 @@ informative:
 
 --- abstract
 
-A Trusted Execution Environment (TEE) is designed to provide a 
-hardware-isolation mechanism to separate a regular operating system 
+A Trusted Execution Environment (TEE) is designed to provide a
+hardware-isolation mechanism to separate a regular operating system
 from security-sensitive application components.
 
-This architecture document motivates the design and standardization 
-of a protocol for managing the lifecycle of trusted applications 
+This architecture document motivates the design and standardization
+of a protocol for managing the lifecycle of trusted applications
 running inside a TEE.
 
 --- middle
 
 
 #  Introduction
-Applications executing in a device are exposed to many different attacks 
+Applications executing in a device are exposed to many different attacks
 intended to compromise the execution of the application, or reveal the
 data upon which those applications are operating. These attacks increase
 with the number of other applications on the device, with such other
-applications coming from potentially untrustworthy sources. The 
+applications coming from potentially untrustworthy sources. The
 potential for attacks further increase with the complexity of features
-and applications on devices, and the unintented interactions among those
-features and applications. The danger of attacks on a system increases 
+and applications on devices, and the unintended interactions among those
+features and applications. The danger of attacks on a system increases
 as the sensitivity of the applications or data on the device increases.
-As an example, exposure of emails from a mail client is likely to be of 
-concern to its owner, but a compromise of a banking application raises 
+As an example, exposure of emails from a mail client is likely to be of
+concern to its owner, but a compromise of a banking application raises
 even greater concerns.
 
 The Trusted Execution Environment (TEE) concept is designed to execute
 applications in a protected environment that separates applications
-inside the TEE from the regular operating system and from other 
+inside the TEE from the regular operating system and from other
 applications on the device. This separation reduces the possibility
-of a successful attack on applications and the data contained inside the
-TEE. Typically, applications are chosen to execute inside a TEE because
-those applications perform security sensitive operations or operate on
-sensitive data. An application running inside a TEE is referred to as a 
-Trusted Applications (TA), while a normal application running in the 
-regular operating system is referred to as an Untrusted Application 
+of a successful attack on application components and the data contained inside the
+TEE. Typically, application components are chosen to execute inside a TEE because
+those application components perform security sensitive operations or operate on
+sensitive data. An application component running inside a TEE is referred to as a
+Trusted Application (TA), while a normal application running in the
+regular operating system is referred to as an Untrusted Application
 (UA).
 
 The TEE uses hardware to enforce protections on the TA and its data, but
 also presents a more limited set of services to applications inside the
 TEE than is normally available to UA's running in the normal operating
 system.
-   
+
 But not all TEEs are the same, and different vendors may have different
 implementations of TEEs with different security properties, different
 features, and different control mechanisms to operate on TAs. Some
-vendors may themsleves market multiple different TEEs with different
-properties atuned to different markets. A device vendor may integrate
+vendors may themselves market multiple different TEEs with different
+properties attuned to different markets. A device vendor may integrate
 one or more TEEs into their devices depending on market needs.
 
 To simplify the life of developers and service providers interacting
 with TAs in a TEE, an interoperable protocol for managing TAs running in
 different TEEs of various devices is needed. In this TEE ecosystem,
 there often arises a need for an external trusted party to verify the
-identity, claims, and rights of SPs, devices, and their TEEs. This
-trusted third party is the Trusted Application Manager (TAM).   
+identity, claims, and rights of Service Providers(SP), devices, and their TEEs.
+This trusted third party is the Trusted Application Manager (TAM).
 
 This protocol addresses the following problems:
 
@@ -160,10 +160,10 @@ This protocol addresses the following problems:
 
 #  Terminology
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", 
-"SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", 
-and "OPTIONAL" in this document are to be interpreted as described 
-in BCP 14 {{RFC2119}} {{RFC8174}} when, and only when, they appear 
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+"SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY",
+and "OPTIONAL" in this document are to be interpreted as described
+in BCP 14 {{RFC2119}} {{RFC8174}} when, and only when, they appear
 in all capitals, as shown here.
 
 The following terms are used:
@@ -176,20 +176,20 @@ The following terms are used:
     a Rich Execution Environment.
 
   - Agent: An application running in a Rich Execution Environment
-    allowing the message 
-    protocol exchange between a TAM and a TEE in a device. A TEE is 
+    allowing the message
+    protocol exchange between a TAM and a TEE in a device. A TEE is
     responsible for processing relayed messages and for returning
     an appropriate response.
 
-  - Rich Execution Environment (REE): An environment that is provided 
-    and governed by a typical OS (e.g., Linux, Windows, Android, iOS), 
-    potentially in conjunction with other supporting operating systems 
-    and hypervisors; it is outside of the TEE. This environment and 
+  - Rich Execution Environment (REE): An environment that is provided
+    and governed by a typical OS (e.g., Linux, Windows, Android, iOS),
+    potentially in conjunction with other supporting operating systems
+    and hypervisors; it is outside of the TEE. This environment and
     applications running on it are considered un-trusted.
 
-  - Service Provider (SP): An entity that wishes to sign Trusted 
-    Applications. A Service Provider requires the 
-    help of a TAM in order to provision the Trusted Applications to 
+  - Service Provider (SP): An entity that wishes to sign Trusted
+    Applications. A Service Provider requires the
+    help of a TAM in order to provision the Trusted Applications to
     remote devices.
 
   - Trust Anchor: A public key in a device whose corresponding private
@@ -198,28 +198,28 @@ The following terms are used:
     The trust anchor is normally stored in a location that resists
     unauthorized modification, insertion, or replacment.   
     The trust anchor private key owner can sign certificates of other
-    public keys, which conveys trust about those keys to the device. 
+    public keys, which conveys trust about those keys to the device.
     A certificate signed by the trust anchor communicates that the
     private key holder of the signed certificate is trusted by the
     trust anchor holder, and can therefore be trusted by the device.
 
   - Trusted Application (TA): An application component that runs in a TEE.
 
-  - Trusted Execution Environment (TEE): An execution environment that 
-    runs alongside of, but is isolated from, an REE. A TEE has security 
-    capabilities and meets certain security-related requirements. It 
-    protects TEE assets from general software attacks, defines rigid 
-    safeguards as to data and functions that a program can access, 
+  - Trusted Execution Environment (TEE): An execution environment that
+    runs alongside of, but is isolated from, an REE. A TEE has security
+    capabilities and meets certain security-related requirements. It
+    protects TEE assets from general software attacks, defines rigid
+    safeguards as to data and functions that a program can access,
     and resists a set of defined threats. It should have at least
     the following three properties:
 
     (a) A device unique credential that cannot be cloned;
-    
+
     (b) Assurance that only authorized code can run in the TEE;
-    
+
     (c) Memory that cannot be read by code outside the TEE.
 
-    There are multiple technologies that can be used to implement 
+    There are multiple technologies that can be used to implement
     a TEE, and the level of security achieved varies accordingly.
 
   - Root-of-Trust (RoT): A hardware or software component in a device
@@ -234,11 +234,11 @@ The following terms are used:
     Reference: NIST SP800-164 (Draft).  
 
   - Trusted Firmware (TFW): A firmware in a device that is signed
-    by a trust anchor, and which can be verified locally by the 
-    device using an RoT for Verification before the firmware is executed. 
+    by a trust anchor, and which can be verified locally by the
+    device using an RoT for Verification before the firmware is executed.
 
   - Secure Boot Module (SBM): A special TFW that executes during
-    device power-on to ensure the device boots into a trusted or 
+    device power-on to ensure the device boots into a trusted or
     known configuration. A SBM typically allows the boot state of
     the device to be recorded by a RoT for Integrity, and later
     verified remotely through a RoT for Measure and Reporting.
@@ -253,7 +253,7 @@ This document uses the following abbreviations:
 
   - SBM: Secure Boot Module
 
-  - SD: Security Domain 
+  - SD: Security Domain
 
   - SP: Service Provider
 
@@ -265,7 +265,7 @@ This document uses the following abbreviations:
 
   - TFW: Trusted Firmware
 
-# Scope and Assumptions 
+# Scope and Assumptions
 
 
 This specification assumes that an applicable device is equipped with
@@ -290,8 +290,8 @@ Each TA binary and configuration data can be from either of two sources:
 
 2. A Client Application supplies the TA binary
 
-The architecture covers the first case where the TA binary and 
-configuration data are delivered from a TAM. The second case calls 
+The architecture covers the first case where the TA binary and
+configuration data are delivered from a TAM. The second case calls
 for an extension when a TAM is absent.
 
 # Use Cases
@@ -314,18 +314,18 @@ input protection.
 
 ## Authentication
 
-For better security of authentication, a device may store its 
+For better security of authentication, a device may store its
 sensitive authentication keys inside a TEE, providing
 hardware-protected security key strength and trusted code execution.
 
 ## Internet of Things
 
-The Internet of Things (IoT) has been posing threats to networks and 
-national infrastructures because of existing weak security in devices. 
-It is very desirable that IoT devices can prevent malware from 
+The Internet of Things (IoT) has been posing threats to networks and
+national infrastructures because of existing weak security in devices.
+It is very desirable that IoT devices can prevent malware from
 manipulating actuators (e.g., unlocking a door), or
-stealing or modifying sensitive data such as authentication credentials 
-in the device. A TEE can be the best way to implement such IoT 
+stealing or modifying sensitive data such as authentication credentials
+in the device. A TEE can be the best way to implement such IoT
 security functions.
 
 TEEs could be used to store variety of sensitive data for IoT devices.
@@ -345,7 +345,7 @@ liability and increased cloud adoption.
 
 # Architecture
 
-## System Components 
+## System Components
 
 The following are the main components in the system.
 
@@ -394,7 +394,7 @@ The following are the main components in the system.
     request TAs that it needs to use.  The Client Application needs
     to pass the messages from the TAM to TEEs in the device.  This
     calls for a component in the REE that Client Applications can use
-    to pass messages to TEEs.  An 
+    to pass messages to TEEs.  An
     Agent is thus an application in the REE or
     software library that can relay messages from a Client
     Application to a TEE in the device.  A device usually comes with
@@ -853,7 +853,7 @@ In all cases, a Client Application needs to be able to identify an
 agent that it can use.
 
 
-## Role of the Agent 
+## Role of the Agent
 
 An agent abstracts the message exchanges with the TEE in a device.
 The input data is originated from a TAM to which a Client Application
@@ -1063,7 +1063,7 @@ support of trust anchor update in their shipped devices.
 
 #  IANA Considerations
 
-This document does not require actions by IANA. 
+This document does not require actions by IANA.
 
 --- back
 
@@ -1074,5 +1074,5 @@ RFC EDITOR: PLEASE REMOVE THE THIS SECTION
 
 IETF Drafts
 
-draft-00: 
+draft-00:
 - Initial working group document
