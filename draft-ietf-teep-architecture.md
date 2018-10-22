@@ -246,14 +246,13 @@ The following terms are used:
     RoTs are possible, including RoT for Integrity, and RoT for Measurement.
     Reference: NIST SP800-164 (Draft).  
 
-  - Trusted Firmware (TFW): A firmware in a device that is signed
-    by a trust anchor, and which can be verified locally by the
-    device using an RoT for Verification before the firmware is executed.
+  - Trusted Firmware (TFW): A firmware in a device that can be verified
+    with a trust anchor by RoT for Verification.
 
-  - Bootloader key: The bootloader key is a symmetric key protected by  
-    electrical fuse (eFuse) technology. It is used to decrypt a  
-	private key, which belongs to a device-unique private/public key pair, 
-    accessible only to the TFW.	
+  - Bootloader key: This symmetric key is protected by  
+    electronic fuse (eFUSE) technology. In this context it is used to decrypt a  
+    TFW private key, which belongs to a device-unique private/public key pair.
+    Not every device is equipped with a bootloader key.
 	
 This document uses the following abbreviations:
 
