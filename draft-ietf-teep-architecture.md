@@ -173,11 +173,11 @@ The following terms are used:
 
   - Device: A physical piece of hardware that hosts a TEE along with
     a Rich Execution Environment. A Device contains a default list
-    of Trust Anchors that identify entities (e.g. TAMs) that are
+    of Trust Anchors that identify entities (e.g., TAMs) that are
     trusted by the Device. This list is normally set by the Device
     Manufacturer, and may be governed by the Device's network carrier.
     The list of Trust Anchors is normally modifiable by the Device's
-    owner or Device Administrator. However the Device mmanufacturer
+    owner or Device Administrator. However the Device manufacturer
     and network carrier may restrict some modifications, for example,
     by not allowing the manufacturer or carrier's Trust Anchor to be
     removed or disabled.
@@ -208,7 +208,7 @@ The following terms are used:
     key is held by an entity implicitly trusted by the device. The
     Trust Anchor may be a certificate or it may be a raw public key.
     The trust anchor is normally stored in a location that resists
-    unauthorized modification, insertion, or replacment.   
+    unauthorized modification, insertion, or replacement.   
     The trust anchor private key owner can sign certificates of other
     public keys, which conveys trust about those keys to the device.
     A certificate signed by the trust anchor communicates that the
@@ -241,7 +241,7 @@ The following terms are used:
     RoTs include software/firmware measurement and verification using
     a trust anchor (RoT for Verification), provide signed assertions
     using a protected attestation key (RoT for Reporting), or protect the
-    storage and/or use of cryptograhic keys (RoT for Storage). Other
+    storage and/or use of cryptographic keys (RoT for Storage). Other
     RoTs are possible, including RoT for Integrity, and RoT for Measurement.
     Reference: NIST SP800-164 (Draft).  
 
@@ -388,7 +388,7 @@ all components are further explained in the following paragraphs.
 {: #notionalarch title="Notional Architecture of TEEP"}
 
   - Service Providers and Device Administrators utilize the services 
-    of a TAM to manage TAs on Devices. SPs do not direclty interact 
+    of a TAM to manage TAs on Devices. SPs do not directly interact 
     with devices. DAs may elect to use a TAM for remote administration
     of TAs instead of managing each device directly.
 
@@ -427,7 +427,7 @@ all components are further explained in the following paragraphs.
     be required for a SP to manage multiple different types of devices
     from different manufacturers, or devices on different carriers, since
     the Trust Anchor list on these different devices may contain different
-    TAMs. A Device Administrator may be able to add thier own TAM's
+    TAMs. A Device Administrator may be able to add their own TAM's
     public key or certificate to the Trust Anchor list on all their devices,
     overcoming this limitation. 
 
@@ -545,7 +545,7 @@ the application developer may provide its TA to a TAM provider
 that will be managing the TA in various devices. 3. A user
 will go to an Application Store to download the Client
 Application. The Client Application will trigger TA installation
-by initiating communicaton with a TAM. This is the step 4. The Client Application
+by initiating communication with a TAM. This is the step 4. The Client Application
 will get messages from TAM, and interacts with device
 TEE via an Agent.
 
@@ -1163,7 +1163,7 @@ contributors Brian Witten, Tyler Kim, and Alin Mutu.
 
 # History
 
-RFC EDITOR: PLEASE REMOVE THE THIS SECTION
+RFC EDITOR: PLEASE REMOVE THIS SECTION
 
 IETF Drafts
 
