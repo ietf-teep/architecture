@@ -169,29 +169,41 @@ in all capitals, as shown here.
 The following terms are used:
 
   - Client Application: An application running in a Rich Execution
-    Environment, such
-    as an Android, Windows, or iOS application.
+    Environment, such as an Android, Windows, or iOS application.
 
   - Device: A physical piece of hardware that hosts a TEE along with
-    a Rich Execution Environment.
+    a Rich Execution Environment. A Device contains a default list
+    of Trust Anchors that identify entities (e.g. TAMs) that are
+    trusted by the Device. This list is normally set by the Device
+    Manufacturer, and may be governed by the Device's network carrier.
+    The list of Trust Anchors is normally modifiable by the Device's
+    owner or Device Administrator. However the Device mmanufacturer
+    and network carrier may restrict some modifications, for example,
+    by not allowing the manufacturer or carrier's Trust Anchor to be
+    removed or disabled.
 
-  - Agent: An application running in a Rich Execution Environment
-    allowing the message
-    protocol exchange between a TAM and a TEE in a device. A TEE is
-    responsible for processing relayed messages and for returning
-    an appropriate response.
-
-  - Rich Execution Environment (REE): An environment that is provided
-    and governed by a typical OS (e.g., Linux, Windows, Android, iOS),
-    potentially in conjunction with other supporting operating systems
-    and hypervisors; it is outside of the TEE. This environment and
+  - Rich Execution Environment (REE): An environment that is provided 
+    and governed by a typical OS (e.g., Linux, Windows, Android, iOS), 
+    potentially in conjunction with other supporting operating systems 
+    and hypervisors; it is outside of the TEE. This environment and 
     applications running on it are considered un-trusted.
 
-  - Service Provider (SP): An entity that wishes to sign Trusted
-    Applications. A Service Provider requires the
-    help of a TAM in order to provision the Trusted Applications to
-    remote devices.
+  - Service Provider (SP): An entity that wishes to provide a service
+    on Devices that requires the use of one or more Trusted Applications.
+    A Service Provider requires the help of a TAM in order to provision 
+    the Trusted Applications to remote devices.
 
+  - Device Administrator:  An entity that owns or is responsible for
+    administration of a Device. A Device Administrator has privileges 
+    on the Device to install and remove applications and TAs, approve
+    or reject Trust Anchors, and approve or reject Service Providers,
+    among possibly other privileges on the Device. A device owner can 
+    manage the list of allowed TAMs by modifying the list of Trust 
+    Anchors on the Device. Although a Device Administrator may have
+    privileges and Device-specific controls to locally administer a
+    device, the Device Administrator may choose to remotely 
+    administrate a device through a TAM.
+    
   - Trust Anchor: A public key in a device whose corresponding private
     key is held by an entity implicitly trusted by the device. The
     Trust Anchor may be a certificate or it may be a raw public key.
@@ -216,7 +228,7 @@ The following terms are used:
     (a) A device unique credential that cannot be cloned;
 
     (b) Assurance that only authorized code can run in the TEE;
-
+    
     (c) Memory that cannot be read by code outside the TEE.
 
     There are multiple technologies that can be used to implement
@@ -347,55 +359,97 @@ liability and increased cloud adoption.
 
 ## System Components
 
-The following are the main components in the system.
+The following are the main components in the system. Full descriptions of 
+components not previously defined are provided below. Interactions of 
+all components are further explained in the following paragraphs.
 
-  - TAM:  A TAM is responsible for originating and coordinating lifecycle
-    management activity on a particular TEE on behalf of a Service
-    Provider or a Device Administrator.  For example, a payment
-    application provider, which also provides payment service as a
-    Service Provider using its payment TA, may choose to use a TAM
-    that it runs or a third party TAM service to distribute and
-    update its payment TA application in payment user devices.  The
-    payment SP isn't a device administrator of the user devices.  A
-    user who chooses to download the payment TA into a device acts
-    as the device administrator, authorizing the TA installation via
-    the downloading consent.  The device manufacturer is typically
-    responsible for embedding the TAM trust verification capability
-    in its device TEE.
+~~~~
+   +-------------------------------------------+
+   | Device                                    |
+   |                          +--------+       |        Service Provider
+   |                          |        |----------+               |
+   |    +-------------+       | TEEP   |---------+|               |
+   |    | TEE-1       |<------| Broker |       | ||   +--------+  |
+   |    |             |       |        |<---+  | |+-->|        |<-+
+   |    |             |       |        |    |  | |  +-|  TAM-1 |
+   |    |             |       |        |<-+ |  | +->| |        |<-+
+   |    | +---+ +---+ |       +--------+  | |  |    | +--------+  |
+   |    | |TA1| |TA2| |                   | |  |    | TAM-2  |    |
+   |  +-->|   | |   | |        +-------+  | |  |    +--------+    |
+   |  | | |   | |   |<---------| App-2 |--+ |  |                  |
+   |  | | +---+ +---+ |    +-------+   |    |  |       Device Administrator   
+   |  | +-------------+    | App-1 |   |    |  |
+   |  |                    |       |   |    |  |
+   |  +--------------------|       |---+    |  | 
+   |                       |       |--------+  |
+   |                       +-------+           |
+   +-------------------------------------------+
+~~~~
+{: #notionalarch title="Notional Architecture of TEEP"}
 
-    A TAM may be used by one SP or many SPs where a TAM may run as a
-    Software-as-a-Service (SaaS).  A TAM may provide Security Domain
-    management and TA management in a device for the SD and TAs that
-    an SP owns.  In particular, a TAM typically offers over-the-air
+  - Service Providers and Device Administrators utilize the services 
+    of a TAM to manage TAs on Devices. SPs do not direclty interact 
+    with devices. DAs may elect to use a TAM for remote administration
+    of TAs instead of managing each device directly.
+
+  - TAM:  A TAM is responsible for performing lifecycle
+    management activity on TA's and SD's on behalf of Service
+    Providers and Device Administrators. This includes creation and
+    deletion of TA's and SD's, and may include, for example,  over-the-air
     updates to keep an SP's TAs up-to-date and clean up when a version
-    should be removed.  A TEE administrator or device administrator
-    may choose TAMs that it trusts to manage its devices.
+    should be removed. TAMs may provide services that make it easier for
+    SPs or DAs to use the TAM's service to manage multiple devices, 
+    although that is not required of a TAM.
 
-  - Certificate Authority (CA):  Certificate-based credentials used for
-    authenticating a device, a TAM and an SP.  A device embeds a list
-    of root certificates (trust anchors), from trusted CAs that a TAM
-    will be validated against.  A TAM will remotely attest a device
-    by checking whether a device comes with a certificate from a CA
-    that the TAM trusts.  The CAs do not need to be the same;
-    different CAs can be chosen by each TAM, and different device CAs
-    can be used by different device manufacturers.
+    The TAM performs its management of TA's and SD's through  an
+    interaction with a Device's TEEP Broker. As shown in 
+    #notionalarch, the TAM cannot directly contact a Device, but must
+    wait for a the TEEP Broker or a Client Application to contact
+    the TAM requesting a particular service. This architecture is
+    intentional in order to accommodate network and application firewalls
+    that normally protect user and enterprise devices from arbitrary
+    connections from external network entities.
+ 
+    A TAM may be publically available for use by many SPs, or a TAM
+    may be private, and accessible by only one or a limited number of
+    SPs. It is expected that manufacturers and carriers will run their
+    own private TAM. Another example of a private TAM is a TAM running as
+    a Software-as-a-Service (SaaS) within an SP.
 
-  - TEE:  A TEE in a device is responsible for protecting applications
-    from attack, enabling the application to perform secure
-    operations.
+    A SP or Device Administrator chooses a particular TAM based on
+    whether the TAM is trusted by a Device or set of Devices. The
+    TAM is trusted by a device if the TAM's public key is an authorized 
+    Trust Anchor in the Device. A SP or Device Administrator may run 
+    their own TAM, however the Devices they wish to manage must include
+    this TAM's pubic key in the Trust Anchor list.
 
-  - REE:  The REE in a device is responsible for enabling off-device
-    communications to be established between a TEE and TAM.  The
-    architecture does not assume or require that the REE or Client
-    Applications is secure.
+    A SP or Device Administrator is free to utilize multiple TAMs. This may
+    be required for a SP to manage multiple different types of devices
+    from different manufacturers, or devices on different carriers, since
+    the Trust Anchor list on these different devices may contain different
+    TAMs. A Device Administrator may be able to add thier own TAM's
+    public key or certificate to the Trust Anchor list on all their devices,
+    overcoming this limitation. 
 
-** Change to Broker
-  - Agent:  A Client Application is expected to communicate with a TAM to
+    Any entity is free to operate a TAM. For a TAM to be successful, it must
+    have its public key or certificate installed in Devices Trust Anchor list.
+    A TAM may set up a relationship with device manufacturers or carriers
+    to have them install the TAM's keys in their device's Trust Anchor list. 
+    Alternatively, a TAM may publish its certificate and allow Device
+    Administrators to install the TAM's certificate in their devices as 
+    an after-market-action.
+
+  - TEEP Broker: The TEEP Broker is an application running in a Rich 
+    Execution Environment that enables the message protocol exchange between
+    a TAM and a TEE in a device. The TEEP Broker does not process messages
+    on behalf of a TEE, but merely is responsible for relaying messages from
+    the TAM to the TEE, and for returning the TEE's responses to the TAM.
+
+    A Client Application is expected to communicate with a TAM to
     request TAs that it needs to use.  The Client Application needs
     to pass the messages from the TAM to TEEs in the device.  This
     calls for a component in the REE that Client Applications can use
-    to pass messages to TEEs.  An
-    Agent is thus an application in the REE or
+    to pass messages to TEEs.  An Agent is thus an application in the REE or
     software library that can relay messages from a Client
     Application to a TEE in the device.  A device usually comes with
     only one active TEE.  A TEE may provide such an
@@ -406,16 +460,31 @@ The following are the main components in the system.
     relaying box with just the TEE interacting capability; it doesn't
     need and shouldn't parse protocol messages.
 
-  - Device Administrator:  A device owner or administrator may want to
-    manage what TAs allowed to run in its devices.  A default list of
-    allowed TA trust root CA certificates is included in a device by
-    the device's manufacturer, which may be governed by the device
-    carriers sometimes.  A device owner can decide the list of allowed TAMs
-    by updating the list of trusted CA certificates.
+  - Certification Authority (CA):  Certificate-based credentials used for
+    authenticating a device, a TAM and an SP.  A device embeds a list
+    of root certificates (trust anchors), from trusted CAs that a TAM
+    will be validated against.  A TAM will remotely attest a device
+    by checking whether a device comes with a certificate from a CA
+    that the TAM trusts.  The CAs do not need to be the same;
+    different CAs can be chosen by each TAM, and different device CAs
+    can be used by different device manufacturers.
 
   - Secure Boot:  Secure boot enables authenticity checking of TEEs
     by the TAM.  Note that some TEE implementations do not require
     secure boot functionality.
+  
+[Editor's Note: 
+ * Move this paragraph below -- too much information at this point
+    The payment SP isn't a device administrator of the user devices.  A
+    user who chooses to download the payment TA into a device acts
+    as the device administrator, authorizing the TA installation via
+    the downloading consent.  The device manufacturer is typically
+    responsible for embedding the TAM trust verification capability
+    in its device TEE.
+]
+
+## Different Renditions of TEEP Architecture
+
 
 ## Entity Relations
 
@@ -1076,3 +1145,4 @@ IETF Drafts
 
 draft-00:
 - Initial working group document
+
