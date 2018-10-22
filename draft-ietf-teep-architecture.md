@@ -250,6 +250,11 @@ The following terms are used:
     by a trust anchor, and which can be verified locally by the
     device using an RoT for Verification before the firmware is executed.
 
+  - Bootloader key: The bootloader key is a symmetric key protected by  
+    electrical fuse (eFuse) technology. It is used to decrypt a  
+	private key, which belongs to a device-unique private/public key pair, 
+    accessible only to the TFW.	
+	
 This document uses the following abbreviations:
 
   - CA: Certificate Authority
@@ -872,8 +877,7 @@ Step 2: Inject Key Pairs and Images to Devices
 
 Step 3: Set up attestation key pairs in devices
 
-  * 1.  [OEM]  Flash TFW Public Key and a secure bootloader key in
-        eFuse.
+  * 1.  [OEM]  Flash TFW Public Key and a secure bootloader key.
 
   * 2.  [TFW/TEE] Generate a unique attestation key pair and get a
        certificate for the device.
@@ -980,22 +984,20 @@ TEEs can be added post-manufacture using the scheme proposed, but it
 is outside of the current scope of this document to detail that.
 
 It should be noted that the attestation scheme described is based on
-signatures.  The only encryption that takes place may be the use of a
-bootloader key protected by eFuse to release the boot module signing
-key and later during the
-protocol lifecycle management interchange with the TAM.
+signatures.  The only decryption that may take place is through the 
+use of a bootloader key.
 
 A boot module generated attestation can be optional where the
 starting point of device attestation can be at TEE certificates.  A TAM
 can define its policies on what kinds of TEE it trusts if TFW
-attestation isn't included during the TEE attestation.
+attestation is not included during the TEE attestation.
 
 ###  Attestation Hierarchy Establishment: Manufacture
 
 During manufacture the following steps are required:
 
 1. A device-specific TFW key pair and certificate are burnt into the
-     device, protected by eFuse.  This key pair will be used for
+     device.  This key pair will be used for
      signing operations performed by the boot module.
 
 2. TEE images are loaded and include a TEE instance-specific key
@@ -1011,7 +1013,7 @@ During manufacture the following steps are required:
 During device boot the following steps are required:
 
 1. The boot module releases the TFW private key by decrypting it with
-   the key protected by eFuse.
+   the bootloader key.
 
 2. The boot module verifies the code-signing signature of the active TEE and
      places its TEE public key into a signing buffer, along with its
