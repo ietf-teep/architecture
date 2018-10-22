@@ -57,6 +57,7 @@ normative:
   RFC8174:
 informative:
   I-D.ietf-teep-opentrustprotocol:
+  RFC7696: 
   GPTEE:
     author:
       org: Global Platform
@@ -173,42 +174,42 @@ The following terms are used:
 
   - Device: A physical piece of hardware that hosts a TEE along with
     a Rich Execution Environment. A Device contains a default list
-    of Trust Anchors that identify entities (e.g. TAMs) that are
+    of Trust Anchors that identify entities (e.g., TAMs) that are
     trusted by the Device. This list is normally set by the Device
     Manufacturer, and may be governed by the Device's network carrier.
     The list of Trust Anchors is normally modifiable by the Device's
-    owner or Device Administrator. However the Device mmanufacturer
+    owner or Device Administrator. However the Device manufacturer
     and network carrier may restrict some modifications, for example,
     by not allowing the manufacturer or carrier's Trust Anchor to be
     removed or disabled.
 
-  - Rich Execution Environment (REE): An environment that is provided 
-    and governed by a typical OS (e.g., Linux, Windows, Android, iOS), 
-    potentially in conjunction with other supporting operating systems 
-    and hypervisors; it is outside of the TEE. This environment and 
+  - Rich Execution Environment (REE): An environment that is provided
+    and governed by a typical OS (e.g., Linux, Windows, Android, iOS),
+    potentially in conjunction with other supporting operating systems
+    and hypervisors; it is outside of the TEE. This environment and
     applications running on it are considered un-trusted.
 
   - Service Provider (SP): An entity that wishes to provide a service
     on Devices that requires the use of one or more Trusted Applications.
-    A Service Provider requires the help of a TAM in order to provision 
+    A Service Provider requires the help of a TAM in order to provision
     the Trusted Applications to remote devices.
 
   - Device Administrator:  An entity that owns or is responsible for
-    administration of a Device. A Device Administrator has privileges 
+    administration of a Device. A Device Administrator has privileges
     on the Device to install and remove applications and TAs, approve
     or reject Trust Anchors, and approve or reject Service Providers,
-    among possibly other privileges on the Device. A device owner can 
-    manage the list of allowed TAMs by modifying the list of Trust 
+    among possibly other privileges on the Device. A device owner can
+    manage the list of allowed TAMs by modifying the list of Trust
     Anchors on the Device. Although a Device Administrator may have
     privileges and Device-specific controls to locally administer a
-    device, the Device Administrator may choose to remotely 
+    device, the Device Administrator may choose to remotely
     administrate a device through a TAM.
-    
+
   - Trust Anchor: A public key in a device whose corresponding private
     key is held by an entity implicitly trusted by the device. The
     Trust Anchor may be a certificate or it may be a raw public key.
     The trust anchor is normally stored in a location that resists
-    unauthorized modification, insertion, or replacment.   
+    unauthorized modification, insertion, or replacement.   
     The trust anchor private key owner can sign certificates of other
     public keys, which conveys trust about those keys to the device.
     A certificate signed by the trust anchor communicates that the
@@ -228,7 +229,7 @@ The following terms are used:
     (a) A device unique credential that cannot be cloned;
 
     (b) Assurance that only authorized code can run in the TEE;
-    
+
     (c) Memory that cannot be read by code outside the TEE.
 
     There are multiple technologies that can be used to implement
@@ -241,19 +242,13 @@ The following terms are used:
     RoTs include software/firmware measurement and verification using
     a trust anchor (RoT for Verification), provide signed assertions
     using a protected attestation key (RoT for Reporting), or protect the
-    storage and/or use of cryptograhic keys (RoT for Storage). Other
+    storage and/or use of cryptographic keys (RoT for Storage). Other
     RoTs are possible, including RoT for Integrity, and RoT for Measurement.
     Reference: NIST SP800-164 (Draft).  
 
   - Trusted Firmware (TFW): A firmware in a device that is signed
     by a trust anchor, and which can be verified locally by the
     device using an RoT for Verification before the firmware is executed.
-
-  - Secure Boot Module (SBM): A special TFW that executes during
-    device power-on to ensure the device boots into a trusted or
-    known configuration. A SBM typically allows the boot state of
-    the device to be recorded by a RoT for Integrity, and later
-    verified remotely through a RoT for Measure and Reporting.
 
 This document uses the following abbreviations:
 
@@ -262,8 +257,6 @@ This document uses the following abbreviations:
   - REE: Rich Execution Environment
 
   - RoT: Root of Trust
-
-  - SBM: Secure Boot Module
 
   - SD: Security Domain
 
@@ -359,8 +352,8 @@ liability and increased cloud adoption.
 
 ## System Components
 
-The following are the main components in the system. Full descriptions of 
-components not previously defined are provided below. Interactions of 
+The following are the main components in the system. Full descriptions of
+components not previously defined are provided below. Interactions of
 all components are further explained in the following paragraphs.
 
 ~~~~
@@ -377,10 +370,10 @@ all components are further explained in the following paragraphs.
    |    | |TA1| |TA2| |                   | |  |    | TAM-2  |    |
    |  +-->|   | |   | |        +-------+  | |  |    +--------+    |
    |  | | |   | |   |<---------| App-2 |--+ |  |                  |
-   |  | | +---+ +---+ |    +-------+   |    |  |       Device Administrator   
+   |  | | +---+ +---+ |    +-------+   |    |  |    Device Administrator
    |  | +-------------+    | App-1 |   |    |  |
    |  |                    |       |   |    |  |
-   |  +--------------------|       |---+    |  | 
+   |  +--------------------|       |---+    |  |
    |                       |       |--------+  |
    |                       +-------+           |
    +-------------------------------------------+
@@ -388,7 +381,7 @@ all components are further explained in the following paragraphs.
 {: #notionalarch title="Notional Architecture of TEEP"}
 
   - Service Providers and Device Administrators utilize the services 
-    of a TAM to manage TAs on Devices. SPs do not direclty interact 
+    of a TAM to manage TAs on Devices. SPs do not directly interact 
     with devices. DAs may elect to use a TAM for remote administration
     of TAs instead of managing each device directly.
 
@@ -398,18 +391,18 @@ all components are further explained in the following paragraphs.
     deletion of TA's and SD's, and may include, for example,  over-the-air
     updates to keep an SP's TAs up-to-date and clean up when a version
     should be removed. TAMs may provide services that make it easier for
-    SPs or DAs to use the TAM's service to manage multiple devices, 
+    SPs or DAs to use the TAM's service to manage multiple devices,
     although that is not required of a TAM.
 
     The TAM performs its management of TA's and SD's through  an
-    interaction with a Device's TEEP Broker. As shown in 
+    interaction with a Device's TEEP Broker. As shown in
     #notionalarch, the TAM cannot directly contact a Device, but must
     wait for a the TEEP Broker or a Client Application to contact
     the TAM requesting a particular service. This architecture is
     intentional in order to accommodate network and application firewalls
     that normally protect user and enterprise devices from arbitrary
     connections from external network entities.
- 
+
     A TAM may be publically available for use by many SPs, or a TAM
     may be private, and accessible by only one or a limited number of
     SPs. It is expected that manufacturers and carriers will run their
@@ -418,8 +411,8 @@ all components are further explained in the following paragraphs.
 
     A SP or Device Administrator chooses a particular TAM based on
     whether the TAM is trusted by a Device or set of Devices. The
-    TAM is trusted by a device if the TAM's public key is an authorized 
-    Trust Anchor in the Device. A SP or Device Administrator may run 
+    TAM is trusted by a device if the TAM's public key is an authorized
+    Trust Anchor in the Device. A SP or Device Administrator may run
     their own TAM, however the Devices they wish to manage must include
     this TAM's pubic key in the Trust Anchor list.
 
@@ -427,19 +420,19 @@ all components are further explained in the following paragraphs.
     be required for a SP to manage multiple different types of devices
     from different manufacturers, or devices on different carriers, since
     the Trust Anchor list on these different devices may contain different
-    TAMs. A Device Administrator may be able to add thier own TAM's
+    TAMs. A Device Administrator may be able to add their own TAM's
     public key or certificate to the Trust Anchor list on all their devices,
-    overcoming this limitation. 
+    overcoming this limitation.
 
     Any entity is free to operate a TAM. For a TAM to be successful, it must
     have its public key or certificate installed in Devices Trust Anchor list.
     A TAM may set up a relationship with device manufacturers or carriers
-    to have them install the TAM's keys in their device's Trust Anchor list. 
+    to have them install the TAM's keys in their device's Trust Anchor list.
     Alternatively, a TAM may publish its certificate and allow Device
-    Administrators to install the TAM's certificate in their devices as 
+    Administrators to install the TAM's certificate in their devices as
     an after-market-action.
 
-  - TEEP Broker: The TEEP Broker is an application running in a Rich 
+  - TEEP Broker: The TEEP Broker is an application running in a Rich
     Execution Environment that enables the message protocol exchange between
     a TAM and a TEE in a device. The TEEP Broker does not process messages
     on behalf of a TEE, but merely is responsible for relaying messages from
@@ -469,12 +462,9 @@ all components are further explained in the following paragraphs.
     different CAs can be chosen by each TAM, and different device CAs
     can be used by different device manufacturers.
 
-  - Secure Boot:  Secure boot enables authenticity checking of TEEs
-    by the TAM.  Note that some TEE implementations do not require
-    secure boot functionality.
-  
-[Editor's Note: 
+\[Editor's Note:
  * Move this paragraph below -- too much information at this point
+
     The payment SP isn't a device administrator of the user devices.  A
     user who chooses to download the payment TA into a device acts
     as the device administrator, authorizing the TA installation via
@@ -545,7 +535,7 @@ the application developer may provide its TA to a TAM provider
 that will be managing the TA in various devices. 3. A user
 will go to an Application Store to download the Client
 Application. The Client Application will trigger TA installation
-by initiating communicaton with a TAM. This is the step 4. The Client Application
+by initiating communication with a TAM. This is the step 4. The Client Application
 will get messages from TAM, and interacts with device
 TEE via an Agent.
 
@@ -672,7 +662,11 @@ security.
 {: #keytypelist title="Key and Certificate Types"}
 
 1. TFW key pair and certificate:  A key pair and certificate for
-    evidence of secure boot and trustworthy firmware in a device.
+    evidence of trustworthy firmware in a device. This key pair is
+    optional for TEEP architecture. Some TEE may present its
+    trusted attributes to a TAM using signed attestation with a
+    TFW key. For example, a platform that uses a hardware based TEE
+    can have attestation data signed by a hardware protected TFW key.  
 
       - Location:   Device secure storage
 
@@ -863,38 +857,38 @@ for the SPs it represents.
 
 Step 1: Prepare Images for Devices
 
-  * 1.  [TEE vendor] Deliver TEE Image (CODE Binary) to device OEM
+  * 1.  \[TEE vendor\] Deliver TEE Image (CODE Binary) to device OEM
 
-  * 2.  [CA]  Deliver root CA Whitelist
+  * 2.  \[CA\]  Deliver root CA Whitelist
 
-  * 3.  [Soc]  Deliver TFW Image
+  * 3.  \[Soc\]  Deliver TFW Image
 
 Step 2: Inject Key Pairs and Images to Devices
 
-  * 1.  [OEM] Generate Secure Boot Key Pair (May be shared among multiple
+  * 1.  \[OEM\] Generate TFW Key Pair (May be shared among multiple
        devices)
 
-  * 2.  [OEM] Flash signed TFW Image and signed TEE Image onto devices
-       (signed by Secure Boot Key)
+  * 2.  \[OEM\] Flash signed TFW Image and signed TEE Image onto devices
+       (signed by TFW Key)
 
 Step 3: Set up attestation key pairs in devices
 
-  * 1.  [OEM]  Flash Secure Boot Public Key and eFuse Key (eFuse key is
-       unique per device)
+  * 1.  \[OEM\]  Flash TFW Public Key and a secure bootloader key in
+        eFuse.
 
-  * 2.  [TFW/TEE] Generate a unique attestation key pair and get a
+  * 2.  \[TFW/TEE\] Generate a unique attestation key pair and get a
        certificate for the device.
 
 Step 4: Set up trust anchors in devices
 
-  * 1.  [TFW/TEE] Store the key and certificate encrypted with the eFuse
-       key
+  * 1.  \[TFW/TEE\] Store the key and certificate encrypted with the
+        bootloader key
 
-  * 2.  [TEE vendor or OEM] Store trusted CA certificate list into
+  * 2.  \[TEE vendor or OEM\] Store trusted CA certificate list into
        devices
 
 
-# Agent
+# TEEP Broker
 
 A TEE and TAs do not generally have the capability to communicate to the
 outside of the hosting device.  For example, GlobalPlatform
@@ -988,10 +982,11 @@ is outside of the current scope of this document to detail that.
 
 It should be noted that the attestation scheme described is based on
 signatures.  The only encryption that takes place may be the use of a
-so-called eFuse to release the SBM signing key and later during the
+bootloader key protected by eFuse to release the boot module signing
+key and later during the
 protocol lifecycle management interchange with the TAM.
 
-SBM attestation can be optional where the
+A boot module generated attestation can be optional where the
 starting point of device attestation can be at TEE certificates.  A TAM
 can define its policies on what kinds of TEE it trusts if TFW
 attestation isn't included during the TEE attestation.
@@ -1001,8 +996,8 @@ attestation isn't included during the TEE attestation.
 During manufacture the following steps are required:
 
 1. A device-specific TFW key pair and certificate are burnt into the
-     device, encrypted by eFuse.  This key pair will be used for
-     signing operations performed by the SBM.
+     device, protected by eFuse.  This key pair will be used for
+     signing operations performed by the boot module.
 
 2. TEE images are loaded and include a TEE instance-specific key
      pair and certificate.  The key pair and certificate are included
@@ -1016,17 +1011,17 @@ During manufacture the following steps are required:
 
 During device boot the following steps are required:
 
-1. Secure boot releases the TFW private key by decrypting it with
-     eFuse.
+1. The boot module releases the TFW private key by decrypting it with
+   the key protected by eFuse.
 
-2. The SBM verifies the code-signing signature of the active TEE and
+2. The boot module verifies the code-signing signature of the active TEE and
      places its TEE public key into a signing buffer, along with its
      identifier for later access.  For a TEE non-compliant to this
-     architecture, the SBM leaves the TEE public key field blank.
+     architecture, the boot module leaves the TEE public key field blank.
 
-3. The SBM signs the signing buffer with the TFW private key.
+3. The boot module signs the signing buffer with the TFW private key.
 
-4. Each active TEE performs the same operation as the SBM, building
+4. Each active TEE performs the same operation as the boot module, building
      up their own signed buffer containing subordinate TEE
      information.
 
@@ -1038,15 +1033,29 @@ that is registered in the trust store of devices.  In
 this way, the TEE can check the intermediate and root CA and verify
 that it trusts this TAM to perform operations on the TEE.
 
-# Acknowledgements
+# Algorithm and Attestation Agility  
 
-The authors thank Dave Thaler for his very thorough review and many
-important suggestions.  Most content of this document is split from
-a previously combined OTrP protocol document
-{{I-D.ietf-teep-opentrustprotocol}}.  We thank the former co-authors
-Nick Cook and Minho Yoo for the initial document content, and
-contributors Brian Witten, Tyler Kim, and Alin Mutu.
+RFC 7696 {{RFC7696}} outlines the requirements to migrate from one 
+mandatory-to-implement algorithm suite to another over time. 
+This feature is also known as crypto agility. Protocol evolution 
+is greatly simplified when crypto agility is already considered 
+during the design of the protocol. In the case of Open Trust 
+Protocol (OTrP) the diverse range of use cases, from trusted app 
+updates for smart phones and tablets to updates of code on 
+higher-end IoT devices, creates the need for different 
+mandatory-to-implement algorithms already from the start. 
 
+Crypto agility in the OTrP concerns the use of symmetric as well 
+as asymmetric algorithms. Symmetric algorithms are used for 
+encryption of content whereas the asymmetric algorithms are 
+mostly used for signing messages.
+
+In addition to the use of cryptographic algorithms in OTrP there 
+is also the need to make use of different attestation technologies. 
+A Device must provide techniques to inform a TAM about the 
+attestation technology it supports. For many deployment cases it 
+is more likely for the TAM to support one or more attestation 
+techniques whereas the Device may only support one. 
 
 # Security Considerations
 
@@ -1134,15 +1143,24 @@ support of trust anchor update in their shipped devices.
 
 This document does not require actions by IANA.
 
+# Acknowledgements
+
+The authors thank Dave Thaler for his very thorough review and many
+important suggestions.  Most content of this document is split from
+a previously combined OTrP protocol document
+{{I-D.ietf-teep-opentrustprotocol}}.  We thank the former co-authors
+Nick Cook and Minho Yoo for the initial document content, and
+contributors Brian Witten, Tyler Kim, and Alin Mutu.
+
+
 --- back
 
 
 # History
 
-RFC EDITOR: PLEASE REMOVE THE THIS SECTION
+RFC EDITOR: PLEASE REMOVE THIS SECTION
 
 IETF Drafts
 
 draft-00:
 - Initial working group document
-
