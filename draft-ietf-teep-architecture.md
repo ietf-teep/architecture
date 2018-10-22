@@ -877,7 +877,7 @@ Step 2: Inject Key Pairs and Images to Devices
 
 Step 3: Set up attestation key pairs in devices
 
-  * 1.  [OEM]  Flash TFW Public Key and a secure bootloader key.
+  * 1.  [OEM]  Flash TFW Public Key and a bootloader key.
 
   * 2.  [TFW/TEE] Generate a unique attestation key pair and get a
        certificate for the device.
