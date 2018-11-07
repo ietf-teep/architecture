@@ -198,7 +198,7 @@ The following terms are used:
     administration of a Device. A Device Administrator has privileges
     on the Device to install and remove applications and TAs, approve
     or reject Trust Anchors, and approve or reject Service Providers,
-    among possibly other privileges on the Device. A device owner can
+    among possibly other privileges on the Device. A Device Administrator can
     manage the list of allowed TAMs by modifying the list of Trust
     Anchors on the Device. Although a Device Administrator may have
     privileges and Device-specific controls to locally administer a
