@@ -211,17 +211,17 @@ The following terms are used:
     Trust Anchor may be a certificate or it may be a raw public key
     along with additional data if necessary such as its public key
     algorithm and parameters.
-    The trust anchor is normally stored in a location that resists
+    The Trust Anchor is normally stored in a location that resists
     unauthorized modification, insertion, or replacement. The digital
     fingerprint of a Trust Anchor may be stored along with the Trust
     Anchor certificate or public key. The Trust Anchor fingerprint
-    can be part of Trust Anchor format. A device can use it uniquely
-    identify a Trust Anchor to be trusted and replaced.
-    The trust anchor private key owner can sign certificates of other
+    can be part of Trust Anchor format. A device can use the
+    fingerprint to uniquely identify a Trust Anchor.
+    The Trust Anchor private key owner can sign certificates of other
     public keys, which conveys trust about those keys to the device.
-    A certificate signed by the trust anchor communicates that the
+    A certificate signed by the Trust Anchor communicates that the
     private key holder of the signed certificate is trusted by the
-    trust anchor holder, and can therefore be trusted by the device.
+    Trust Anchor holder, and can therefore be trusted by the device.
     Trust Anchors in a device may be updated by an authorized party
     when a Trust Anchor should be deprecated or a new Trust Anchor
     should be added.
@@ -250,14 +250,15 @@ The following terms are used:
     function. A RoT should be secure by design, small, and protected
     by hardware against modification or interference. Examples of
     RoTs include software/firmware measurement and verification using
-    a trust anchor (RoT for Verification), provide signed assertions
+    a Trust Anchor (RoT for Verification), provide signed assertions
     using a protected attestation key (RoT for Reporting), or protect the
     storage and/or use of cryptographic keys (RoT for Storage). Other
     RoTs are possible, including RoT for Integrity, and RoT for Measurement.
     Reference: NIST SP800-164 (Draft).  
 
-  - Trusted Firmware (TFW): A firmware in a device that can be verified
-    with a trust anchor by RoT for Verification.
+  - Trusted Firmware (TFW): A firmware in a device that is signed
+    by a Trust Anchor, and which can be verified locally by the
+    device using an RoT for Verification before the firmware is executed.
 
   - Bootloader key: This symmetric key is protected by  
     electronic fuse (eFUSE) technology. In this context it is used to decrypt a  
@@ -398,7 +399,7 @@ all components are further explained in the following paragraphs.
     that normally protect user and enterprise devices from arbitrary
     connections from external network entities.
 
-    A TAM may be publically available for use by many SPs, or a TAM
+    A TAM may be publicly available for use by many SPs, or a TAM
     may be private, and accessible by only one or a limited number of
     SPs. It is expected that manufacturers and carriers will run their
     own private TAM. Another example of a private TAM is a TAM running as
@@ -450,7 +451,7 @@ all components are further explained in the following paragraphs.
 
   - Certification Authority (CA):  Certificate-based credentials used for
     authenticating a device, a TAM and an SP.  A device embeds a list
-    of root certificates (trust anchors), from trusted CAs that a TAM
+    of root certificates (Trust Anchors), from trusted CAs that a TAM
     will be validated against.  A TAM will remotely attest a device
     by checking whether a device comes with a certificate from a CA
     that the TAM trusts.  The CAs do not need to be the same;
@@ -465,11 +466,11 @@ all components are further explained in the following paragraphs.
 This architecture leverages asymmetric cryptography to
 authenticate a device to a TAM. Additionally, a TEE
 in a device authenticates a TAM and TA signer. The
-provisioning of trust anchors to a device may different from
+provisioning of Trust Anchors to a device may different from
 one use case to the other. A device administrator may want to
 have the capability to control what TAs are allowed.
 A device manufacturer enables verification of the TA signers
-and TAM providers; it may embed a list of default trust anchors
+and TAM providers; it may embed a list of default Trust Anchors
 that the signer of an allowed TA's signer certificate should
 chain to. A device administrator may choose to accept a subset
 of the allowed TAs via consent or action of downloading.
@@ -604,7 +605,7 @@ certificate from a CA that is listed in the trust store of the TEE.
 
 ## Trust Anchors in TAM
 
-The trust anchor store in a TAM consists of a list of CA certificates
+The Trust Anchor store in a TAM consists of a list of CA certificates
 that sign various device TEE certificates.  A TAM decides what
 devices it will trust the TEE in.
 
@@ -715,8 +716,8 @@ security.
 
 ## Scalability
 
-This architecture uses a PKI.  Trust anchors exist on the devices to
-enable the TEE to authenticate TAMs, and TAMs use trust anchors to
+This architecture uses a PKI.  Trust Anchors exist on the devices to
+enable the TEE to authenticate TAMs, and TAMs use Trust Anchors to
 authenticate TEEs.  Since a PKI is used, many intermediate CA
 certificates can chain to a root certificate, each of which can issue
 many certificates.  This makes the protocol highly scalable.  New
@@ -863,7 +864,7 @@ Step 3: Set up attestation key pairs in devices
   2.  [TFW/TEE] Generate a unique attestation key pair and get a
        certificate for the device.
 
-Step 4: Set up trust anchors in devices
+Step 4: Set up Trust Anchors in devices
 
   1.  [TFW/TEE] Store the key and certificate encrypted with the
         bootloader key
@@ -1115,10 +1116,10 @@ TFW and TEE device certificates are expected to be long lived, longer
 than the lifetime of a device.  A TAM certificate usually has a
 moderate lifetime of 2 to 5 years.  A TAM should get renewed or
 rekeyed certificates.  The root CA certificates for a TAM, which are
-embedded into the trust anchor store in a device, should have long
-lifetimes that don't require device trust anchor update.  On the
+embedded into the Trust Anchor store in a device, should have long
+lifetimes that don't require device Trust Anchor update.  On the
 other hand, it is imperative that OEMs or device providers plan for
-support of trust anchor update in their shipped devices.
+support of Trust Anchor update in their shipped devices.
 
 
 #  IANA Considerations
