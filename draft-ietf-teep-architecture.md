@@ -56,8 +56,9 @@ normative:
   RFC2119:
   RFC8174:
 informative:
+  RFC6024:
   I-D.ietf-teep-opentrustprotocol:
-  RFC7696: 
+  RFC7696:
   GPTEE:
     author:
       org: Global Platform
@@ -207,14 +208,23 @@ The following terms are used:
 
   - Trust Anchor: A public key in a device whose corresponding private
     key is held by an entity implicitly trusted by the device. The
-    Trust Anchor may be a certificate or it may be a raw public key.
+    Trust Anchor may be a certificate or it may be a raw public key
+    along with additional data if necessary such as its public key
+    algorithm and parameters.
     The trust anchor is normally stored in a location that resists
-    unauthorized modification, insertion, or replacement.   
+    unauthorized modification, insertion, or replacement. The digital
+    fingerprint of a Trust Anchor may be stored along with the Trust
+    Anchor certificate or public key. The Trust Anchor fingerprint
+    can be part of Trust Anchor format. A device can use it uniquely
+    identify a Trust Anchor to be trusted and replaced.
     The trust anchor private key owner can sign certificates of other
     public keys, which conveys trust about those keys to the device.
     A certificate signed by the trust anchor communicates that the
     private key holder of the signed certificate is trusted by the
     trust anchor holder, and can therefore be trusted by the device.
+    Trust Anchors in a device may be updated by an authorized party
+    when a Trust Anchor should be deprecated or a new Trust Anchor
+    should be added.
 
   - Trusted Application (TA): An application component that runs in a TEE.
 
@@ -384,8 +394,8 @@ all components are further explained in the following paragraphs.
 ~~~~
 {: #notionalarch title="Notional Architecture of TEEP"}
 
-  - Service Providers and Device Administrators utilize the services 
-    of a TAM to manage TAs on Devices. SPs do not directly interact 
+  - Service Providers and Device Administrators utilize the services
+    of a TAM to manage TAs on Devices. SPs do not directly interact
     with devices. DAs may elect to use a TAM for remote administration
     of TAs instead of managing each device directly.
 
@@ -1025,27 +1035,27 @@ that it trusts this TAM to perform operations on the TEE.
 
 # Algorithm and Attestation Agility  
 
-RFC 7696 {{RFC7696}} outlines the requirements to migrate from one 
-mandatory-to-implement algorithm suite to another over time. 
-This feature is also known as crypto agility. Protocol evolution 
-is greatly simplified when crypto agility is already considered 
-during the design of the protocol. In the case of Open Trust 
-Protocol (OTrP) the diverse range of use cases, from trusted app 
-updates for smart phones and tablets to updates of code on 
-higher-end IoT devices, creates the need for different 
-mandatory-to-implement algorithms already from the start. 
+RFC 7696 {{RFC7696}} outlines the requirements to migrate from one
+mandatory-to-implement algorithm suite to another over time.
+This feature is also known as crypto agility. Protocol evolution
+is greatly simplified when crypto agility is already considered
+during the design of the protocol. In the case of Open Trust
+Protocol (OTrP) the diverse range of use cases, from trusted app
+updates for smart phones and tablets to updates of code on
+higher-end IoT devices, creates the need for different
+mandatory-to-implement algorithms already from the start.
 
-Crypto agility in the OTrP concerns the use of symmetric as well 
-as asymmetric algorithms. Symmetric algorithms are used for 
-encryption of content whereas the asymmetric algorithms are 
+Crypto agility in the OTrP concerns the use of symmetric as well
+as asymmetric algorithms. Symmetric algorithms are used for
+encryption of content whereas the asymmetric algorithms are
 mostly used for signing messages.
 
-In addition to the use of cryptographic algorithms in OTrP there 
-is also the need to make use of different attestation technologies. 
-A Device must provide techniques to inform a TAM about the 
-attestation technology it supports. For many deployment cases it 
-is more likely for the TAM to support one or more attestation 
-techniques whereas the Device may only support one. 
+In addition to the use of cryptographic algorithms in OTrP there
+is also the need to make use of different attestation technologies.
+A Device must provide techniques to inform a TAM about the
+attestation technology it supports. For many deployment cases it
+is more likely for the TAM to support one or more attestation
+techniques whereas the Device may only support one.
 
 # Security Considerations
 
