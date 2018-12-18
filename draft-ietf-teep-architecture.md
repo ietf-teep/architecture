@@ -199,7 +199,7 @@ The following terms are used:
     administration of a Device. A Device Administrator has privileges
     on the Device to install and remove applications and TAs, approve
     or reject Trust Anchors, and approve or reject Service Providers,
-    among possibly other privileges on the Device. A device owner can
+    among possibly other privileges on the Device. A Device Administrator can
     manage the list of allowed TAMs by modifying the list of Trust
     Anchors on the Device. Although a Device Administrator may have
     privileges and Device-specific controls to locally administer a
@@ -256,10 +256,14 @@ The following terms are used:
     RoTs are possible, including RoT for Integrity, and RoT for Measurement.
     Reference: NIST SP800-164 (Draft).  
 
-  - Trusted Firmware (TFW): A firmware in a device that is signed
-    by a Trust Anchor, and which can be verified locally by the
-    device using an RoT for Verification before the firmware is executed.
+  - Trusted Firmware (TFW): A firmware in a device that can be verified
+    with a Trust Anchor by RoT for Verification.
 
+  - Bootloader key: This symmetric key is protected by  
+    electronic fuse (eFUSE) technology. In this context it is used to decrypt a  
+    TFW private key, which belongs to a device-unique private/public key pair.
+    Not every device is equipped with a bootloader key.
+	
 This document uses the following abbreviations:
 
   - CA: Certificate Authority
@@ -380,7 +384,7 @@ all components are further explained in the following paragraphs.
    |    | |TA1| |TA2| |                   | |  |    | TAM-2  |    |
    |  +-->|   | |   | |        +-------+  | |  |    +--------+    |
    |  | | |   | |   |<---------| App-2 |--+ |  |                  |
-   |  | | +---+ +---+ |    +-------+   |    |  |       Device Administrator   
+   |  | | +---+ +---+ |    +-------+   |    |  |    Device Administrator
    |  | +-------------+    | App-1 |   |    |  |
    |  |                    |       |   |    |  |
    |  +--------------------|       |---+    |  |
@@ -471,16 +475,6 @@ all components are further explained in the following paragraphs.
     that the TAM trusts.  The CAs do not need to be the same;
     different CAs can be chosen by each TAM, and different device CAs
     can be used by different device manufacturers.
-
-[Editor's Note:
- * Move this paragraph below -- too much information at this point
-    The payment SP isn't a device administrator of the user devices.  A
-    user who chooses to download the payment TA into a device acts
-    as the device administrator, authorizing the TA installation via
-    the downloading consent.  The device manufacturer is typically
-    responsible for embedding the TAM trust verification capability
-    in its device TEE.
-]
 
 ## Different Renditions of TEEP Architecture
 
@@ -882,8 +876,7 @@ Step 2: Inject Key Pairs and Images to Devices
 
 Step 3: Set up attestation key pairs in devices
 
-  1.  [OEM]  Flash TFW Public Key and a secure bootloader key in
-        eFuse.
+  1.  [OEM] Flash TFW Public Key and a bootloader key.
 
   2.  [TFW/TEE] Generate a unique attestation key pair and get a
        certificate for the device.
@@ -990,22 +983,20 @@ TEEs can be added post-manufacture using the scheme proposed, but it
 is outside of the current scope of this document to detail that.
 
 It should be noted that the attestation scheme described is based on
-signatures.  The only encryption that takes place may be the use of a
-bootloader key protected by eFuse to release the boot module signing
-key and later during the
-protocol lifecycle management interchange with the TAM.
+signatures.  The only decryption that may take place is through the 
+use of a bootloader key.
 
 A boot module generated attestation can be optional where the
 starting point of device attestation can be at TEE certificates.  A TAM
 can define its policies on what kinds of TEE it trusts if TFW
-attestation isn't included during the TEE attestation.
+attestation is not included during the TEE attestation.
 
 ###  Attestation Hierarchy Establishment: Manufacture
 
 During manufacture the following steps are required:
 
 1. A device-specific TFW key pair and certificate are burnt into the
-     device, protected by eFuse.  This key pair will be used for
+     device.  This key pair will be used for
      signing operations performed by the boot module.
 
 2. TEE images are loaded and include a TEE instance-specific key
@@ -1021,7 +1012,7 @@ During manufacture the following steps are required:
 During device boot the following steps are required:
 
 1. The boot module releases the TFW private key by decrypting it with
-   the key protected by eFuse.
+   the bootloader key.
 
 2. The boot module verifies the code-signing signature of the active TEE and
      places its TEE public key into a signing buffer, along with its
