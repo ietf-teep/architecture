@@ -284,34 +284,15 @@ This document uses the following abbreviations:
 
   - TFW: Trusted Firmware
 
-# Scope and Assumptions
-
+# Assumptions
 
 This specification assumes that an applicable device is equipped with
 one or more TEEs and each TEE is pre-provisioned with a device-unique
-public/private key pair, which is securely stored. This key pair is
-referred to as the 'root of trust' for remote attestation of
-the associated TEE in a device by an TAM.
+public/private key pair, which is securely stored.
 
-New note: SD is for managing keys for TAs
-
-A Security Domain (SD) concept is used as the security boundary inside
-a TEE for trusted applications. Each SD is typically associated with
-one TA provider as the owner, which is a logical space that contains an
-SP's TAs. One TA provider may request to have multiple SDs in a TEE.
-One SD may contain multiple TAs. Each Security Domain requires the
-management operations of TAs in the form of installation, update and
-deletion.
-
-Each TA binary and configuration data can be from either of two sources:
-
-1. A TAM supplies the signed and encrypted TA binary and any required configuration data
-
-2. A Client Application supplies the TA binary
-
-The architecture covers the first case where the TA binary and
-configuration data are delivered from a TAM. The second case calls
-for an extension when a TAM is absent.
+A TEE uses an isolation mechanism between Trusted Applications to ensure 
+that one TA cannot read, modify or delete the data and code of another 
+TA. 
 
 # Use Cases
 
