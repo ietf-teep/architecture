@@ -256,9 +256,8 @@ The following terms are used:
     RoTs are possible, including RoT for Integrity, and RoT for Measurement.
     Reference: NIST SP800-164 (Draft).  
 
-  - Trusted Firmware (TFW): A firmware in a device that is signed
-    by a Trust Anchor, and which can be verified locally by the
-    device using an RoT for Verification before the firmware is executed.
+  - Trusted Firmware (TFW): A firmware in a device that can be verified
+    with a Trust Anchor by RoT for Verification.
 
   - Bootloader key: This symmetric key is protected by  
     electronic fuse (eFUSE) technology. In this context it is used to decrypt a  
@@ -858,8 +857,7 @@ Step 2: Inject Key Pairs and Images to Devices
 
 Step 3: Set up attestation key pairs in devices
 
-  1.  [OEM]  Flash TFW Public Key and a secure bootloader key in
-        eFuse.
+  1.  [OEM] Flash TFW Public Key and a bootloader key.
 
   2.  [TFW/TEE] Generate a unique attestation key pair and get a
        certificate for the device.
