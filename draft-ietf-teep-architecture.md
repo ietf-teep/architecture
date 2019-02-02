@@ -966,8 +966,10 @@ In TEEP, the primary purpose of an attestation is to allow a device to prove to 
 and SPs that a TEE in the device has particular properities, was built by a particular 
 manufacturer, or is executing a particular TA. Other claims are possible; this architecture 
 specification does not limit the attestation claims, but defines a minimal set of claims 
-required for TEEP to operate properly. Extensions to these claims are possible, and TEEP allows
-for such extensions to be included in the the TEEP-defined claims format. 
+required for TEEP to operate properly. Extensions to these claims are possible, but are not
+defined in the TEEP specifications. Other standards or groups may define the format and semantics
+of extended claims. The TEEP specification defines the claims format such that these extended claims
+may be easily included in a TEEP attestation message. 
 
 As of the writing of this specification, device and TEE attestations have not been standardized 
 across the market. Different devices, manufacturers, and TEEs support different attestation
@@ -983,11 +985,11 @@ set of cryptographic properties based on minimal assumptions. The cryptographic 
 conveyed by the attestation; however the assumptions are not conveyed within the attestation itself.
 
 The assumptions which may apply to an attestation have to do with the quality of the attestation
-and the quality and security provided by the TEE, the device, the manufacturer, or others invovled
+and the quality and security provided by the TEE, the device, the manufacturer, or others involved
 in the device or TEE ecosystem. 
 Some of the assumptions that might apply to an attestations include (this may not be a comprehensive list):
     - Assumptions regarding the security measures a manufacturer takes when provisioning keys into devices/TEEs;
-    - Assumption regarding what hardware and software components have access to the Attestation keys of the TEE;
+    - Assumptions regarding what hardware and software components have access to the Attestation keys of the TEE;
     - Assumptions related to the source or local verification of claims within an attestation prior to a TEE signing a set of claims;
     - Assumptions regarding the level of protection afforded to attestation keys against exfiltration, modification, and side channel attacks;
     - Assumptions regarding the limitations of use applied to TEE Attestation keys;
@@ -997,12 +999,12 @@ Some of the assumptions that might apply to an attestations include (this may no
 TAMs and SPs must be comfortable with the assumptions that are inherently part of any attestation
 they accept. Alternatively, any TAM or SP may choose not to accept an attestation generated from
 a particular manufacturer or device's TEE based on the inherent assumptions. The choice and policy 
-decisions are left up to the particular TAM / SP.
+decisions are left up to the particular TAM/SP.
 
 Some TAMs or SPs may require additional claims in order to properly authorize a device or TEE. These
 additional claims may help clear up any assumptions for which the TAM/SP wants to alleviate. The specific 
 format for these additional claims are outside the scope of this specification, but the OTrP protocol
-SHALL provide a mechanism to include additional claims in the attestation. 
+SHALL allow these additional claims to be included in the attestation messages. 
 
 The following sub-sections define the cryptographic properties conveyed by the TEEP attestation,
 the basic set of TEEP claims required in a TEEP attestation, the TEEP attestation flow between the
@@ -1082,7 +1084,7 @@ RFC 7696 {{RFC7696}} outlines the requirements to migrate from one
 mandatory-to-implement algorithm suite to another over time.
 This feature is also known as crypto agility. Protocol evolution
 is greatly simplified when crypto agility is already considered
-during the design of the protocol. In the case of Open Trust
+during the design of the protocol. In the case of the Open Trust
 Protocol (OTrP) the diverse range of use cases, from trusted app
 updates for smart phones and tablets to updates of code on
 higher-end IoT devices, creates the need for different
