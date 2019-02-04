@@ -955,8 +955,72 @@ applications to interact with an agent for the TAM and TEE
 interaction.
 
 # Attestation
+Attestation is the process through which one entity (an attestor) presents a series of
+claims to another entity (a verifier), and provides sufficient proof that the claims
+are true. Different verifiers may have different standards for attestation proofs
+and not all attestations are acceptable to every verifier. TEEP attestations are based
+upon the use of an asymmetric key pair under the control of the TEE to create digital
+signatures across a well-defined claim set.
 
-## Attestation Hierarchy
+In TEEP, the primary purpose of an attestation is to allow a device to prove to TAMs 
+and SPs that a TEE in the device has particular properities, was built by a particular 
+manufacturer, or is executing a particular TA. Other claims are possible; this architecture 
+specification does not limit the attestation claims, but defines a minimal set of claims 
+required for TEEP to operate properly. Extensions to these claims are possible, but are not
+defined in the TEEP specifications. Other standards or groups may define the format and semantics
+of extended claims. The TEEP specification defines the claims format such that these extended claims
+may be easily included in a TEEP attestation message. 
+
+As of the writing of this specification, device and TEE attestations have not been standardized 
+across the market. Different devices, manufacturers, and TEEs support different attestation
+algorithms and mechanisms. In order for TEEP to be inclusive, the attestation format shall
+allow for both proprietary attestation signatures, as well as a standardized form of attestation
+signature. Either form of attesation signature may be applied to a set of TEEP claims, and 
+both forms of attestation shall be considered conformant with TEEP. However, it should be recognized 
+that not all TAMs or SPs may be able to process all proprietary forms of attestations. All TAMs
+and SPs MUST be able to process the TEEP standard attestation format and attached signature.
+
+The attestation formats and mechanisms described and mandated by TEEP shall convey a particular 
+set of cryptographic properties based on minimal assumptions. The cryptographic properties are 
+conveyed by the attestation; however the assumptions are not conveyed within the attestation itself.
+
+The assumptions which may apply to an attestation have to do with the quality of the attestation
+and the quality and security provided by the TEE, the device, the manufacturer, or others involved
+in the device or TEE ecosystem. 
+Some of the assumptions that might apply to an attestations include (this may not be a comprehensive list):
+    - Assumptions regarding the security measures a manufacturer takes when provisioning keys into devices/TEEs;
+    - Assumptions regarding what hardware and software components have access to the Attestation keys of the TEE;
+    - Assumptions related to the source or local verification of claims within an attestation prior to a TEE signing a set of claims;
+    - Assumptions regarding the level of protection afforded to attestation keys against exfiltration, modification, and side channel attacks;
+    - Assumptions regarding the limitations of use applied to TEE Attestation keys;
+    - Assumptions regarding the processes in place to discover or detect TEE breeches; and
+    - Assumptions regarding the revocation and recovery process.
+
+TAMs and SPs must be comfortable with the assumptions that are inherently part of any attestation
+they accept. Alternatively, any TAM or SP may choose not to accept an attestation generated from
+a particular manufacturer or device's TEE based on the inherent assumptions. The choice and policy 
+decisions are left up to the particular TAM/SP.
+
+Some TAMs or SPs may require additional claims in order to properly authorize a device or TEE. These
+additional claims may help clear up any assumptions for which the TAM/SP wants to alleviate. The specific 
+format for these additional claims are outside the scope of this specification, but the OTrP protocol
+SHALL allow these additional claims to be included in the attestation messages. 
+
+The following sub-sections define the cryptographic properties conveyed by the TEEP attestation,
+the basic set of TEEP claims required in a TEEP attestation, the TEEP attestation flow between the
+TAM the device TEE, and some implementation examples of how an attestation key may be realized in 
+a real TEEP device. 
+
+## Attestation Cryptographic Properties
+
+
+## TEEP Attestation Claims
+
+
+## TEEP Attestation Flow
+
+
+## Attestation Key Example
 
 The attestation hierarchy and seed required for TAM protocol
 operation must be built into the device at manufacture.  Additional
@@ -1020,7 +1084,7 @@ RFC 7696 {{RFC7696}} outlines the requirements to migrate from one
 mandatory-to-implement algorithm suite to another over time.
 This feature is also known as crypto agility. Protocol evolution
 is greatly simplified when crypto agility is already considered
-during the design of the protocol. In the case of Open Trust
+during the design of the protocol. In the case of the Open Trust
 Protocol (OTrP) the diverse range of use cases, from trusted app
 updates for smart phones and tablets to updates of code on
 higher-end IoT devices, creates the need for different
