@@ -458,6 +458,57 @@ all components are further explained in the following paragraphs.
     can be used by different device manufacturers.
 
 ## Different Renditions of TEEP Architecture
+There is nothing prohibiting a device from implementing multiple TEEs. In
+addition, some TEEs ( for example, SGX) present themselves as separate containers 
+within memory without a controlling manager within the TEE. In these cases, 
+the rich operating system hosts multiple TEEP brokers, where each broker manages 
+a particular TEE or set of TEEs. Enumeration and access to the appropriate 
+broker is up to the rich OS and the applications. Verification that the correct TA 
+has been reached then becomes a matter of properly verifying TA attestations, 
+which are unforgeable. The multiple TEE approach is shown in the diagram below. 
+For brevity, TEEP Broker 2 is shown interacting with only one TAM and UA, but 
+no such limitation is intended to be implied in the architecture. 
+
+~~~~
+   +-------------------------------------------+
+   | Device                                    |
+   |                          +--------+       |        Service Provider
+   |                          |        |----------+               |
+   |    +-------------+       | TEEP   |---------+|               |
+   |    | TEE-1       |<------| Broker |       | ||   +--------+  |
+   |    |             |       | 1      |<---+  | |+-->|        |<-+
+   |    | +---+ +---+ |       |        |    |  | |  +-|  TAM-1 |
+   |    | |TA1| |TA2| |       |        |<-+ |  | +->| |        |<-+
+   |  +-->|   | |   |<---+    +--------+  | |  |    | +--------+  |
+   |  | | +---+ +---+ |  |                | |  |    | TAM-2  |    |
+   |  | |             |  |     +-------+  | |  |    +--------+    |
+   |  | +-------------+  +-----| App-2 |--+ |  |       ^          |
+   |  |                    +-------+   |    |  |       |        Device       
+   |  +--------------------| App-1 |   |    |  |       |   Administrator
+   |                +------|       |   |    |  |       |
+   |    +-----------|-+    |       |---+    |  |       |
+   |    | TEE-2     | |    |       |--------+  |       |
+   |    |           | |    |       |------+    |       |
+   |    | +---+     | |    +-------+      |    |       |
+   |    | |TA3|<----+ |    +----------+   |    |       |
+   |    | |   |       |    | TEEP     |<--+    |       |
+   |    | +---+       |<---| Broker   |----------------+
+   |    |             |    | 2        |        |
+   |    |             |    |          |        |
+   |    +-------------+    +----------+        |
+   |                                           |
+   +-------------------------------------------+
+~~~~
+{: #notionalarch2 title="Notional Architecture of TEEP wtih multiple TEEs"}
+
+In the diagram above, TEEP Broker 1 controls interactions with the TA's in TEE-1,
+and TEEP Broker 2 contorls interactions with the TA's in TEE-2. This presents some
+challenges for a TAM in completely managing the device, since a TAM may not 
+interact with all the TEEP Brokers on a particular platform. In addition, since
+TEE's may be physically separated, with wholly different resources, there may be no
+need for TEEP Brokers to share information on installed TAs or resource usage.
+However, the architecture guarantees that the TAM will receive all the relevant
+information from the TEEP Broker to which it communicates.
 
 
 ## Entity Relations
