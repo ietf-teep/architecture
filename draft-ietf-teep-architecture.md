@@ -1059,7 +1059,7 @@ Some of the assumptions that might apply to an attestations include (this may no
     - Assumptions regarding the level of protection afforded to attestation keys against exfiltration, modification, and side channel attacks;
     - Assumptions regarding the limitations of use applied to TEE Attestation keys;
     - Assumptions regarding the processes in place to discover or detect TEE breeches; and
-    - Assumptions regarding the revocation and recovery process.
+    - Assumptions regarding the revocation and recovery process of TEE attestation keys.
 
 TAMs and SPs must be comfortable with the assumptions that are inherently part of any attestation
 they accept. Alternatively, any TAM or SP may choose not to accept an attestation generated from
@@ -1077,13 +1077,109 @@ TAM the device TEE, and some implementation examples of how an attestation key m
 a real TEEP device. 
 
 ## Attestation Cryptographic Properties
+The attestation constructed by TEEP must convey certain cryptographic properties from the attestor to 
+the verifier; in the case of TEEP, the attestation must convey properties from the device to the TAM 
+and/or SP. The properties required by TEEP include:
+    - Non-repudiation, Unique Proof of Source - the cryptographic digital signature across the attestation,
+      and optionally along with information in the attestion itself SHALL uniquely identify a specific TEE
+      in a specific device.
+    - Integrity of claims - the cryptographic digital signature across the attestation SHALL cover the entire
+      attesation including all meta data and all the claims in the attestation, ensuring that the attestaion
+      has not be modified since the TEE signed the attestation.
 
+Standard public key algorithms such as RSA and ECDSA digital signatures convey these properties. Group public key 
+algorithms such as EPID can also convey these properties, if the attestation includes a unique device identifier
+and an identifier for the TEE. Other cryptographic operations used in other attestation schemes may also convey
+these properties. 
+
+The TEEP standard attestation format SHALL use one of the following digital signature formats:
+    - RSA-2048 with SHA-256 or SHA-384 in RSASSA-PKCS1-v1_5 or PSS format
+    - RSA-3072 with SHA-256 or SHA-384 in RSASSA-PKCS1-v1_5 or PSS format 
+    - ECDSA-256 using NIST P256 curve using SHA-256
+    - ECDSA-384 using NIST P384 curve using SHA-384
+    - HashEdDSA using Ed25519 with SHA-512 (Ed25519ph in RFC8032) and context="TEEP Attestation"
+    - EdDSA using Ed448 with SHAK256 (Ed448ph in RFC8032) and context="TEEP Attestation"
+
+All TAMs and SPs MUST be able to accept attestations using these algorithms, contingent on their acceptance of 
+the assumptions implied by the attestations.
+
+## TEEP Attestation Structure
+For a TEEP attestation to be useful, it must contain an information set allowing the TAM and/or SP to assess
+the attestation and make a related security policy decision. The structure of the TEEP attestation is shown 
+in the diagram below.
+
+~~~~
+                      +------(Signed By)-----------+
+                      |                            |
+        /--------------------------\               V
+      +---------------+-------------+--------------------------+
+      | Attestation   | The         | The                      |
+      | Header        | Claims      | Attestation Signature(s) |
+      +---------------+-------------+--------------------------+
+                          |     
+                          | 
+             +------------+--(Contains)------+-----------------+--------------+
+             |            |                  |                 |              |
+             V            V                  V                 V              V
+      +-------------+  +-------------+  +----------+   +-----------------+  +------------+
+      | Device      |  | TEE         |  |          |   | Action or       |  | Additional |
+      | Identifying |  | Identifying |  | Liveness |   | Operation       |  | or optional|
+      | Info        |  | Info        |  | Proof    |   | Specific claims |  | Claims     |
+      +-------------+  +-------------+  +----------+   +-----------------+  +------------+
+~~~~
+{: #attestationstructure title="Structure of TEEP Attestation"}
+
+The Attestation Header SHALL identify the "Attestation Type" and the "Attestation Signature Type" along
+with an "Attestation Format Version Number." The "Attestation Type" identifies the minimal set of claims 
+that MUST be included in the attestation; this is an identifier for a profile that defines the claims
+that should be included in the attestation as part of the "Action or Operation Specific Claims."
+The "Attestation Signature Type" identifies the type of attestation signature that is attached. 
+The type of attestation signature SHALL be one of the standard signatures types identified by an IANA 
+number, a proprietary signature type identified by an IANA number, or the generic "Proprietary Signature" 
+with an accompanying proprietary identifier. Not all TAMs may be able to process proprietary signatures.
+
+The claims in the attestation are set of mandatory and optional claims. The claims themselves SHALL be 
+defined in an attestation claims dictionary. See the next section on TEEP Attestation Claims.
+Claims are grouped in profiles under an identifier (Attestation Type), however all attestations require
+a minimal set of claims which includes:
+   
+    - Device Identifying Info: TEEP attestations must uniquely identify a device to the TAM and SP. This
+         identifier allows the TAM/SP to provide services unique to the device, such as managing installed
+         TAs, and providing subscriptions to services, and locating device-specific keying material to
+         communicate wiht or authenticate the device. Additionally, device manufacturer information must
+         be provided to provide better universal uniqueness qualities without requiring globally unique
+         identifiers for all devices.
+    - TEE Identifying info: The type of TEE that generated this attestation must be identified. Standard 
+         TEE types are identified by an IANA number, but also must include version identification information
+         such as the hardware, firmware, and software version of the TEE, as applicable by the 
+         TEE type. Structure to the version number is required.TEE manufacturer information for the TEE is 
+         required in order to disambiguate the same TEE type created by different manufacturers and
+         resolve potential assumptions around manufacturer provisioning, keying and support for the TEE.
+    - Liveness Proof: a claim that includes liveness information SHALL be included which may be a large nonce
+         or may be a timestamp and short nonce.
+    - Action Specific Claims: Certain attestation types shall include specific claims. For example an attestation
+         from a specific TA shall include a measurement, version and signing public key for the TA. 
+    - Additional Claims: (Optional - May be empty set) A TAM or SP may require specific additional claims in order 
+         to address potential assumptions, such as the requirement that a device's REE performed a secure boot, 
+         or that the device is not currenlty in a debug or non-productions state. A TAM may require a device to 
+         provide a device health attestation that may include some claims or measurements about the REE. 
+         These claims are TAM specific. 
 
 ## TEEP Attestation Claims
-
+TEEP  requires a set of attestation claims that provide sufficient evidence to the TAM and/or SP that the device
+and its TEE meet certain minimal requirements. Because attestation formats are not yet broadly standardized across
+the industry, standardization work is currently ongoing, and it is expected that extensions to the attestation
+claims will be required as new TEEs and devices are created, the set of attestation claims required by TEEP SHALL
+be defined in an IANA registry. That registry SHALL be defined in the OTrP protocol with sufficient elements 
+to address basic TEEP claims, expected new standard claims (for example from https://www.ietf.org/id/draft-mandyam-eat-01.txt),
+and proprietary claim sets. 
 
 ## TEEP Attestation Flow
-
+Attesations are required in TEEP under the following flows:
+    - When a TEE responds with device state information (dsi) to the TAM or SP, including a "GetDeviceState" 
+      response, "InstallTA" response, etc.
+    - When a new key pair is generated for a TA-to-TAM or TA-to-SP communication, the keypair must be covered by 
+      an attestation, including "CreateSecurityDomain" response, "UpdateSecurityDomain" response, etc.
 
 ## Attestation Key Example
 
