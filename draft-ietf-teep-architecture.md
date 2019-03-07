@@ -195,10 +195,24 @@ The following terms are used:
     A Service Provider requires the help of a TAM in order to provision
     the Trusted Applications to remote devices.
 
-  - Device Administrator:  An entity that owns or is responsible for
-    administration of a Device. A Device Administrator has privileges
-    on the Device to install and remove applications and TAs, approve
-    or reject Trust Anchors, and approve or reject Service Providers,
+  - Device User: A human being that uses a device. Many devices have
+    a single device user. Some devices have a primary device user with
+    other human beings as secondary device users (e.g., parent allowing
+    children to use their tablet or laptop). Relates to Device Owner
+    and Device Administrator.
+
+  - Device Owner: A device is always owned by someone. It is common for 
+    the (primary) device user to also own the device, making the device
+    user/owner also the device administrator. In enterprise environments
+    it is more common for the enterprise to own the device, and device 
+    users have no or limited administration rights. In this case, the
+    enterprise appoints a device administrator that is not the device
+    owner.
+
+  - Device Administrator:  An entity that is responsible for administration
+    of a Device, which could be the device owner. A Device Administrator 
+    has privileges on the Device to install and remove applications and TAs, 
+    approve or reject Trust Anchors, and approve or reject Service Providers,
     among possibly other privileges on the Device. A Device Administrator can
     manage the list of allowed TAMs by modifying the list of Trust
     Anchors on the Device. Although a Device Administrator may have
