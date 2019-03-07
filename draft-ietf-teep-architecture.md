@@ -1093,7 +1093,7 @@ and/or SP. The properties required by TEEP include:
       in a specific device.
 
   - Integrity of claims - the cryptographic digital signature across the attestation SHALL cover the entire
-      attesation including all meta data and all the claims in the attestation, ensuring that the attestaion
+      attesation including all meta data and all the claims in the attestation, ensuring that the attestation
       has not be modified since the TEE signed the attestation.
 
 Standard public key algorithms such as RSA and ECDSA digital signatures convey these properties. Group public key 
