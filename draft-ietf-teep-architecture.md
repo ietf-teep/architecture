@@ -197,11 +197,11 @@ The following terms are used:
 
   - Device User: A human being that uses a device. Many devices have
     a single device user. Some devices have a primary device user with
-    other human beings as secondary device users (e.g. parent allowing
+    other human beings as secondary device users (e.g., parent allowing
     children to use their tablet or laptop). Relates to Device Owner
     and Device Administrator.
 
-  - Device Owner: A device is always owned by by someone. It is common for 
+  - Device Owner: A device is always owned by someone. It is common for 
     the (primary) device user to also own the device, making the device
     user/owner also the device administrator. In enterprise environments
     it is more common for the enterprise to own the device, and device 
