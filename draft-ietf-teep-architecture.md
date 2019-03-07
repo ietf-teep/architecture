@@ -1053,12 +1053,19 @@ The assumptions which may apply to an attestation have to do with the quality of
 and the quality and security provided by the TEE, the device, the manufacturer, or others involved
 in the device or TEE ecosystem. 
 Some of the assumptions that might apply to an attestations include (this may not be a comprehensive list):
+
     - Assumptions regarding the security measures a manufacturer takes when provisioning keys into devices/TEEs;
+
     - Assumptions regarding what hardware and software components have access to the Attestation keys of the TEE;
+
     - Assumptions related to the source or local verification of claims within an attestation prior to a TEE signing a set of claims;
+
     - Assumptions regarding the level of protection afforded to attestation keys against exfiltration, modification, and side channel attacks;
+
     - Assumptions regarding the limitations of use applied to TEE Attestation keys;
+
     - Assumptions regarding the processes in place to discover or detect TEE breeches; and
+
     - Assumptions regarding the revocation and recovery process of TEE attestation keys.
 
 TAMs and SPs must be comfortable with the assumptions that are inherently part of any attestation
@@ -1093,11 +1100,17 @@ and an identifier for the TEE. Other cryptographic operations used in other atte
 these properties. 
 
 The TEEP standard attestation format SHALL use one of the following digital signature formats:
+
     - RSA-2048 with SHA-256 or SHA-384 in RSASSA-PKCS1-v1_5 or PSS format
+
     - RSA-3072 with SHA-256 or SHA-384 in RSASSA-PKCS1-v1_5 or PSS format 
+
     - ECDSA-256 using NIST P256 curve using SHA-256
+
     - ECDSA-384 using NIST P384 curve using SHA-384
+
     - HashEdDSA using Ed25519 with SHA-512 (Ed25519ph in RFC8032) and context="TEEP Attestation"
+
     - EdDSA using Ed448 with SHAK256 (Ed448ph in RFC8032) and context="TEEP Attestation"
 
 All TAMs and SPs MUST be able to accept attestations using these algorithms, contingent on their acceptance of 
@@ -1149,16 +1162,20 @@ a minimal set of claims which includes:
          communicate wiht or authenticate the device. Additionally, device manufacturer information must
          be provided to provide better universal uniqueness qualities without requiring globally unique
          identifiers for all devices.
+
     - TEE Identifying info: The type of TEE that generated this attestation must be identified. Standard 
          TEE types are identified by an IANA number, but also must include version identification information
          such as the hardware, firmware, and software version of the TEE, as applicable by the 
          TEE type. Structure to the version number is required.TEE manufacturer information for the TEE is 
          required in order to disambiguate the same TEE type created by different manufacturers and
          resolve potential assumptions around manufacturer provisioning, keying and support for the TEE.
+
     - Liveness Proof: a claim that includes liveness information SHALL be included which may be a large nonce
          or may be a timestamp and short nonce.
+
     - Action Specific Claims: Certain attestation types shall include specific claims. For example an attestation
          from a specific TA shall include a measurement, version and signing public key for the TA. 
+
     - Additional Claims: (Optional - May be empty set) A TAM or SP may require specific additional claims in order 
          to address potential assumptions, such as the requirement that a device's REE performed a secure boot, 
          or that the device is not currenlty in a debug or non-productions state. A TAM may require a device to 
@@ -1176,8 +1193,10 @@ and proprietary claim sets.
 
 ## TEEP Attestation Flow
 Attesations are required in TEEP under the following flows:
+
     - When a TEE responds with device state information (dsi) to the TAM or SP, including a "GetDeviceState" 
       response, "InstallTA" response, etc.
+
     - When a new key pair is generated for a TA-to-TAM or TA-to-SP communication, the keypair must be covered by 
       an attestation, including "CreateSecurityDomain" response, "UpdateSecurityDomain" response, etc.
 
