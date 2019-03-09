@@ -172,6 +172,7 @@ The following terms are used:
 
   - Client Application: An application running in a Rich Execution
     Environment, such as an Android, Windows, or iOS application.
+    We sometimes refer to this as the 'Client App'.
 
   - Device: A physical piece of hardware that hosts a TEE along with
     a Rich Execution Environment. A Device contains a default list
@@ -523,6 +524,78 @@ TEE's may be physically separated, with wholly different resources, there may be
 need for TEEP Brokers to share information on installed TAs or resource usage.
 However, the architecture guarantees that the TAM will receive all the relevant
 information from the TEEP Broker to which it communicates.
+
+## Client Apps, Trusted Apps, and Personalization Data
+
+In TEEP, there is an explicit relationship and dependence between the client app
+in the REE and one or more TAs in the TEE, as shown in {{notionalarch2}}.
+From the perspective of a device user, a client app that uses one or more TA's in a TEE
+appears no different from any other untrusted application in the REE. However, the way
+the client app and its corresponding TA's are packaged, delivered, and installed on
+the device can vary. The variations depend on whether the client app and TA are bundled
+together or are provided separately, and this has implications to the management of
+the TAs in the TEE. In addition to the client app and TA, the TA and/or TEE may require
+some additional data to personalize the TA to the service provider or the device user.
+This personalization data is dependent on the TEE, the TA and the SP; an example of 
+personalization data might be username and password of the device user's account with 
+the SP, or a secret symmetric key used to by the TA to communicate with the SP. The 
+personalization data must be encrypted to preserve the confidentiality of potentially 
+sensitive data contained within it. Other than this requirement to support confidentiality,
+TEEP place no limitations or requirements on the personalization data.
+
+There are three possible cases for bundling of the Client App, TA, and personalizaiton data:
+
+  1. The Client App, TA, and personnalization data are all bundled together in a single
+     package by the SP and provided to the TEEP Broker through the TAM.
+
+  2. The Client App and the TA are bundled together in a single binary, which the TAM or
+     a publicly accessible app store maintains in repository, and the personalization data
+     is separately provided by the SP. In this case, the personalization data is collected
+     by the TAM and included in the InstallTA message to the TEEP Broker.
+
+  3. All components are independent. The device user installs the Client App through some
+     independent or device-specific mechanism, and the TAM provides the TA and personalization
+     data from the SP. Delivery of the TA and personalization data may be combined or separate.
+
+## Examples of Application Delivery Mechanisms in Existing TEEs
+In order to better understand these cases, it is helpful to review actual implementations of
+TEEs and their application delivery mechanisms.
+
+In Intel Software Guard Extensions (SGX), the Client App and TA are typically bound into the 
+same binary (Case 2). The TA is compiled into the Client App binary using SGX tools, and 
+exists in the binary as a shared library (.so or .dll). The Client App loads the TA into 
+an SGX enclave when the client needs the TA. This organization makes it easy to maintain 
+compatibility between the Client App and the TA, since they are updated together. It is 
+entirely possible to create a Client App that loads an external TA into an SGX enclave and 
+use that TA (Case 3). In this case, the Client App would require a reference to an external 
+file or download such a file dynamically, place the contents of the file into memory, and 
+load that as a TA. Obviously, such file or downloaded content must be properly formatted 
+and signed for it to be accepted by the SGX TEE. In SGX, for Case 2 and Case 3, the 
+personalization data is normally loaded into the SGX enclave (the TA) after the TA has
+started. Although Case 1 is possible with SGX, there are no instances of this known to
+be in use at this time, since such a construction would required a special installation
+program and SGX TA to recieve the encrypted binary, decrypt it, separate it into the
+three different elements, and then install all three. This installation is complex,
+because the Client App decrypted inside the TEE must be passed out of the TEE to an 
+installer in the REE which would install the Client App; this assumes that the Client
+App binary includes the TA code also, otherwise there is a significant problem in getting
+the SGX encalve code (the TA) from the TEE, through the installer and into the Client App
+in a trusted fashion. Finally, the personalization data would need to be sent out of the 
+TEE (encrypted in an SGX encalve-to-enclave manner) to the REE's installation app, which
+would pass this data to the installed Client App, which would in turn send this data
+to the SGX enclave (TA). This complexity is due to the fact that each SGX enclave is separate
+and does not have direct communication to one another.
+
+[NOTE: Need to add an equivalent discussion for an ARM/TZ implementation]  
+
+## TEEP Architectural Support for Client App, TA, and Personalization Data Delivery
+This section defines TEEP support for the three different cases for delivery of the Client
+App, TA, and personalization data.
+
+[Note: discussion of format of this single binary, and who/what is responsible for splitting
+these things apart, and installing the client app into the REE, the TA into the TEE, and the 
+personalization data into the TEE or TA. Obviously the decryption must be done by the TEE
+but this may not be suported by all TAs.]
 
 
 ## Entity Relations
