@@ -525,6 +525,60 @@ need for TEEP Brokers to share information on installed TAs or resource usage.
 However, the architecture guarantees that the TAM will receive all the relevant
 information from the TEEP Broker to which it communicates.
 
+## Multiple TAMs and Relationship to TAs
+
+As shown in {{notionalarch2}}, the TEEP Broker provides connections from the TEE and
+the Client App to one or more TAMs. The selection of which TAM to communicate with is
+dependent on information from the Client App and is directly related to the TA.
+
+When a SP offers a service which requires a TA, the SP associates that service with a 
+specific TA. The TA itself is digitally signed, protecting its integrity, but the 
+signature also links the TA back to the signer. The signer is usually the SP, but in 
+some cases may be another party that the SP trusts. The SP selects one or more TAMs 
+through which to offer their service, and communicates the information of the service 
+and the specific client apps and TAs to the TAM. 
+
+The SP chooses TAMs based upon the markets into which the TAM can provide access. There
+may be TAMs that provide services to specific types of mobile devices, or mobile device 
+operating systems, or specific geographical regions or network carriers. A SP may be
+motivated to utilize multiple TAMs for its service in order to maximize market penetration
+and availability on multiple types of devices. This likely means that the same service
+will be available through multiple TAMs.
+
+When the SP publishes the Client App to an app store or other app repositories, the SP
+binds the Client App with a manifest that identifies what TAMs can be contacted for
+the TA. In some situations, an SP may use only a single TAM - this is likely the case
+for enterprise applications or SPs serving a closed community. For broad public apps,
+there will likely be multiple TAMs in the manifest - one servicing one brand of mobile 
+device and another servicing a different manufacturer, etc. Because different devices
+and different manufacturers trust different TAMs, the manifest will include different
+TAMs that support this SP's client app and TA. Multiple TAMs allow the SP to provide
+thier service and this app (and TA) to multiple different devices.
+
+When the TEEP Broker recieves a request to contact the TAM for a Client App in order to
+install a TA, a list of TAMs may be provided. The TEEP Broker selects a single TAM that
+is consistent with the list of trusted TAMs (trust anchors) provisioned on the device.
+For any client app, there should be only a single TAM for the TEEP Broker to contact. 
+This is also the case when a Client App uses multiple TAs, or when one TA depends on
+anther TA in a software dependency (see section TBD). The reason is that the SP should
+provide each TAM that it places in the Client App's manifest all the TAs that the app
+requires. There is no benefit to going to multiple different TAMs, and there is no
+need for a special TAM to be contacted for a specific TA.
+
+[Note: This should always be the case. When a particular device or TEE supports
+only a special proprietary attestation mechanism, then a specific TAM will be
+needed that supports that attestation scheme. The TAM should also support standard
+atttestation signatures as well. It is highly unlikely that a set of TAs would use
+different proprietary attestation mechanisms since a TEE is likley to support only
+one such proprietary scheme.]
+
+[Note: This situation gets more complex in situations where a Client App expects 
+another application or a device to already have a specific TA installed. This 
+situation does not occur with SGX, but could occur in situations where the secure
+world maintains an trusted operating system and runs an entire trusted system with
+multiple TAs running. This requires more discussion.] 
+
+
 ## Client Apps, Trusted Apps, and Personalization Data
 
 In TEEP, there is an explicit relationship and dependence between the client app
