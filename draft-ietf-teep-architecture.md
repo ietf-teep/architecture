@@ -1,7 +1,7 @@
 ---
 title: Trusted Execution Environment Provisioning (TEEP) Architecture
 abbrev: TEEP Architecture
-docname: draft-ietf-teep-architecture-01
+docname: draft-ietf-teep-architecture-02
 category: info
 
 ipr: pre5378Trust200902
@@ -202,17 +202,17 @@ The following terms are used:
     children to use their tablet or laptop). Relates to Device Owner
     and Device Administrator.
 
-  - Device Owner: A device is always owned by someone. It is common for 
+  - Device Owner: A device is always owned by someone. It is common for
     the (primary) device user to also own the device, making the device
     user/owner also the device administrator. In enterprise environments
-    it is more common for the enterprise to own the device, and device 
+    it is more common for the enterprise to own the device, and device
     users have no or limited administration rights. In this case, the
     enterprise appoints a device administrator that is not the device
     owner.
 
-  - Device Administrator:  An entity that is responsible for administration
-    of a Device, which could be the device owner. A Device Administrator 
-    has privileges on the Device to install and remove applications and TAs, 
+  - Device Administrator (DA):  An entity that is responsible for administration
+    of a Device, which could be the device owner. A Device Administrator
+    has privileges on the Device to install and remove applications and TAs,
     approve or reject Trust Anchors, and approve or reject Service Providers,
     among possibly other privileges on the Device. A Device Administrator can
     manage the list of allowed TAMs by modifying the list of Trust
@@ -229,8 +229,7 @@ The following terms are used:
     The Trust Anchor is normally stored in a location that resists
     unauthorized modification, insertion, or replacement. The digital
     fingerprint of a Trust Anchor may be stored along with the Trust
-    Anchor certificate or public key. The Trust Anchor fingerprint
-    can be part of Trust Anchor format. A device can use the
+    Anchor certificate or public key. A device can use the
     fingerprint to uniquely identify a Trust Anchor.
     The Trust Anchor private key owner can sign certificates of other
     public keys, which conveys trust about those keys to the device.
@@ -278,7 +277,7 @@ The following terms are used:
     electronic fuse (eFUSE) technology. In this context it is used to decrypt a  
     TFW private key, which belongs to a device-unique private/public key pair.
     Not every device is equipped with a bootloader key.
-	
+
 This document uses the following abbreviations:
 
   - CA: Certificate Authority
@@ -305,9 +304,9 @@ This specification assumes that an applicable device is equipped with
 one or more TEEs and each TEE is pre-provisioned with a device-unique
 public/private key pair, which is securely stored.
 
-A TEE uses an isolation mechanism between Trusted Applications to ensure 
-that one TA cannot read, modify or delete the data and code of another 
-TA. 
+A TEE uses an isolation mechanism between Trusted Applications to ensure
+that one TA cannot read, modify or delete the data and code of another
+TA.
 
 # Use Cases
 
@@ -390,7 +389,7 @@ all components are further explained in the following paragraphs.
 ~~~~
 {: #notionalarch title="Notional Architecture of TEEP"}
 
-  - Service Providers and Device Administrators utilize the services
+  - Service Providers (SP) and Device Administrators (DA) utilize the services
     of a TAM to manage TAs on Devices. SPs do not directly interact
     with devices. DAs may elect to use a TAM for remote administration
     of TAs instead of managing each device directly.
@@ -474,15 +473,15 @@ all components are further explained in the following paragraphs.
 
 ## Different Renditions of TEEP Architecture
 There is nothing prohibiting a device from implementing multiple TEEs. In
-addition, some TEEs ( for example, SGX) present themselves as separate containers 
-within memory without a controlling manager within the TEE. In these cases, 
-the rich operating system hosts multiple TEEP brokers, where each broker manages 
-a particular TEE or set of TEEs. Enumeration and access to the appropriate 
-broker is up to the rich OS and the applications. Verification that the correct TA 
-has been reached then becomes a matter of properly verifying TA attestations, 
-which are unforgeable. The multiple TEE approach is shown in the diagram below. 
-For brevity, TEEP Broker 2 is shown interacting with only one TAM and UA, but 
-no such limitation is intended to be implied in the architecture. 
+addition, some TEEs ( for example, SGX) present themselves as separate containers
+within memory without a controlling manager within the TEE. In these cases,
+the rich operating system hosts multiple TEEP brokers, where each broker manages
+a particular TEE or set of TEEs. Enumeration and access to the appropriate
+broker is up to the rich OS and the applications. Verification that the correct TA
+has been reached then becomes a matter of properly verifying TA attestations,
+which are unforgeable. The multiple TEE approach is shown in the diagram below.
+For brevity, TEEP Broker 2 is shown interacting with only one TAM and UA, but
+no such limitation is intended to be implied in the architecture.
 
 ~~~~
    +-------------------------------------------+
@@ -517,8 +516,8 @@ no such limitation is intended to be implied in the architecture.
 {: #notionalarch2 title="Notional Architecture of TEEP wtih multiple TEEs"}
 
 In the diagram above, TEEP Broker 1 controls interactions with the TA's in TEE-1,
-and TEEP Broker 2 contorls interactions with the TA's in TEE-2. This presents some
-challenges for a TAM in completely managing the device, since a TAM may not 
+and TEEP Broker 2 controls interactions with the TA's in TEE-2. This presents some
+challenges for a TAM in completely managing the device, since a TAM may not
 interact with all the TEEP Brokers on a particular platform. In addition, since
 TEE's may be physically separated, with wholly different resources, there may be no
 need for TEEP Brokers to share information on installed TAs or resource usage.
@@ -777,18 +776,27 @@ content of messages except for the TEE routing information.
 
 ## Trust Anchors in TEE
 
-Each TEE comes with a trust store that contains a whitelist of root
-CA certificates that are used to validate a TAM's certificate.  A TEE
+Each TEE comes with a trust store that contains a whitelist of Trust Anchors
+that are used to validate a TAM's certificate. A TEE
 will accept a TAM to create new Security Domains and install new TAs
 on behalf of an SP only if the TAM's certificate is chained to one of
 the root CA certificates in the TEE's trust store.
 
 A TEE's trust store is typically preloaded at manufacturing time.  It
-is out of the scope in this document to specify how the trust store
+is out of the scope in this document to specify how the trust anchors
 should be updated when a new root certificate should be added or
 existing one should be updated or removed.  A device manufacturer is
-expected to provide its TEE trust store live update or out-of-band
-update to devices.
+expected to provide its TEE trust anchors live update or out-of-band
+update to Device Administrators.
+
+When trust anchor update is carried out, it is imperative that any update
+must maintain integrity where only authentic trust anchor list from
+a device manufacturer or a Device Administrator is accepted. This calls
+for a complete lifecycle flow in authorizing who can make trust anchor
+update and whether a given trust anchor list are non-tampered from the
+original provider. The signing of a trust anchor list for integrity
+check and update authorization methods are desirable to be developed.
+This can be addressed outside of this architecture document.
 
 Before a TAM can begin operation in the marketplace to support a
 device with a particular TEE, it must obtain a TAM
@@ -797,8 +805,9 @@ certificate from a CA that is listed in the trust store of the TEE.
 ## Trust Anchors in TAM
 
 The Trust Anchor store in a TAM consists of a list of CA certificates
-that sign various device TEE certificates.  A TAM decides what
-devices it will trust the TEE in.
+that sign various device TEE certificates.  A TAM will accept a
+device for TA management if the TEE in the device uses a TEE certificate
+that is chained to a CA that the TAM trusts.
 
 ## Keys and Certificate Types
 
@@ -1070,8 +1079,8 @@ outside of the hosting device.  For example, GlobalPlatform
 {{GPTEE}} specifies one such architecture.  This calls for a software
 module in the REE world to handle the network communication.  Each
 Client Application in the REE might carry this communication functionality
-but such functionality must also interact with the TEE for the message exchange.  The
-TEE interaction will vary according to different TEEs.  In order for
+but such functionality must also interact with the TEE for the message exchange.  
+The TEE interaction will vary according to different TEEs.  In order for
 a Client Application to transparently support different TEEs, it is
 imperative to have a common interface for a Client Application to
 invoke for exchanging messages with TEEs.
@@ -1079,24 +1088,27 @@ invoke for exchanging messages with TEEs.
 A shared agent comes to meet this need.  An agent is an application
 running in the REE of the device or an SDK that facilitates
 communication between a TAM and a TEE.  It also provides interfaces for
-TAM SDK or Client Applications to query and trigger TA installation
-that the application needs to use.
+Client Applications to query and trigger TA installation that the
+application needs to use.
 
-This interface for Client Applications may be commonly an OS
-service call for an REE OS.  A Client Application
-interacts with a TAM, and turns around to pass messages received from
-TAM to agent.
+It isn't always that a Client Application directly calls such an agent
+to interact with a TEE. A REE Application Installer might carry out TEE
+and TAM interaction to install all required TAs that a Client Application
+depends. A Client Application may have a metadata file that describes
+the TAs it depends on and the associated TAM that each TA installation
+goes to use. The REE Application Installer can inspect the
+application metadata file and installs TAs on behalf of the Client
+Application without requiring the Client Application to run first.
 
-In all cases, a Client Application needs to be able to identify an
-agent that it can use.
-
+This interface for Client Applications or Application Installers may be
+commonly an OS service call for an REE OS.  A Client Application or
+an Application Installer interacts with the device TEE and the TAMs.
 
 ## Role of the Agent
 
 An agent abstracts the message exchanges with the TEE in a device.
-The input data is originated from a TAM to which a Client Application
-connects.  A Client Application may also directly call an Agent for some
-TA query functions.
+The input data is originated from a TAM or the first initialization
+call to trigger a TA installation.
 
 The agent may internally process a message from a TAM.  At least, it
 needs to know where to route a message, e.g., TEE instance.  It does
@@ -1121,7 +1133,7 @@ the TAM.
 
 ### Agent Distribution
 
-The agent installation is commonly carried out at OEM time.  A user
+The agent installation is commonly carried out at OEM time. A user
 can dynamically download and install an agent on-demand.
 
 It is important to ensure a legitimate agent is installed and used.
@@ -1154,31 +1166,31 @@ and not all attestations are acceptable to every verifier. TEEP attestations are
 upon the use of an asymmetric key pair under the control of the TEE to create digital
 signatures across a well-defined claim set.
 
-In TEEP, the primary purpose of an attestation is to allow a device to prove to TAMs 
-and SPs that a TEE in the device has particular properities, was built by a particular 
-manufacturer, or is executing a particular TA. Other claims are possible; this architecture 
-specification does not limit the attestation claims, but defines a minimal set of claims 
+In TEEP, the primary purpose of an attestation is to allow a device to prove to TAMs
+and SPs that a TEE in the device has particular properities, was built by a particular
+manufacturer, or is executing a particular TA. Other claims are possible; this architecture
+specification does not limit the attestation claims, but defines a minimal set of claims
 required for TEEP to operate properly. Extensions to these claims are possible, but are not
 defined in the TEEP specifications. Other standards or groups may define the format and semantics
 of extended claims. The TEEP specification defines the claims format such that these extended claims
-may be easily included in a TEEP attestation message. 
+may be easily included in a TEEP attestation message.
 
-As of the writing of this specification, device and TEE attestations have not been standardized 
+As of the writing of this specification, device and TEE attestations have not been standardized
 across the market. Different devices, manufacturers, and TEEs support different attestation
 algorithms and mechanisms. In order for TEEP to be inclusive, the attestation format shall
 allow for both proprietary attestation signatures, as well as a standardized form of attestation
-signature. Either form of attesation signature may be applied to a set of TEEP claims, and 
-both forms of attestation shall be considered conformant with TEEP. However, it should be recognized 
+signature. Either form of attesation signature may be applied to a set of TEEP claims, and
+both forms of attestation shall be considered conformant with TEEP. However, it should be recognized
 that not all TAMs or SPs may be able to process all proprietary forms of attestations. All TAMs
 and SPs MUST be able to process the TEEP standard attestation format and attached signature.
 
-The attestation formats and mechanisms described and mandated by TEEP shall convey a particular 
-set of cryptographic properties based on minimal assumptions. The cryptographic properties are 
+The attestation formats and mechanisms described and mandated by TEEP shall convey a particular
+set of cryptographic properties based on minimal assumptions. The cryptographic properties are
 conveyed by the attestation; however the assumptions are not conveyed within the attestation itself.
 
 The assumptions which may apply to an attestation have to do with the quality of the attestation
 and the quality and security provided by the TEE, the device, the manufacturer, or others involved
-in the device or TEE ecosystem. 
+in the device or TEE ecosystem.
 Some of the assumptions that might apply to an attestations include (this may not be a comprehensive list):
 
   - Assumptions regarding the security measures a manufacturer takes when provisioning keys into devices/TEEs;
@@ -1197,18 +1209,18 @@ Some of the assumptions that might apply to an attestations include (this may no
 
 TAMs and SPs must be comfortable with the assumptions that are inherently part of any attestation
 they accept. Alternatively, any TAM or SP may choose not to accept an attestation generated from
-a particular manufacturer or device's TEE based on the inherent assumptions. The choice and policy 
+a particular manufacturer or device's TEE based on the inherent assumptions. The choice and policy
 decisions are left up to the particular TAM/SP.
 
 Some TAMs or SPs may require additional claims in order to properly authorize a device or TEE. These
-additional claims may help clear up any assumptions for which the TAM/SP wants to alleviate. The specific 
+additional claims may help clear up any assumptions for which the TAM/SP wants to alleviate. The specific
 format for these additional claims are outside the scope of this specification, but the OTrP protocol
-SHALL allow these additional claims to be included in the attestation messages. 
+SHALL allow these additional claims to be included in the attestation messages.
 
 The following sub-sections define the cryptographic properties conveyed by the TEEP attestation,
 the basic set of TEEP claims required in a TEEP attestation, the TEEP attestation flow between the
-TAM the device TEE, and some implementation examples of how an attestation key may be realized in 
-a real TEEP device. 
+TAM the device TEE, and some implementation examples of how an attestation key may be realized in
+a real TEEP device.
 
 ## Attestation Cryptographic Properties
 The attestation constructed by TEEP must convey certain cryptographic properties from the attestor to 
@@ -1337,7 +1349,7 @@ TEEs can be added post-manufacture using the scheme proposed, but it
 is outside of the current scope of this document to detail that.
 
 It should be noted that the attestation scheme described is based on
-signatures.  The only decryption that may take place is through the 
+signatures.  The only decryption that may take place is through the
 use of a bootloader key.
 
 A boot module generated attestation can be optional where the
