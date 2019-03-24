@@ -1179,7 +1179,7 @@ As of the writing of this specification, device and TEE attestations have not be
 across the market. Different devices, manufacturers, and TEEs support different attestation
 algorithms and mechanisms. In order for TEEP to be inclusive, the attestation format shall
 allow for both proprietary attestation signatures, as well as a standardized form of attestation
-signature. Either form of attesation signature may be applied to a set of TEEP claims, and
+signature. Either form of attestation signature may be applied to a set of TEEP claims, and
 both forms of attestation shall be considered conformant with TEEP. However, it should be recognized
 that not all TAMs or SPs may be able to process all proprietary forms of attestations. All TAMs
 and SPs MUST be able to process the TEEP standard attestation format and attached signature.
@@ -1232,7 +1232,7 @@ and/or SP. The properties required by TEEP include:
       in a specific device.
 
   - Integrity of claims - the cryptographic digital signature across the attestation SHALL cover the entire
-      attesation including all meta data and all the claims in the attestation, ensuring that the attestation
+      attestation including all meta data and all the claims in the attestation, ensuring that the attestation
       has not be modified since the TEE signed the attestation.
 
 Standard public key algorithms such as RSA and ECDSA digital signatures convey these properties. Group public key 
