@@ -47,10 +47,10 @@ author:
        email: andrew.atyeo@intercede.com
 
  -
-       ins: D. Thaler
-       name: David Thaler
-       organization: Microsoft
-       email: dthaler@microsoft.com
+       ins: L. Dapeng
+       name: Liu Dapeng
+       organization: Alibaba Group
+       email: maxpassion@gmail.com
 
 normative:
   RFC2119:
@@ -371,10 +371,10 @@ all components are further explained in the following paragraphs.
    |                          +--------+       |        Service Provider
    |    +-------------+       |        |----------+               |
    |    | TEE-1       |       | TEEP   |---------+|               |
-   |    |  +-------+  |<------| Broker |       | ||   +--------+  |
-   |    |  | TEEP  |  |       |        |<---+  | |+-->|        |<-+
-   |    |  | Agent |  |       |        |    |  | |  +-|  TAM-1 |
-   |    |  +-------+  |       |        |<-+ |  | +->| |        |<-+
+   |    | +--------+  |  +----| Broker |       | ||   +--------+  |
+   |    | | TEEP   |  |  |    |        |<---+  | |+-->|        |<-+
+   |    | | Agent  |<----+    |        |    |  | |  +-|  TAM-1 |
+   |    | +--------+  |       |        |<-+ |  | +->| |        |<-+
    |    |             |       +--------+  | |  |    | +--------+  |
    |    | +---+ +---+ |                   | |  |    | TAM-2  |    |
    |  +-->|TA1| |TA2| |        +-------+  | |  |    +--------+    |
@@ -497,8 +497,14 @@ no such limitation is intended to be implied in the architecture.
    |                          +--------+       |        Service Provider
    |                          |        |----------+               |
    |    +-------------+       | TEEP   |---------+|               |
-   |    | TEE-1       |<------| Broker |       | ||   +--------+  |
-   |    |             |       | 1      |<---+  | |+-->|        |<-+
+   |    | TEE-1       |   +---| Broker |       | ||   +--------+  |
+   |    |             |   |   | 1      |<---+  | |+-->|        |<-+
+   |    | +-------+   |   |   |        |    |  | |    |        |
+   |    | | TEEP  |   |   |   |        |    |  | |    |        |
+   |    | | Agent |<------+   |        |    |  | |    |        |
+   |    | | 1     |   |       |        |    |  | |    |        |
+   |    | +-------+   |       |        |    |  | |    |        |
+   |    |             |       |        |    |  | |    |        |
    |    | +---+ +---+ |       |        |    |  | |  +-|  TAM-1 |
    |    | |TA1| |TA2| |       |        |<-+ |  | +->| |        |<-+
    |  +-->|   | |   |<---+    +--------+  | |  |    | +--------+  |
@@ -510,13 +516,17 @@ no such limitation is intended to be implied in the architecture.
    |                +------|       |   |    |  |       |
    |    +-----------|-+    |       |---+    |  |       |
    |    | TEE-2     | |    |       |--------+  |       |
-   |    |           | |    |       |------+    |       |
-   |    | +---+     | |    +-------+      |    |       |
-   |    | |TA3|<----+ |    +----------+   |    |       |
-   |    | |   |       |    | TEEP     |<--+    |       |
-   |    | +---+       |<---| Broker   |----------------+
+   |    | +------+  | |    |       |------+    |       |
+   |    | | TEEP |  | |    +-------+      |    |       |  
+   |    | | Agent|<-----+                |    |       |
+   |    | | 2    |  | | |                 |    |       |
+   |    | +------+  | | |                 |    |       |
+   |    |           | | |                 |    |       |
+   |    | +---+     | | |                 |    |       |
+   |    | |TA3|<----+ | |  +----------+   |    |       |
+   |    | |   |       | |  | TEEP     |<--+    |       |
+   |    | +---+       | +--| Broker   |----------------+
    |    |             |    | 2        |        |
-   |    |             |    |          |        |
    |    +-------------+    +----------+        |
    |                                           |
    +-------------------------------------------+
@@ -1438,21 +1448,12 @@ This document does not require actions by IANA.
 
 # Acknowledgements
 
-Most content of this document is split from a previously combined OTrP
-protocol document
+The authors thank Dave Thaler for his very thorough review and many
+important suggestions. Most content of this document is split from a
+previously combined OTrP protocol document
 {{I-D.ietf-teep-opentrustprotocol}}.  We thank the former co-authors
 Nick Cook and Minho Yoo for the initial document content, and
 contributors Brian Witten, Tyler Kim, and Alin Mutu.
-
-# Contributors
-
-We would like to thank the following individuals for their
-contributions to use cases and an earlier version of this
-specification.
-
-  Dapeng Liu  
-  Alibaba Group  
-  maxpassion@gmail.com
 
 --- back
 
