@@ -1075,10 +1075,6 @@ the TAM.
 The Broker installation is commonly carried out at OEM time. A user
 can dynamically download and install a Broker on-demand.
 
-It is important to ensure a legitimate TEEP Broker is installed and used.
-If a TEEP Broker is compromised it may drop messages and thereby
-introduce a denial of service.
-
 ### Number of TEEP Brokers
 
 There should be generally only one shared TEEP Broker in a device.
