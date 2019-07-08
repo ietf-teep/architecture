@@ -1,7 +1,7 @@
 ---
 title: Trusted Execution Environment Provisioning (TEEP) Architecture
 abbrev: TEEP Architecture
-docname: draft-ietf-teep-architecture-02
+docname: draft-ietf-teep-architecture-03
 category: info
 
 ipr: pre5378Trust200902
@@ -47,10 +47,10 @@ author:
        email: andrew.atyeo@intercede.com
 
  -
-       ins: L. Dapeng
-       name: Liu Dapeng
-       organization: Alibaba Group
-       email: maxpassion@gmail.com
+       ins: D. Thaler
+       name: David Thaler
+       organization: Microsoft
+       email: dthaler@microsoft.com
 
 normative:
   RFC2119:
@@ -142,7 +142,7 @@ This protocol addresses the following problems:
     TEE is genuine and capable of providing the security protections
     required by a particular TA.
 
-  - A Service Provider (SP) must be able to deterine if a TA exists (is
+  - A Service Provider (SP) must be able to determine if a TA exists (is
     installed) on a device (in the TEE), and if not, install the TA in
     the TEE.
 
@@ -154,7 +154,7 @@ This protocol addresses the following problems:
     TEE if the SP is no longer offering such services or the services
     are being revoked from a particular user (or device). For example,
     if a subscription or contract for a particular service has expired,
-    or a payment by the user has not been completed or has been recinded.
+    or a payment by the user has not been completed or has been rescinded.
 
   - A Service Provider (SP) must be able to define the relationship
     between cooperating TAs under the SP's control, and specify whether
@@ -369,15 +369,15 @@ all components are further explained in the following paragraphs.
    +-------------------------------------------+
    | Device                                    |
    |                          +--------+       |        Service Provider
-   |                          |        |----------+               |
-   |    +-------------+       | TEEP   |---------+|               |
-   |    | TEE-1       |<------| Broker |       | ||   +--------+  |
-   |    |             |       |        |<---+  | |+-->|        |<-+
-   |    |             |       |        |    |  | |  +-|  TAM-1 |
-   |    |             |       |        |<-+ |  | +->| |        |<-+
-   |    | +---+ +---+ |       +--------+  | |  |    | +--------+  |
-   |    | |TA1| |TA2| |                   | |  |    | TAM-2  |    |
-   |  +-->|   | |   | |        +-------+  | |  |    +--------+    |
+   |    +-------------+       |        |----------+               |
+   |    | TEE-1       |       | TEEP   |---------+|               |
+   |    |  +-------+  |<------| Broker |       | ||   +--------+  |
+   |    |  | TEEP  |  |       |        |<---+  | |+-->|        |<-+
+   |    |  | Agent |  |       |        |    |  | |  +-|  TAM-1 |
+   |    |  +-------+  |       |        |<-+ |  | +->| |        |<-+
+   |    |             |       +--------+  | |  |    | +--------+  |
+   |    | +---+ +---+ |                   | |  |    | TAM-2  |    |
+   |  +-->|TA1| |TA2| |        +-------+  | |  |    +--------+    |
    |  | | |   | |   |<---------| App-2 |--+ |  |                  |
    |  | | +---+ +---+ |    +-------+   |    |  |    Device Administrator
    |  | +-------------+    | App-1 |   |    |  |
@@ -395,15 +395,15 @@ all components are further explained in the following paragraphs.
     of TAs instead of managing each device directly.
 
   - TAM:  A TAM is responsible for performing lifecycle
-    management activity on TA's and SD's on behalf of Service
+    management activity on TA's on behalf of Service
     Providers and Device Administrators. This includes creation and
-    deletion of TA's and SD's, and may include, for example,  over-the-air
+    deletion of TA's, and may include, for example,  over-the-air
     updates to keep an SP's TAs up-to-date and clean up when a version
     should be removed. TAMs may provide services that make it easier for
     SPs or DAs to use the TAM's service to manage multiple devices,
     although that is not required of a TAM.
 
-    The TAM performs its management of TA's and SD's through  an
+    The TAM performs its management of TA's through  an
     interaction with a Device's TEEP Broker. As shown in
     #notionalarch, the TAM cannot directly contact a Device, but must
     wait for a the TEEP Broker or a Client Application to contact
@@ -442,7 +442,7 @@ all components are further explained in the following paragraphs.
     an after-market-action.
 
   - TEEP Broker: The TEEP Broker is an application running in a Rich
-    Execution Environment that enables the message protocol exchange between
+    Execution Environment (REE) that enables the message protocol exchange between
     a TAM and a TEE in a device. The TEEP Broker does not process messages
     on behalf of a TEE, but merely is responsible for relaying messages from
     the TAM to the TEE, and for returning the TEE's responses to the TAM.
@@ -451,16 +451,24 @@ all components are further explained in the following paragraphs.
     request TAs that it needs to use.  The Client Application needs
     to pass the messages from the TAM to TEEs in the device.  This
     calls for a component in the REE that Client Applications can use
-    to pass messages to TEEs.  An Agent is thus an application in the REE or
-    software library that can relay messages from a Client
+    to pass messages to TEEs.  The TEEP Broker is thus an application
+    in the REE or software library that can relay messages from a Client
     Application to a TEE in the device.  A device usually comes with
-    only one active TEE.  A TEE may provide such an
-    Agent to the device manufacturer to be bundled in devices.  Such
-    a TEE must also include an Agent counterpart, namely, a
-    processing module inside the TEE, to parse TAM messages sent
-    through the Agent.  An Agent is generally acting as a dummy
+    only one active TEE.  A TEE may provide such a
+    Broker to the device manufacturer to be bundled in devices.  Such
+    a TEE must also include a Broker counterpart, namely, a TEEP Agent
+    inside the TEE, to parse TAM messages sent
+    through the Broker.  A TEEP Broker is generally acting as a dummy
     relaying box with just the TEE interacting capability; it doesn't
     need and shouldn't parse protocol messages.
+
+  - TEEP Agent: the TEEP Agent is a processing module running inside
+    a TEE that receives TAM requests that are relayed via a TEEP Broker
+    that runs in an REE. A TEEP Agent in the TEE may parse requests or
+    forward requests to other processing modules in a TEE, which is
+    up to a TEE provider's implementation. A response message
+    corresponding to a TAM request is sent by a TEEP Agent back
+    to a TEEP Broker.
 
   - Certification Authority (CA):  Certificate-based credentials used for
     authenticating a device, a TAM and an SP.  A device embeds a list
@@ -473,7 +481,7 @@ all components are further explained in the following paragraphs.
 
 ## Different Renditions of TEEP Architecture
 There is nothing prohibiting a device from implementing multiple TEEs. In
-addition, some TEEs ( for example, SGX) present themselves as separate containers
+addition, some TEEs (for example, SGX) present themselves as separate containers
 within memory without a controlling manager within the TEE. In these cases,
 the rich operating system hosts multiple TEEP brokers, where each broker manages
 a particular TEE or set of TEEs. Enumeration and access to the appropriate
@@ -530,15 +538,15 @@ As shown in {{notionalarch2}}, the TEEP Broker provides connections from the TEE
 the Client App to one or more TAMs. The selection of which TAM to communicate with is
 dependent on information from the Client App and is directly related to the TA.
 
-When a SP offers a service which requires a TA, the SP associates that service with a 
-specific TA. The TA itself is digitally signed, protecting its integrity, but the 
-signature also links the TA back to the signer. The signer is usually the SP, but in 
-some cases may be another party that the SP trusts. The SP selects one or more TAMs 
-through which to offer their service, and communicates the information of the service 
-and the specific client apps and TAs to the TAM. 
+When a SP offers a service which requires a TA, the SP associates that service with a
+specific TA. The TA itself is digitally signed, protecting its integrity, but the
+signature also links the TA back to the signer. The signer is usually the SP, but in
+some cases may be another party that the SP trusts. The SP selects one or more TAMs
+through which to offer their service, and communicates the information of the service
+and the specific client apps and TAs to the TAM.
 
 The SP chooses TAMs based upon the markets into which the TAM can provide access. There
-may be TAMs that provide services to specific types of mobile devices, or mobile device 
+may be TAMs that provide services to specific types of mobile devices, or mobile device
 operating systems, or specific geographical regions or network carriers. A SP may be
 motivated to utilize multiple TAMs for its service in order to maximize market penetration
 and availability on multiple types of devices. This likely means that the same service
@@ -548,16 +556,16 @@ When the SP publishes the Client App to an app store or other app repositories, 
 binds the Client App with a manifest that identifies what TAMs can be contacted for
 the TA. In some situations, an SP may use only a single TAM - this is likely the case
 for enterprise applications or SPs serving a closed community. For broad public apps,
-there will likely be multiple TAMs in the manifest - one servicing one brand of mobile 
+there will likely be multiple TAMs in the manifest - one servicing one brand of mobile
 device and another servicing a different manufacturer, etc. Because different devices
 and different manufacturers trust different TAMs, the manifest will include different
 TAMs that support this SP's client app and TA. Multiple TAMs allow the SP to provide
 thier service and this app (and TA) to multiple different devices.
 
-When the TEEP Broker recieves a request to contact the TAM for a Client App in order to
+When the TEEP Broker receives a request to contact the TAM for a Client App in order to
 install a TA, a list of TAMs may be provided. The TEEP Broker selects a single TAM that
 is consistent with the list of trusted TAMs (trust anchors) provisioned on the device.
-For any client app, there should be only a single TAM for the TEEP Broker to contact. 
+For any client app, there should be only a single TAM for the TEEP Broker to contact.
 This is also the case when a Client App uses multiple TAs, or when one TA depends on
 anther TA in a software dependency (see section TBD). The reason is that the SP should
 provide each TAM that it places in the Client App's manifest all the TAs that the app
@@ -571,11 +579,11 @@ atttestation signatures as well. It is highly unlikely that a set of TAs would u
 different proprietary attestation mechanisms since a TEE is likley to support only
 one such proprietary scheme.]
 
-[Note: This situation gets more complex in situations where a Client App expects 
-another application or a device to already have a specific TA installed. This 
+[Note: This situation gets more complex in situations where a Client App expects
+another application or a device to already have a specific TA installed. This
 situation does not occur with SGX, but could occur in situations where the secure
 world maintains an trusted operating system and runs an entire trusted system with
-multiple TAs running. This requires more discussion.] 
+multiple TAs running. This requires more discussion.]
 
 
 ## Client Apps, Trusted Apps, and Personalization Data
@@ -589,16 +597,16 @@ the device can vary. The variations depend on whether the client app and TA are 
 together or are provided separately, and this has implications to the management of
 the TAs in the TEE. In addition to the client app and TA, the TA and/or TEE may require
 some additional data to personalize the TA to the service provider or the device user.
-This personalization data is dependent on the TEE, the TA and the SP; an example of 
-personalization data might be username and password of the device user's account with 
-the SP, or a secret symmetric key used to by the TA to communicate with the SP. The 
-personalization data must be encrypted to preserve the confidentiality of potentially 
+This personalization data is dependent on the TEE, the TA and the SP; an example of
+personalization data might be username and password of the device user's account with
+the SP, or a secret symmetric key used to by the TA to communicate with the SP. The
+personalization data must be encrypted to preserve the confidentiality of potentially
 sensitive data contained within it. Other than this requirement to support confidentiality,
 TEEP place no limitations or requirements on the personalization data.
 
-There are three possible cases for bundling of the Client App, TA, and personalizaiton data:
+There are three possible cases for bundling of the Client App, TA, and personalization data:
 
-  1. The Client App, TA, and personnalization data are all bundled together in a single
+  1. The Client App, TA, and personalization data are all bundled together in a single
      package by the SP and provided to the TEEP Broker through the TAM.
 
   2. The Client App and the TA are bundled together in a single binary, which the TAM or
@@ -611,29 +619,28 @@ There are three possible cases for bundling of the Client App, TA, and personali
      data from the SP. Delivery of the TA and personalization data may be combined or separate.
 
 ## Examples of Application Delivery Mechanisms in Existing TEEs
-In order to better understand these cases, it is helpful to review actual implementations of
-TEEs and their application delivery mechanisms.
+In order to better understand these cases, it is helpful to review actual implementations of TEEs and their application delivery mechanisms.
 
-In Intel Software Guard Extensions (SGX), the Client App and TA are typically bound into the 
-same binary (Case 2). The TA is compiled into the Client App binary using SGX tools, and 
-exists in the binary as a shared library (.so or .dll). The Client App loads the TA into 
-an SGX enclave when the client needs the TA. This organization makes it easy to maintain 
-compatibility between the Client App and the TA, since they are updated together. It is 
-entirely possible to create a Client App that loads an external TA into an SGX enclave and 
-use that TA (Case 3). In this case, the Client App would require a reference to an external 
-file or download such a file dynamically, place the contents of the file into memory, and 
-load that as a TA. Obviously, such file or downloaded content must be properly formatted 
-and signed for it to be accepted by the SGX TEE. In SGX, for Case 2 and Case 3, the 
+In Intel Software Guard Extensions (SGX), the Client App and TA are typically bound into the
+same binary (Case 2). The TA is compiled into the Client App binary using SGX tools, and
+exists in the binary as a shared library (.so or .dll). The Client App loads the TA into
+an SGX enclave when the client needs the TA. This organization makes it easy to maintain
+compatibility between the Client App and the TA, since they are updated together. It is
+entirely possible to create a Client App that loads an external TA into an SGX enclave and
+use that TA (Case 3). In this case, the Client App would require a reference to an external
+file or download such a file dynamically, place the contents of the file into memory, and
+load that as a TA. Obviously, such file or downloaded content must be properly formatted
+and signed for it to be accepted by the SGX TEE. In SGX, for Case 2 and Case 3, the
 personalization data is normally loaded into the SGX enclave (the TA) after the TA has
 started. Although Case 1 is possible with SGX, there are no instances of this known to
 be in use at this time, since such a construction would required a special installation
 program and SGX TA to recieve the encrypted binary, decrypt it, separate it into the
 three different elements, and then install all three. This installation is complex,
-because the Client App decrypted inside the TEE must be passed out of the TEE to an 
+because the Client App decrypted inside the TEE must be passed out of the TEE to an
 installer in the REE which would install the Client App; this assumes that the Client
 App binary includes the TA code also, otherwise there is a significant problem in getting
 the SGX encalve code (the TA) from the TEE, through the installer and into the Client App
-in a trusted fashion. Finally, the personalization data would need to be sent out of the 
+in a trusted fashion. Finally, the personalization data would need to be sent out of the
 TEE (encrypted in an SGX encalve-to-enclave manner) to the REE's installation app, which
 would pass this data to the installed Client App, which would in turn send this data
 to the SGX enclave (TA). This complexity is due to the fact that each SGX enclave is separate
@@ -646,9 +653,9 @@ This section defines TEEP support for the three different cases for delivery of 
 App, TA, and personalization data.
 
 [Note: discussion of format of this single binary, and who/what is responsible for splitting
-these things apart, and installing the client app into the REE, the TA into the TEE, and the 
+these things apart, and installing the client app into the REE, the TA into the TEE, and the
 personalization data into the TEE or TA. Obviously the decryption must be done by the TEE
-but this may not be suported by all TAs.]
+but this may not be supported by all TAs.]
 
 
 ## Entity Relations
@@ -725,12 +732,14 @@ the entity relationships between CAs, TAMs, SPs and devices.
  |  REE   |  TEE    |           |    TAM      |   |  SP    |
  |  ---   |  ---    |           |    ---      |   |  --    |
  |        |         |           |             |   |        |
- | Client | SD (TAs)|           |   SD / TA   |   |  TA    |
- |  Apps  |         |           |     Mgmt    |   |        |
+ | Client | TEEP    |           |      TA     |   |  TA    |
+ |  Apps  | Agent   |           |     Mgmt    |   |        |
  |   |    |         |           |             |   |        |
- |   |    | List of |           |  List of    |   |        |
+ |   |    |  TAs    |           |             |   |        |
+ |  TEEP  |         |           |             |   |        |
+ | Broker | List of |           |  List of    |   |        |
  |        | Trusted |           |  Trusted    |   |        |
- | Agent  |  TAM/SP |           |   FW/TEE    |   |        |
+ |        |  TAM/SP |           |   FW/TEE    |   |        |
  |        |   CAs   |           |    CAs      |   |        |
  |        |         |           |             |   |        |
  |        |TEE Key/ |           |  TAM Key/   |   |SP Key/ |
@@ -752,7 +761,7 @@ key is the message originator's private key such as that of a TAM,
 the private key of trusted firmware (TFW), or a TEE's private key.
 
 The main components consist of a set of standard messages created by
-a TAM to deliver device SD and TA management commands to a device,
+a TAM to deliver TA management commands to a device,
 and device attestation and response messages created by a TEE that
 responds to a TAM's message.
 
@@ -764,14 +773,16 @@ with a TEE for message exchanges.  Consequently, a TAM generally
 communicates with a Client Application about how it gets messages
 that originate from a TEE inside a device.  Similarly, a TA or TEE
 generally gets messages from a TAM via some Client Application,
-namely, an agent in this protocol architecture, not directly from the
-network.
+namely, a TEEP Broker in this protocol architecture, not directly
+from the network.
 
 It is imperative to have an interoperable protocol to communicate
 with different TAMs and different TEEs in different devices.
 This is the role of the
-agent, which is a software component that bridges communication
-between a TAM and a TEE.  The agent does not need to know the actual
+Broker, which is a software component that bridges communication
+between a TAM and a TEE. Furthermore the Broker communicates with a Agent
+inside a TEE that is responsible to process TAM requests.
+The Broker in REE does not need to know the actual
 content of messages except for the TEE routing information.
 
 ## Trust Anchors in TEE
@@ -841,7 +852,7 @@ security.
 |             |          |        | of TA to TAM. SP  |             |
 |             |          |        | signer is         |             |
 |             |          |        | associated with a |             |
-|             |          |        | SD as the owner.  |             |
+|             |          |        | TA as the owner.  |             |
 +-------------+----------+--------+-------------------+-------------+
 ~~~~
 {: #keytypelist title="Key and Certificate Types"}
@@ -933,7 +944,7 @@ centralized databases of all TEEs produced or all TAMs that exist.
 
 ## Message Security
 
-Messages created by a TAM are used to deliver device SD and TA
+Messages created by a TAM are used to deliver TA
 management commands to a device, and device attestation and
 messages created by the device TEE to respond to TAM messages.
 
@@ -941,102 +952,14 @@ These messages are signed end-to-end and are typically encrypted such
 that only the targeted device TEE or TAM is able to decrypt and view
 the actual content.
 
-## Security Domain Hierarchy and Ownership
+## Security Domain
 
-The primary job of a TAM is to help an SP to manage its trusted
-applications.  A TA is typically installed in an SD.  An SD is
-commonly created for an SP.
-
-When an SP delegates its SD and TA management to a TAM, an SD is
-created on behalf of a TAM in a TEE and the owner of the SD is
-assigned to the TAM.  An SD may be associated with an SP but the TAM
-has full privilege to manage the SD for the SP.
-
-Each SD for an SP is associated with only one TAM.  When an SP
-changes TAM, a new SP SD must be created to associate with the new
-TAM.  The TEE will maintain a registry of TAM ID and SP SD ID
-mapping.
-
-From an SD ownership perspective, the SD tree is flat and there is
-only one level.  An SD is associated with its owner.  It is up to the TEE
-implementation how it maintains SD binding information for a TAM and
-different SPs under the same TAM.
-
-It is an important decision in this architecture that a TEE
-doesn't need to know whether a TAM is authorized to manage the SD for
-an SP.  This authorization is implicitly triggered by an SP Client
-Application, which instructs what TAM it wants to use.  An SD is
-always associated with a TAM in addition to its SP ID.  A rogue TAM
-isn't able to do anything on an unauthorized SP's SD managed by
-another TAM.
-
-Since a TAM may support multiple SPs, sharing the same SD name for
-different SPs creates a dependency in deleting an SD.  An SD can be
-deleted only after all TAs associated with the SD are deleted.  An SP
-cannot delete a Security Domain on its own with a TAM if a TAM
-decides to introduce such sharing.  There are cases where multiple
-virtual SPs belong to the same organization, and a TAM chooses to use
-the same SD name for those SPs.  This is totally up to the TAM
-implementation and out of scope of this specification.
-
-## SD Owner Identification and TAM Certificate Requirements
-
-There is a need of cryptographically binding proof about the owner of
-an SD in a device.  When an SD is created on behalf of a TAM, a
-future request from the TAM must present itself as a way that the TEE
-can verify it is the true owner.  The certificate itself cannot
-reliably used as the owner because TAM may change its certificate.
-
-** need to handle the normal key roll-over case, as well as the less frequent key compromise case
-
-To this end, each TAM will be associated with a trusted identifier
-defined as an attribute in the TAM certificate.  This field is kept
-the same when the TAM renew its certificates.  A TAM CA is
-responsible to vet the requested TAM attribute value.
-
-This identifier value must not collide among different TAM providers,
-and one TAM shouldn't be able to claim the identifier used by another
-TAM provider.
-
-The certificate extension name to carry the identifier can initially
-use SubjectAltName:registeredID.  A dedicated new extension name may
-be registered later.
-
-One common choice of the identifier value is the TAM's service URL.
-A CA can verify the domain ownership of the URL with the TAM in the
-certificate enrollment process.
-
-A TEE can assign this certificate attribute value as the TAM owner ID
-for the SDs that are created for the TAM.
-
-An alternative way to represent an SD ownership by a TAM is to have a
-unique secret key upon SD creation such that only the creator TAM is
-able to produce a proof-of-possession (PoP) data with the secret.
-
-## Service Provider Container
-
-A sample Security Domain hierarchy for the TEE is shown in {{SD}}.
-
-~~~~
-       ----------
-       |  TEE   |
-       ----------
-           |
-           |          ----------
-           |----------| SP1 SD1 |
-           |          ----------
-           |          ----------
-           |----------| SP1 SD2 |
-           |          ----------
-           |          ----------
-           |----------| SP2 SD1 |
-                      ----------
-~~~~
-{: #SD title="Security Domain Hierarchy"}
-
-The architecture separates SDs and TAs such that a TAM can only
-manage or retrieve data for SDs and TAs that it previously created
-for the SPs it represents.
+No security domain (SD) is explicitly assumed in a TEE for TA management.
+Some TEE, for example, some TEE compliant with Global Platform (GP),
+may continue to choose to use SD to organize resource partition and
+security boundaries. It is up to a TEE implementation to decide how
+a SD is attached to a TA installation, for example, one SD could be
+created per TA.
 
 ## A Sample Device Setup Flow
 
@@ -1085,13 +1008,13 @@ a Client Application to transparently support different TEEs, it is
 imperative to have a common interface for a Client Application to
 invoke for exchanging messages with TEEs.
 
-A shared agent comes to meet this need.  An agent is an application
+A shared module in REE comes to meet this need.  A TEEP broker is an application
 running in the REE of the device or an SDK that facilitates
 communication between a TAM and a TEE.  It also provides interfaces for
 Client Applications to query and trigger TA installation that the
 application needs to use.
 
-It isn't always that a Client Application directly calls such an agent
+It isn't always that a Client Application directly calls such a Broker
 to interact with a TEE. A REE Application Installer might carry out TEE
 and TAM interaction to install all required TAs that a Client Application
 depends. A Client Application may have a metadata file that describes
@@ -1101,62 +1024,65 @@ application metadata file and installs TAs on behalf of the Client
 Application without requiring the Client Application to run first.
 
 This interface for Client Applications or Application Installers may be
-commonly an OS service call for an REE OS.  A Client Application or
-an Application Installer interacts with the device TEE and the TAMs.
+commonly in a form of an OS service call for an REE OS.  A Client Application
+or an Application Installer interacts with the device TEE and the TAMs.
 
-## Role of the Agent
+## Role of the TEEP Broker
 
-An agent abstracts the message exchanges with the TEE in a device.
+A TEEP Broker abstracts the message exchanges with a TEE in a device.
 The input data is originated from a TAM or the first initialization
 call to trigger a TA installation.
 
-The agent may internally process a message from a TAM.  At least, it
-needs to know where to route a message, e.g., TEE instance.  It does
-not need to process or verify message content.
+The Broker doesn't need to parse a message content received from a TAM
+that should be processed by a TEE.
+When a device has more than one TEE, one TEEP Broker per TEE could
+be present in REE. A TEEP Broker interacts with a TEEP Agent inside
+a TEE.
 
-The agent returns TEE / TFW generated response messages to the
-caller.  The agent is not expected to handle any network connection
+A TAM message may indicate the target TEE where a TA should be installed.
+A compliant TEEP protocol should include a target TEE identifier for a
+TEEP Broker when multiple TEEs are present.  
+
+The Broker relays the response messages generated from a TEEP Agent in a TEE
+to the TAM. The Broker is not expected to handle any network connection
 with an application or TAM.
 
-The agent only needs to return an agent error message if the TEE is
+The Broker only needs to return an error message if the TEE is
 not reachable for some reason.  Other errors are represented as
 response messages returned from the TEE which will then be passed to
 the TAM.
 
-## Agent Implementation Consideration
+## TEEP Broker Implementation Consideration
 
    A Provider should consider methods of distribution, scope and
-   concurrency on devices and runtime options when implementing an agent.
+   concurrency on devices and runtime options when implementing a TEEP Broker.
    Several non-exhaustive options are discussed below.  Providers are
    encouraged to take advantage of the latest communication and platform
    capabilities to offer the best user experience.
 
-### Agent Distribution
+### TEEP Broker Distribution
 
-The agent installation is commonly carried out at OEM time. A user
-can dynamically download and install an agent on-demand.
+The Broker installation is commonly carried out at OEM time. A user
+can dynamically download and install a Broker on-demand.
 
-It is important to ensure a legitimate agent is installed and used.
-If an agent is compromised it may drop messages and thereby
+It is important to ensure a legitimate TEEP Broker is installed and used.
+If a TEEP Broker is compromised it may drop messages and thereby
 introduce a denial of service.
 
-### Number of Agents
+### Number of TEEP Brokers
 
-We anticipate only one shared agent instance in a device.  The
-device's TEE vendor will most probably supply one agent.
+There should be generally only one shared TEEP Broker in a device.
+The device's TEE vendor will most probably supply one Broker. When
+multiple TEEs are present in a device, one TEEP Broker per TEE may be used.
 
-With one shared agent, the agent provider is responsible to allow
-multiple TAMs and TEE providers to achieve interoperability.  With a
-standard agent interface, each TAM can implement its own SDK for its SP
-Client Applications to work with this agent.
+When only one Broker is used per device, the Broker provider is responsible
+to allow multiple TAMs and TEE providers to achieve interoperability.  With a
+standard Broker interface, each TAM can implement its own SDK for its SP
+Client Applications to work with this Broker.
 
-Multiple independent agent providers can be used as long as they have
+Multiple independent Broker providers can be used as long as they have
 standard interface to a Client Application or TAM SDK.  Only one
-agent is expected in a device.
-
-TAM providers are generally expected to provide an SDK for SP
-applications to interact with an agent for the TAM and TEE
-interaction.
+Broker is generally expected in a device.
 
 # Attestation
 Attestation is the process through which one entity (an attestor) presents a series of
@@ -1167,7 +1093,7 @@ upon the use of an asymmetric key pair under the control of the TEE to create di
 signatures across a well-defined claim set.
 
 In TEEP, the primary purpose of an attestation is to allow a device to prove to TAMs
-and SPs that a TEE in the device has particular properities, was built by a particular
+and SPs that a TEE in the device has particular properties, was built by a particular
 manufacturer, or is executing a particular TA. Other claims are possible; this architecture
 specification does not limit the attestation claims, but defines a minimal set of claims
 required for TEEP to operate properly. Extensions to these claims are possible, but are not
@@ -1223,8 +1149,8 @@ TAM the device TEE, and some implementation examples of how an attestation key m
 a real TEEP device.
 
 ## Attestation Cryptographic Properties
-The attestation constructed by TEEP must convey certain cryptographic properties from the attestor to 
-the verifier; in the case of TEEP, the attestation must convey properties from the device to the TAM 
+The attestation constructed by TEEP must convey certain cryptographic properties from the attestor to
+the verifier; in the case of TEEP, the attestation must convey properties from the device to the TAM
 and/or SP. The properties required by TEEP include:
 
   - Non-repudiation, Unique Proof of Source - the cryptographic digital signature across the attestation,
@@ -1235,16 +1161,16 @@ and/or SP. The properties required by TEEP include:
       attestation including all meta data and all the claims in the attestation, ensuring that the attestation
       has not be modified since the TEE signed the attestation.
 
-Standard public key algorithms such as RSA and ECDSA digital signatures convey these properties. Group public key 
+Standard public key algorithms such as RSA and ECDSA digital signatures convey these properties. Group public key
 algorithms such as EPID can also convey these properties, if the attestation includes a unique device identifier
 and an identifier for the TEE. Other cryptographic operations used in other attestation schemes may also convey
-these properties. 
+these properties.
 
 The TEEP standard attestation format SHALL use one of the following digital signature formats:
 
   - RSA-2048 with SHA-256 or SHA-384 in RSASSA-PKCS1-v1_5 or PSS format
 
-  - RSA-3072 with SHA-256 or SHA-384 in RSASSA-PKCS1-v1_5 or PSS format 
+  - RSA-3072 with SHA-256 or SHA-384 in RSASSA-PKCS1-v1_5 or PSS format
 
   - ECDSA-256 using NIST P256 curve using SHA-256
 
@@ -1254,12 +1180,12 @@ The TEEP standard attestation format SHALL use one of the following digital sign
 
   - EdDSA using Ed448 with SHAK256 (Ed448ph in RFC8032) and context="TEEP Attestation"
 
-All TAMs and SPs MUST be able to accept attestations using these algorithms, contingent on their acceptance of 
+All TAMs and SPs MUST be able to accept attestations using these algorithms, contingent on their acceptance of
 the assumptions implied by the attestations.
 
 ## TEEP Attestation Structure
 For a TEEP attestation to be useful, it must contain an information set allowing the TAM and/or SP to assess
-the attestation and make a related security policy decision. The structure of the TEEP attestation is shown 
+the attestation and make a related security policy decision. The structure of the TEEP attestation is shown
 in the diagram below.
 
 ~~~~
@@ -1271,7 +1197,7 @@ in the diagram below.
       | Header        | Claims      | Attestation Signature(s) |
       +---------------+-------------+--------------------------+
                           |     
-                          | 
+                          |
              +------------+--(Contains)------+-----------------+--------------+
              |            |                  |                 |              |
              V            V                  V                 V              V
@@ -1284,19 +1210,19 @@ in the diagram below.
 {: #attestationstructure title="Structure of TEEP Attestation"}
 
 The Attestation Header SHALL identify the "Attestation Type" and the "Attestation Signature Type" along
-with an "Attestation Format Version Number." The "Attestation Type" identifies the minimal set of claims 
+with an "Attestation Format Version Number." The "Attestation Type" identifies the minimal set of claims
 that MUST be included in the attestation; this is an identifier for a profile that defines the claims
 that should be included in the attestation as part of the "Action or Operation Specific Claims."
-The "Attestation Signature Type" identifies the type of attestation signature that is attached. 
-The type of attestation signature SHALL be one of the standard signatures types identified by an IANA 
-number, a proprietary signature type identified by an IANA number, or the generic "Proprietary Signature" 
+The "Attestation Signature Type" identifies the type of attestation signature that is attached.
+The type of attestation signature SHALL be one of the standard signatures types identified by an IANA
+number, a proprietary signature type identified by an IANA number, or the generic "Proprietary Signature"
 with an accompanying proprietary identifier. Not all TAMs may be able to process proprietary signatures.
 
-The claims in the attestation are set of mandatory and optional claims. The claims themselves SHALL be 
+The claims in the attestation are set of mandatory and optional claims. The claims themselves SHALL be
 defined in an attestation claims dictionary. See the next section on TEEP Attestation Claims.
 Claims are grouped in profiles under an identifier (Attestation Type), however all attestations require
 a minimal set of claims which includes:
-   
+
   - Device Identifying Info: TEEP attestations must uniquely identify a device to the TAM and SP. This
     identifier allows the TAM/SP to provide services unique to the device, such as managing installed
     TAs, and providing subscriptions to services, and locating device-specific keying material to
@@ -1304,10 +1230,10 @@ a minimal set of claims which includes:
     be provided to provide better universal uniqueness qualities without requiring globally unique
     identifiers for all devices.
 
-  - TEE Identifying info: The type of TEE that generated this attestation must be identified. Standard 
+  - TEE Identifying info: The type of TEE that generated this attestation must be identified. Standard
     TEE types are identified by an IANA number, but also must include version identification information
-    such as the hardware, firmware, and software version of the TEE, as applicable by the 
-    TEE type. Structure to the version number is required.TEE manufacturer information for the TEE is 
+    such as the hardware, firmware, and software version of the TEE, as applicable by the
+    TEE type. Structure to the version number is required.TEE manufacturer information for the TEE is
     required in order to disambiguate the same TEE type created by different manufacturers and
     resolve potential assumptions around manufacturer provisioning, keying and support for the TEE.
 
@@ -1315,30 +1241,30 @@ a minimal set of claims which includes:
     or may be a timestamp and short nonce.
 
   - Action Specific Claims: Certain attestation types shall include specific claims. For example an attestation
-    from a specific TA shall include a measurement, version and signing public key for the TA. 
+    from a specific TA shall include a measurement, version and signing public key for the TA.
 
-  - Additional Claims: (Optional - May be empty set) A TAM or SP may require specific additional claims in order 
-    to address potential assumptions, such as the requirement that a device's REE performed a secure boot, 
-    or that the device is not currenlty in a debug or non-productions state. A TAM may require a device to 
-    provide a device health attestation that may include some claims or measurements about the REE. 
-    These claims are TAM specific. 
+  - Additional Claims: (Optional - May be empty set) A TAM or SP may require specific additional claims in order
+    to address potential assumptions, such as the requirement that a device's REE performed a secure boot,
+    or that the device is not currenlty in a debug or non-productions state. A TAM may require a device to
+    provide a device health attestation that may include some claims or measurements about the REE.
+    These claims are TAM specific.
 
 ## TEEP Attestation Claims
 TEEP  requires a set of attestation claims that provide sufficient evidence to the TAM and/or SP that the device
 and its TEE meet certain minimal requirements. Because attestation formats are not yet broadly standardized across
 the industry, standardization work is currently ongoing, and it is expected that extensions to the attestation
 claims will be required as new TEEs and devices are created, the set of attestation claims required by TEEP SHALL
-be defined in an IANA registry. That registry SHALL be defined in the OTrP protocol with sufficient elements 
+be defined in an IANA registry. That registry SHALL be defined in the OTrP protocol with sufficient elements
 to address basic TEEP claims, expected new standard claims (for example from https://www.ietf.org/id/draft-mandyam-eat-01.txt),
-and proprietary claim sets. 
+and proprietary claim sets.
 
 ## TEEP Attestation Flow
 Attesations are required in TEEP under the following flows:
 
-  - When a TEE responds with device state information (dsi) to the TAM or SP, including a "GetDeviceState" 
+  - When a TEE responds with device state information (dsi) to the TAM or SP, including a "GetDeviceState"
     response, "InstallTA" response, etc.
 
-  - When a new key pair is generated for a TA-to-TAM or TA-to-SP communication, the keypair must be covered by 
+  - When a new key pair is generated for a TA-to-TAM or TA-to-SP communication, the keypair must be covered by
     an attestation, including "CreateSecurityDomain" response, "UpdateSecurityDomain" response, etc.
 
 ## Attestation Key Example
@@ -1436,7 +1362,7 @@ responsibility of the TEE, using the security mechanisms provided by
 the protocol.
 
 We allow a way for an (untrusted) application to check the
-trustworthiness of a TA.  An agent has a function to allow an
+trustworthiness of a TA.  A TEEP Broker has a function to allow an
 application to query the information about a TA.
 
 An application in the Rich O/S may perform verification of the TA by
@@ -1448,19 +1374,20 @@ the TAM, or require additional SP signer trust chaining.
 
 ## One TA Multiple SP Case
 
-A TA for multiple SPs must have a different identifier per SP.  A TA
-will be installed in a different SD for each respective SP.
+A TA for multiple SPs must have a different identifier per SP.  They
+should appear as different TAs when they are installed in the same
+device.
 
-## Agent Trust Model
+## Broker Trust Model
 
-An agent could be malware in the vulnerable REE.  A Client
+A TEEP Broker could be malware in the vulnerable REE.  A Client
 Application will connect its TAM provider for required TA
 installation.  It gets command messages from the TAM, and passes the
-message to the agent.
+message to the Broker.
 
 The architecture enables the TAM to communicate with the device's TEE
-to manage SDs and TAs.  All TAM messages are signed and sensitive
-data is encrypted such that the agent cannot modify or capture
+to manage TAs.  All TAM messages are signed and sensitive
+data is encrypted such that the TEEP Broker cannot modify or capture
 sensitive data.
 
 ## Data Protection at TAM and TEE
@@ -1511,16 +1438,23 @@ This document does not require actions by IANA.
 
 # Acknowledgements
 
-The authors thank Dave Thaler for his very thorough review and many
-important suggestions.  Most content of this document is split from
-a previously combined OTrP protocol document
+Most content of this document is split from a previously combined OTrP
+protocol document
 {{I-D.ietf-teep-opentrustprotocol}}.  We thank the former co-authors
 Nick Cook and Minho Yoo for the initial document content, and
 contributors Brian Witten, Tyler Kim, and Alin Mutu.
 
+# Contributors
+
+We would like to thank the following individuals for their
+contributions to use cases and an earlier version of this
+specification.
+
+  Dapeng Liu  
+  Alibaba Group  
+  maxpassion@gmail.com
 
 --- back
-
 
 # History
 
