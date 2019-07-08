@@ -1,5 +1,8 @@
-draft-ietf-teep-architecture.txt: draft-ietf-teep-architecture.xml
-	xml2rfc draft-ietf-teep-architecture.xml
+FN := $(shell grep 'docname: draft-ietf-teep-architecture' draft-ietf-teep-architecture.md | awk '{print $$2}')
 
-draft-ietf-teep-architecture.xml: draft-ietf-teep-architecture.md
-	kramdown-rfc2629 draft-ietf-teep-architecture.md > draft-ietf-teep-architecture.xml
+$(FN).txt: $(FN).xml
+	xml2rfc $(FN).xml
+
+$(FN).xml: draft-ietf-teep-architecture.md
+	kramdown-rfc2629 draft-ietf-teep-architecture.md > $(FN).xml
+
