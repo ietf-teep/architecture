@@ -261,7 +261,7 @@ The following terms are used:
 
   - Root-of-Trust (RoT): A hardware or software component in a device
     that is inherently trusted to perform a certain security-critical
-    function. A RoT should be secure by design, small, and protected
+    function. A RoT should ideally be secure by design, small, and protected
     by hardware against modification or interference. Examples of
     RoTs include software/firmware measurement and verification using
     a Trust Anchor (RoT for Verification), provide signed assertions
@@ -330,7 +330,7 @@ input protection.
 
 For better security of authentication, a device may store its
 sensitive authentication keys inside a TEE, providing
-hardware-protected security key strength and trusted code execution.
+TEE-protected security key strength and trusted code execution.
 
 ## Internet of Things
 
