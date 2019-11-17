@@ -58,8 +58,7 @@ normative:
 informative:
   RFC6024:
   I-D.ietf-teep-opentrustprotocol:
-  I-D.tschofenig-teep-protocol:
-  I-D.mandyam-eat
+  I-D.mandyam-eat:
   RFC7696:
   GPTEE:
     author:
