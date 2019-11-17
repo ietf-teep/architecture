@@ -59,6 +59,7 @@ informative:
   RFC6024:
   I-D.ietf-teep-opentrustprotocol:
   I-D.ietf-teep-otrp-over-http:
+  I-D.mandyam-eat:
   RFC7696:
   GPTEE:
     author:
@@ -127,7 +128,7 @@ there often arises a need for an external trusted party to verify the
 identity, claims, and rights of Service Providers(SP), devices, and their TEEs.
 This trusted third party is the Trusted Application Manager (TAM).
 
-This protocol addresses the following problems:
+The Trusted Execution Provisioning (TEEP) protocol addresses the following problems:
 
   - A Service Provider (SP) intending to provide services through a TA
     to users of a device needs to determine security-relevant
@@ -269,13 +270,13 @@ The following terms are used:
     using a protected attestation key (RoT for Reporting), or protect the
     storage and/or use of cryptographic keys (RoT for Storage). Other
     RoTs are possible, including RoT for Integrity, and RoT for Measurement.
-    Reference: NIST SP800-164 (Draft).  
+    Reference: NIST SP800-164 (Draft).
 
   - Trusted Firmware (TFW): A firmware in a device that can be verified
     with a Trust Anchor by RoT for Verification.
 
-  - Bootloader key: This symmetric key is protected by  
-    electronic fuse (eFUSE) technology. In this context it is used to decrypt a  
+  - Bootloader key: This symmetric key is protected by
+    electronic fuse (eFUSE) technology. In this context it is used to decrypt a
     TFW private key, which belongs to a device-unique private/public key pair.
     Not every device is equipped with a bootloader key.
 
@@ -497,14 +498,14 @@ no such limitation is intended to be implied in the architecture.
    |  | | +---+ +---+ |  |                | |  |    | TAM-2  |    |
    |  | |             |  |     +-------+  | |  |    +--------+    |
    |  | +-------------+  +-----| App-2 |--+ |  |       ^          |
-   |  |                    +-------+   |    |  |       |        Device       
+   |  |                    +-------+   |    |  |       |        Device
    |  +--------------------| App-1 |   |    |  |       |   Administrator
    |                +------|       |   |    |  |       |
    |    +-----------|-+    |       |---+    |  |       |
    |    | TEE-2     | |    |       |--------+  |       |
    |    | +------+  | |    |       |------+    |       |
-   |    | | TEEP |  | |    +-------+      |    |       |  
-   |    | | Agent|<-----+                |    |       |
+   |    | | TEEP |  | |    +-------+      |    |       |
+   |    | | Agent|<-----+                 |    |       |
    |    | | 2    |  | | |                 |    |       |
    |    | +------+  | | |                 |    |       |
    |    |           | | |                 |    |       |
@@ -568,18 +569,18 @@ provide each TAM that it places in the Client App's manifest all the TAs that th
 requires. There is no benefit to going to multiple different TAMs, and there is no
 need for a special TAM to be contacted for a specific TA.
 
-[Note: This should always be the case. When a particular device or TEE supports
+\[Note: This should always be the case. When a particular device or TEE supports
 only a special proprietary attestation mechanism, then a specific TAM will be
 needed that supports that attestation scheme. The TAM should also support standard
 atttestation signatures as well. It is highly unlikely that a set of TAs would use
 different proprietary attestation mechanisms since a TEE is likley to support only
-one such proprietary scheme.]
+one such proprietary scheme.\]
 
-[Note: This situation gets more complex in situations where a Client App expects
+\[Note: This situation gets more complex in situations where a Client App expects
 another application or a device to already have a specific TA installed. This
 situation does not occur with SGX, but could occur in situations where the secure
 world maintains an trusted operating system and runs an entire trusted system with
-multiple TAs running. This requires more discussion.]
+multiple TAs running. This requires more discussion.\]
 
 
 ## Client Apps, Trusted Apps, and Personalization Data
@@ -642,16 +643,16 @@ would pass this data to the installed Client App, which would in turn send this 
 to the SGX enclave (TA). This complexity is due to the fact that each SGX enclave is separate
 and does not have direct communication to one another.
 
-[NOTE: Need to add an equivalent discussion for an ARM/TZ implementation]  
+\[Note: Need to add an equivalent discussion for an ARM/TZ implementation\]
 
 ## TEEP Architectural Support for Client App, TA, and Personalization Data Delivery
 This section defines TEEP support for the three different cases for delivery of the Client
 App, TA, and personalization data.
 
-[Note: discussion of format of this single binary, and who/what is responsible for splitting
+\[Note: discussion of format of this single binary, and who/what is responsible for splitting
 these things apart, and installing the client app into the REE, the TA into the TEE, and the
 personalization data into the TEE or TA. Obviously the decryption must be done by the TEE
-but this may not be supported by all TAs.]
+but this may not be supported by all TAs.\]
 
 
 ## Entity Relations
@@ -858,7 +859,7 @@ security.
     optional for TEEP architecture. Some TEE may present its
     trusted attributes to a TAM using signed attestation with a
     TFW key. For example, a platform that uses a hardware based TEE
-    can have attestation data signed by a hardware protected TFW key.  
+    can have attestation data signed by a hardware protected TFW key.
 
       - Location:   Device secure storage
 
@@ -961,33 +962,33 @@ created per TA.
 
 Step 1: Prepare Images for Devices
 
-  1.  [TEE vendor] Deliver TEE Image (CODE Binary) to device OEM
+  1.  \[TEE vendor\] Deliver TEE Image (CODE Binary) to device OEM
 
-  2.  [CA]  Deliver root CA Whitelist
+  2.  \[CA\]  Deliver root CA Whitelist
 
-  3.  [Soc]  Deliver TFW Image
+  3.  \[Soc\]  Deliver TFW Image
 
 Step 2: Inject Key Pairs and Images to Devices
 
-  1.  [OEM] Generate TFW Key Pair (May be shared among multiple
+  1.  \[OEM\] Generate TFW Key Pair (May be shared among multiple
        devices)
 
-  2.  [OEM] Flash signed TFW Image and signed TEE Image onto devices
+  2.  \[OEM\] Flash signed TFW Image and signed TEE Image onto devices
        (signed by TFW Key)
 
 Step 3: Set up attestation key pairs in devices
 
-  1.  [OEM] Flash TFW Public Key and a bootloader key.
+  1.  \[OEM\] Flash TFW Public Key and a bootloader key.
 
-  2.  [TFW/TEE] Generate a unique attestation key pair and get a
+  2.  \[TFW/TEE\] Generate a unique attestation key pair and get a
        certificate for the device.
 
 Step 4: Set up Trust Anchors in devices
 
-  1.  [TFW/TEE] Store the key and certificate encrypted with the
+  1.  \[TFW/TEE\] Store the key and certificate encrypted with the
         bootloader key
 
-  2.  [TEE vendor or OEM] Store trusted CA certificate list into
+  2.  \[TEE vendor or OEM\] Store trusted CA certificate list into
        devices
 
 
@@ -998,7 +999,7 @@ outside of the hosting device.  For example, GlobalPlatform
 {{GPTEE}} specifies one such architecture.  This calls for a software
 module in the REE world to handle the network communication.  Each
 Client Application in the REE might carry this communication functionality
-but such functionality must also interact with the TEE for the message exchange.  
+but such functionality must also interact with the TEE for the message exchange.
 The TEE interaction will vary according to different TEEs.  In order for
 a Client Application to transparently support different TEEs, it is
 imperative to have a common interface for a Client Application to
@@ -1037,7 +1038,7 @@ a TEE.
 
 A TAM message may indicate the target TEE where a TA should be installed.
 A compliant TEEP protocol should include a target TEE identifier for a
-TEEP Broker when multiple TEEs are present.  
+TEEP Broker when multiple TEEs are present.
 
 The Broker relays the response messages generated from a TEEP Agent in a TEE
 to the TAM. The Broker is not expected to handle any network connection
@@ -1160,7 +1161,7 @@ decisions are left up to the particular TAM/SP.
 
 Some TAMs or SPs may require additional claims in order to properly authorize a device or TEE. These
 additional claims may help clear up any assumptions for which the TAM/SP wants to alleviate. The specific
-format for these additional claims are outside the scope of this specification, but the OTrP protocol
+format for these additional claims are outside the scope of this specification, but the TEEP protocol
 SHALL allow these additional claims to be included in the attestation messages.
 
 The following sub-sections define the cryptographic properties conveyed by the TEEP attestation,
@@ -1209,23 +1210,24 @@ the attestation and make a related security policy decision. The structure of th
 in the diagram below.
 
 ~~~~
-                      +------(Signed By)-----------+
-                      |                            |
-        /--------------------------\               V
-      +---------------+-------------+--------------------------+
-      | Attestation   | The         | The                      |
-      | Header        | Claims      | Attestation Signature(s) |
-      +---------------+-------------+--------------------------+
-                          |     
-                          |
-             +------------+--(Contains)------+-----------------+--------------+
-             |            |                  |                 |              |
-             V            V                  V                 V              V
-      +-------------+  +-------------+  +----------+   +-----------------+  +------------+
-      | Device      |  | TEE         |  |          |   | Action or       |  | Additional |
-      | Identifying |  | Identifying |  | Liveness |   | Operation       |  | or optional|
-      | Info        |  | Info        |  | Proof    |   | Specific claims |  | Claims     |
-      +-------------+  +-------------+  +----------+   +-----------------+  +------------+
+                +------(Signed By)-----------+
+                |                            |
+  /--------------------------\               V
++---------------+-------------+--------------------------+
+| Attestation   | The         | The                      |
+| Header        | Claims      | Attestation Signature(s) |
++---------------+-------------+--------------------------+
+                  |
+                  |
+       +----------+--(Contains)-----+-------------+-------------+
+       |          |                 |             |             |
+       V          V                 V             V             V
++------------+ +-------------+ +----------+ +-----------+ +------------+
+| Device     | | TEE         | |          | | Action or | | Additional |
+| Identifying| | Identifying | | Liveness | | Operation | | or         |
+| Info       | | Info        | | Proof    | | Specific  | | Optional   |
+|            | |             | |          | | Claims    | | Claims     |
++------------+ +-------------+ +----------+ +-----------+ +------------+
 ~~~~
 {: #attestationstructure title="Structure of TEEP Attestation"}
 
@@ -1274,8 +1276,8 @@ TEEP  requires a set of attestation claims that provide sufficient evidence to t
 and its TEE meet certain minimal requirements. Because attestation formats are not yet broadly standardized across
 the industry, standardization work is currently ongoing, and it is expected that extensions to the attestation
 claims will be required as new TEEs and devices are created, the set of attestation claims required by TEEP SHALL
-be defined in an IANA registry. That registry SHALL be defined in the OTrP protocol with sufficient elements
-to address basic TEEP claims, expected new standard claims (for example from https://www.ietf.org/id/draft-mandyam-eat-01.txt),
+be defined in an IANA registry. That registry SHALL be defined in the TEEP protocol with sufficient elements
+to address basic TEEP claims, expected new standard claims (for example from {{I-D.mandyam-eat}}),
 and proprietary claim sets.
 
 ## TEEP Attestation Flow
@@ -1345,24 +1347,24 @@ that is registered in the trust store of devices.  In
 this way, the TEE can check the intermediate and root CA and verify
 that it trusts this TAM to perform operations on the TEE.
 
-# Algorithm and Attestation Agility  
+# Algorithm and Attestation Agility
 
 RFC 7696 {{RFC7696}} outlines the requirements to migrate from one
 mandatory-to-implement algorithm suite to another over time.
 This feature is also known as crypto agility. Protocol evolution
 is greatly simplified when crypto agility is already considered
-during the design of the protocol. In the case of the Open Trust
-Protocol (OTrP) the diverse range of use cases, from trusted app
+during the design of the protocol. In the case of the Trusted Execution Provisioning
+(TEEP) Protocol the diverse range of use cases, from trusted app
 updates for smart phones and tablets to updates of code on
 higher-end IoT devices, creates the need for different
 mandatory-to-implement algorithms already from the start.
 
-Crypto agility in the OTrP concerns the use of symmetric as well
+Crypto agility in TEEP concerns the use of symmetric as well
 as asymmetric algorithms. Symmetric algorithms are used for
 encryption of content whereas the asymmetric algorithms are
 mostly used for signing messages.
 
-In addition to the use of cryptographic algorithms in OTrP there
+In addition to the use of cryptographic algorithms in TEEP there
 is also the need to make use of different attestation technologies.
 A Device must provide techniques to inform a TAM about the
 attestation technology it supports. For many deployment cases it
@@ -1458,9 +1460,7 @@ This document does not require actions by IANA.
 
 # Acknowledgements
 
-The authors thank Dave Thaler for his very thorough review and many
-important suggestions. Most content of this document is split from a
-previously combined OTrP protocol document
+Some content of this document is based on text in a previous OTrP protocol document
 {{I-D.ietf-teep-opentrustprotocol}}.  We thank the former co-authors
 Nick Cook and Minho Yoo for the initial document content, and
 contributors Brian Witten, Tyler Kim, and Alin Mutu.
