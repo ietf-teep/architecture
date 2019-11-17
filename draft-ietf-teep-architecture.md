@@ -58,6 +58,8 @@ normative:
 informative:
   RFC6024:
   I-D.ietf-teep-opentrustprotocol:
+  I-D.tschofenig-teep-protocol:
+  I-D.mandyam-eat
   RFC7696:
   GPTEE:
     author:
@@ -126,7 +128,7 @@ there often arises a need for an external trusted party to verify the
 identity, claims, and rights of Service Providers(SP), devices, and their TEEs.
 This trusted third party is the Trusted Application Manager (TAM).
 
-This protocol addresses the following problems:
+The Trusted Execution Provisioning (TEEP) protocol addresses the following problems:
 
   - A Service Provider (SP) intending to provide services through a TA
     to users of a device needs to determine security-relevant
@@ -518,7 +520,7 @@ no such limitation is intended to be implied in the architecture.
    |    | TEE-2     | |    |       |--------+  |       |
    |    | +------+  | |    |       |------+    |       |
    |    | | TEEP |  | |    +-------+      |    |       |  
-   |    | | Agent|<-----+                |    |       |
+   |    | | Agent|<-----+                 |    |       |
    |    | | 2    |  | | |                 |    |       |
    |    | +------+  | | |                 |    |       |
    |    |           | | |                 |    |       |
@@ -1146,7 +1148,7 @@ decisions are left up to the particular TAM/SP.
 
 Some TAMs or SPs may require additional claims in order to properly authorize a device or TEE. These
 additional claims may help clear up any assumptions for which the TAM/SP wants to alleviate. The specific
-format for these additional claims are outside the scope of this specification, but the OTrP protocol
+format for these additional claims are outside the scope of this specification, but the TEEP protocol
 SHALL allow these additional claims to be included in the attestation messages.
 
 The following sub-sections define the cryptographic properties conveyed by the TEEP attestation,
@@ -1260,8 +1262,8 @@ TEEP  requires a set of attestation claims that provide sufficient evidence to t
 and its TEE meet certain minimal requirements. Because attestation formats are not yet broadly standardized across
 the industry, standardization work is currently ongoing, and it is expected that extensions to the attestation
 claims will be required as new TEEs and devices are created, the set of attestation claims required by TEEP SHALL
-be defined in an IANA registry. That registry SHALL be defined in the OTrP protocol with sufficient elements
-to address basic TEEP claims, expected new standard claims (for example from https://www.ietf.org/id/draft-mandyam-eat-01.txt),
+be defined in an IANA registry. That registry SHALL be defined in the TEEP protocol with sufficient elements
+to address basic TEEP claims, expected new standard claims (for example from {{I-D.mandyam-eat}}),
 and proprietary claim sets.
 
 ## TEEP Attestation Flow
@@ -1337,18 +1339,18 @@ RFC 7696 {{RFC7696}} outlines the requirements to migrate from one
 mandatory-to-implement algorithm suite to another over time.
 This feature is also known as crypto agility. Protocol evolution
 is greatly simplified when crypto agility is already considered
-during the design of the protocol. In the case of the Open Trust
-Protocol (OTrP) the diverse range of use cases, from trusted app
+during the design of the protocol. In the case of the Trusted Execution Provisioning
+(TEEP) Protocol the diverse range of use cases, from trusted app
 updates for smart phones and tablets to updates of code on
 higher-end IoT devices, creates the need for different
 mandatory-to-implement algorithms already from the start.
 
-Crypto agility in the OTrP concerns the use of symmetric as well
+Crypto agility in TEEP concerns the use of symmetric as well
 as asymmetric algorithms. Symmetric algorithms are used for
 encryption of content whereas the asymmetric algorithms are
 mostly used for signing messages.
 
-In addition to the use of cryptographic algorithms in OTrP there
+In addition to the use of cryptographic algorithms in TEEP there
 is also the need to make use of different attestation technologies.
 A Device must provide techniques to inform a TAM about the
 attestation technology it supports. For many deployment cases it
@@ -1445,8 +1447,8 @@ This document does not require actions by IANA.
 # Acknowledgements
 
 The authors thank Dave Thaler for his very thorough review and many
-important suggestions. Most content of this document is split from a
-previously combined OTrP protocol document
+important suggestions. Some content of this document is based on text in
+a previous OTrP protocol document
 {{I-D.ietf-teep-opentrustprotocol}}.  We thank the former co-authors
 Nick Cook and Minho Yoo for the initial document content, and
 contributors Brian Witten, Tyler Kim, and Alin Mutu.
