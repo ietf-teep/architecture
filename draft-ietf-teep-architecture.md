@@ -579,7 +579,7 @@ install a TA, a list of TAMs may be provided. The TEEP Broker selects a single T
 is consistent with the list of trusted TAMs (trust anchors) provisioned on the device.
 For any client app, there should be only a single TAM for the TEEP Broker to contact.
 This is also the case when a Client App uses multiple TAs, or when one TA depends on
-anther TA in a software dependency. The reason is that the SP should
+another TA in a software dependency. The reason is that the SP should
 provide each TAM that it places in the Client App's manifest all the TAs that the app
 requires. There is no benefit to going to multiple different TAMs, and there is no
 need for a special TAM to be contacted for a specific TA.
