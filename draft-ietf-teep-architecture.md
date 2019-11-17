@@ -406,7 +406,7 @@ all components are further explained in the following paragraphs.
     The TAM performs its management of TA's through  an
     interaction with a Device's TEEP Broker. As shown in
     #notionalarch, the TAM cannot directly contact a Device, but must
-    wait for a the TEEP Broker or a Client Application to contact
+    wait for the TEEP Broker to contact
     the TAM requesting a particular service. This architecture is
     intentional in order to accommodate network and application firewalls
     that normally protect user and enterprise devices from arbitrary
@@ -441,26 +441,11 @@ all components are further explained in the following paragraphs.
     Administrators to install the TAM's certificate in their devices as
     an after-market-action.
 
-  - TEEP Broker: The TEEP Broker is an application running in a Rich
+  - TEEP Broker: The TEEP Broker is an application component running in a Rich
     Execution Environment (REE) that enables the message protocol exchange between
     a TAM and a TEE in a device. The TEEP Broker does not process messages
     on behalf of a TEE, but merely is responsible for relaying messages from
     the TAM to the TEE, and for returning the TEE's responses to the TAM.
-
-    A Client Application is expected to communicate with a TAM to
-    request TAs that it needs to use.  The Client Application needs
-    to pass the messages from the TAM to TEEs in the device.  This
-    calls for a component in the REE that Client Applications can use
-    to pass messages to TEEs.  The TEEP Broker is thus an application
-    in the REE or software library that can relay messages from a Client
-    Application to a TEE in the device.  A device usually comes with
-    only one active TEE.  A TEE may provide such a
-    Broker to the device manufacturer to be bundled in devices.  Such
-    a TEE must also include a Broker counterpart, namely, a TEEP Agent
-    inside the TEE, to parse TAM messages sent
-    through the Broker.  A TEEP Broker is generally acting as a dummy
-    relaying box with just the TEE interacting capability; it doesn't
-    need and shouldn't parse protocol messages.
 
   - TEEP Agent: the TEEP Agent is a processing module running inside
     a TEE that receives TAM requests that are relayed via a TEEP Broker
@@ -1069,6 +1054,34 @@ the TAM.
    Several non-exhaustive options are discussed below.  Providers are
    encouraged to take advantage of the latest communication and platform
    capabilities to offer the best user experience.
+
+### TEEP Broker APIs
+
+The following conceptual APIs exist from a TEEP Broker to a TEEP Agent:
+
+1. RequestTA: A notification from an REE application (e.g., an installer,
+   or a normal application) that it depends on a given TA, which may or may not
+   already be installed in the TEE.
+
+2. ProcessTeepMessage: A message arriving from the network, to be delivered
+   to the TEEP Agent for processing.
+
+3. RequestPolicyCheck: A hint (e.g., based on a timer) that the TEEP Agent
+   may wish to contact the TAM for any changes, without the device itself
+   needing any particular change.
+
+4. ProcessError: A notification that the TEEP Broker could not deliver an outbound
+   TEEP message to a TAM.
+
+For comparison, similar APIs may exist on the TAM side, where a broker may or may not
+exist (depending on whether the TAM uses a TEE or not):
+
+1. ProcessConnect: A notification that an incoming TEEP session is being requested by a TEEP Agent.
+
+2. ProcessTeepMessage: A message arriving from the network, to be delivered
+   to the TAM for processing.
+
+For further discussion on these APIs, see {{?I.D-ietf-teep-otrp-over-http}}.
 
 ### TEEP Broker Distribution
 
