@@ -58,6 +58,7 @@ normative:
 informative:
   RFC6024:
   I-D.ietf-teep-opentrustprotocol:
+  I-D.ietf-teep-otrp-over-http:
   RFC7696:
   GPTEE:
     author:
@@ -1081,7 +1082,7 @@ exist (depending on whether the TAM uses a TEE or not):
 2. ProcessTeepMessage: A message arriving from the network, to be delivered
    to the TAM for processing.
 
-For further discussion on these APIs, see {{?I.D-ietf-teep-otrp-over-http}}.
+For further discussion on these APIs, see {{I-D.ietf-teep-otrp-over-http}}.
 
 ### TEEP Broker Distribution
 
