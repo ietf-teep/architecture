@@ -200,13 +200,14 @@ The following terms are used:
   - Device User: A human being that uses a device. Many devices have
     a single device user. Some devices have a primary device user with
     other human beings as secondary device users (e.g., parent allowing
-    children to use their tablet or laptop). Relates to Device Owner
+    children to use their tablet or laptop). Other devices are not used
+    by a human being and hence have no device user. Relates to Device Owner
     and Device Administrator.
 
-  - Device Owner: A device is always owned by someone. It is common for
+  - Device Owner: A device is always owned by someone. In some cases, it is common for
     the (primary) device user to also own the device, making the device
     user/owner also the device administrator. In enterprise environments
-    it is more common for the enterprise to own the device, and device
+    it is more common for the enterprise to own the device, and any device
     users have no or limited administration rights. In this case, the
     enterprise appoints a device administrator that is not the device
     owner.
@@ -601,16 +602,16 @@ multiple TAs running. This requires more discussion.\]
 
 In TEEP, there is an explicit relationship and dependence between the client app
 in the REE and one or more TAs in the TEE, as shown in {{notionalarch2}}.
-From the perspective of a device user, a client app that uses one or more TA's in a TEE
+For most purposes, a client app that uses one or more TA's in a TEE
 appears no different from any other untrusted application in the REE. However, the way
 the client app and its corresponding TA's are packaged, delivered, and installed on
 the device can vary. The variations depend on whether the client app and TA are bundled
 together or are provided separately, and this has implications to the management of
 the TAs in the TEE. In addition to the client app and TA, the TA and/or TEE may require
-some additional data to personalize the TA to the service provider or the device user.
+some additional data to personalize the TA to the service provider or the device or a user.
 This personalization data is dependent on the TEE, the TA and the SP; an example of
-personalization data might be username and password of the device user's account with
-the SP, or a secret symmetric key used to by the TA to communicate with the SP. The
+personalization data might be username and password of an account with
+the SP, or a secret symmetric key used by the TA to communicate with the SP. The
 personalization data must be encrypted to preserve the confidentiality of potentially
 sensitive data contained within it. Other than this requirement to support confidentiality,
 TEEP place no limitations or requirements on the personalization data.
@@ -625,7 +626,7 @@ There are three possible cases for bundling of the Client App, TA, and personali
      is separately provided by the SP. In this case, the personalization data is collected
      by the TAM and included in the InstallTA message to the TEEP Broker.
 
-  3. All components are independent. The device user installs the Client App through some
+  3. All components are independent. The Client App is installed through some
      independent or device-specific mechanism, and the TAM provides the TA and personalization
      data from the SP. Delivery of the TA and personalization data may be combined or separate.
 
