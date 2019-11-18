@@ -596,7 +596,9 @@ format in {{I-D.ietf-suit-manifest}} for expressing how to install the TA as wel
 dependencies on other TEE components and versions.
 That is, dependencies from TAs on other TEE components can be expressed in a SUIT manifest,
 including dependencies on any other TAs, or trusted OS code (if any), or trusted firmware.
-Installation steps can also be expressed in a SUIT manifest.  For example, TEE's compliant
+Installation steps can also be expressed in a SUIT manifest.
+
+For example, TEE's compliant
 with Global Platform may have a notion of a "security domain" (which is a grouping of
 one or more TAs installed on a device, that can share information within such a group)
 that must be created and into which one or more TAs can then be installed. It is thus up
