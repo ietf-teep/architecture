@@ -406,7 +406,7 @@ all components are further explained in the following paragraphs.
 
     The TAM performs its management of TA's through  an
     interaction with a Device's TEEP Broker. As shown in
-    #notionalarch, the TAM cannot directly contact a Device, but must
+    {{notionalarch}}, the TAM cannot directly contact a Device, but must
     wait for a the TEEP Broker or a Client Application to contact
     the TAM requesting a particular service. This architecture is
     intentional in order to accommodate network and application firewalls
@@ -532,7 +532,7 @@ no such limitation is intended to be implied in the architecture.
    |                                           |
    +-------------------------------------------+
 ~~~~
-{: #notionalarch2 title="Notional Architecture of TEEP wtih multiple TEEs"}
+{: #notionalarch2 title="Notional Architecture of TEEP with multiple TEEs"}
 
 In the diagram above, TEEP Broker 1 controls interactions with the TA's in TEE-1,
 and TEEP Broker 2 controls interactions with the TA's in TEE-2. This presents some
@@ -645,7 +645,7 @@ and signed for it to be accepted by the SGX TEE. In SGX, for Case 2 and Case 3, 
 personalization data is normally loaded into the SGX enclave (the TA) after the TA has
 started. Although Case 1 is possible with SGX, there are no instances of this known to
 be in use at this time, since such a construction would required a special installation
-program and SGX TA to recieve the encrypted binary, decrypt it, separate it into the
+program and SGX TA to receive the encrypted binary, decrypt it, separate it into the
 three different elements, and then install all three. This installation is complex,
 because the Client App decrypted inside the TEE must be passed out of the TEE to an
 installer in the REE which would install the Client App; this assumes that the Client
@@ -674,7 +674,7 @@ but this may not be supported by all TAs.\]
 This architecture leverages asymmetric cryptography to
 authenticate a device to a TAM. Additionally, a TEE
 in a device authenticates a TAM and TA signer. The
-provisioning of Trust Anchors to a device may different from
+provisioning of Trust Anchors to a device may be different from
 one use case to the other. A device administrator may want to
 have the capability to control what TAs are allowed.
 A device manufacturer enables verification of the TA signers
@@ -1267,7 +1267,7 @@ to address basic TEEP claims, expected new standard claims (for example from {{I
 and proprietary claim sets.
 
 ## TEEP Attestation Flow
-Attesations are required in TEEP under the following flows:
+Attestations are required in TEEP under the following flows:
 
   - When a TEE responds with device state information (dsi) to the TAM or SP, including a "GetDeviceState"
     response, "InstallTA" response, etc.
