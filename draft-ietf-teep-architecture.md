@@ -847,7 +847,7 @@ security.
 | certificate | storage  |        | trusted by TAMs   |             |
 |             |          |        |                   |             |
 | 2. TEE key  | Device   | TEE CA | A whitelist of    | 1 per       |
-| pair and    | TEE      | under  | TEE root CA       | device      |
+| pair and    | TEE      | under  | TEE root CA       | TEE         |
 | certificate |          | a root | trusted by TAMs   |             |
 |             |          | CA     |                   |             |
 |             |          |        |                   |             |
@@ -888,9 +888,9 @@ security.
 2. TEE key pair and certificate:  It is used for device attestation
     to a remote TAM and SP.
 
-      - This key pair is burned into the device by the device manufacturer.
+      - This key pair is burned into the TEE by the TEE manufacturer.
        The key pair and its certificate are valid for the expected
-       lifetime of the device.
+       lifetime of the TEE.
 
       - Location:   Device TEE
 
@@ -900,7 +900,7 @@ security.
 
       - Checked Against:   A whitelist of TEE root CAs trusted by TAMs
 
-      - Cardinality:   One per device
+      - Cardinality:   One per TEE
 
 3. TAM key pair and certificate:  A TAM provider acquires a
     certificate from a CA that a TEE trusts.
