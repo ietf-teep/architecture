@@ -571,7 +571,7 @@ there will likely be multiple TAMs in the manifest - one servicing one brand of 
 device and another servicing a different manufacturer, etc. Because different devices
 and different manufacturers trust different TAMs, the manifest will include different
 TAMs that support this SP's client app and TA. Multiple TAMs allow the SP to provide
-thier service and this app (and TA) to multiple different devices.
+their service and this app (and TA) to multiple different devices.
 
 When the TEEP Broker receives a request to contact the TAM for a Client App in order to
 install a TA, a list of TAMs may be provided. The TEEP Broker selects a single TAM that
@@ -586,8 +586,8 @@ need for a special TAM to be contacted for a specific TA.
 \[Note: This should always be the case. When a particular device or TEE supports
 only a special proprietary attestation mechanism, then a specific TAM will be
 needed that supports that attestation scheme. The TAM should also support standard
-atttestation signatures as well. It is highly unlikely that a set of TAs would use
-different proprietary attestation mechanisms since a TEE is likley to support only
+attestation signatures as well. It is highly unlikely that a set of TAs would use
+different proprietary attestation mechanisms since a TEE is likely to support only
 one such proprietary scheme.\]
 
 \[Note: This situation gets more complex in situations where a Client App expects
@@ -644,15 +644,15 @@ load that as a TA. Obviously, such file or downloaded content must be properly f
 and signed for it to be accepted by the SGX TEE. In SGX, for Case 2 and Case 3, the
 personalization data is normally loaded into the SGX enclave (the TA) after the TA has
 started. Although Case 1 is possible with SGX, there are no instances of this known to
-be in use at this time, since such a construction would required a special installation
+be in use at this time, since such a construction would require a special installation
 program and SGX TA to receive the encrypted binary, decrypt it, separate it into the
 three different elements, and then install all three. This installation is complex,
 because the Client App decrypted inside the TEE must be passed out of the TEE to an
 installer in the REE which would install the Client App; this assumes that the Client
 App binary includes the TA code also, otherwise there is a significant problem in getting
-the SGX encalve code (the TA) from the TEE, through the installer and into the Client App
+the SGX enclave code (the TA) from the TEE, through the installer and into the Client App
 in a trusted fashion. Finally, the personalization data would need to be sent out of the
-TEE (encrypted in an SGX encalve-to-enclave manner) to the REE's installation app, which
+TEE (encrypted in an SGX enclave-to-enclave manner) to the REE's installation app, which
 would pass this data to the installed Client App, which would in turn send this data
 to the SGX enclave (TA). This complexity is due to the fact that each SGX enclave is separate
 and does not have direct communication to one another.
@@ -1092,7 +1092,7 @@ standard interface to a Client Application or TAM SDK.  Only one
 Broker is generally expected in a device.
 
 # Attestation
-Attestation is the process through which one entity (an attestor) presents a series of
+Attestation is the process through which one entity (an attester) presents a series of
 claims to another entity (a verifier), and provides sufficient proof that the claims
 are true. Different verifiers may have different standards for attestation proofs
 and not all attestations are acceptable to every verifier. TEEP attestations are based
@@ -1156,12 +1156,12 @@ TAM the device TEE, and some implementation examples of how an attestation key m
 a real TEEP device.
 
 ## Attestation Cryptographic Properties
-The attestation constructed by TEEP must convey certain cryptographic properties from the attestor to
+The attestation constructed by TEEP must convey certain cryptographic properties from the attester to
 the verifier; in the case of TEEP, the attestation must convey properties from the device to the TAM
 and/or SP. The properties required by TEEP include:
 
   - Non-repudiation, Unique Proof of Source - the cryptographic digital signature across the attestation,
-      and optionally along with information in the attestion itself SHALL uniquely identify a specific TEE
+      and optionally along with information in the attestation itself SHALL uniquely identify a specific TEE
       in a specific device.
 
   - Integrity of claims - the cryptographic digital signature across the attestation SHALL cover the entire
@@ -1234,14 +1234,14 @@ a minimal set of claims which includes:
   - Device Identifying Info: TEEP attestations must uniquely identify a device to the TAM and SP. This
     identifier allows the TAM/SP to provide services unique to the device, such as managing installed
     TAs, and providing subscriptions to services, and locating device-specific keying material to
-    communicate wiht or authenticate the device. Additionally, device manufacturer information must
+    communicate with or authenticate the device. Additionally, device manufacturer information must
     be provided to provide better universal uniqueness qualities without requiring globally unique
     identifiers for all devices.
 
   - TEE Identifying info: The type of TEE that generated this attestation must be identified. Standard
     TEE types are identified by an IANA number, but also must include version identification information
     such as the hardware, firmware, and software version of the TEE, as applicable by the
-    TEE type. Structure to the version number is required.TEE manufacturer information for the TEE is
+    TEE type. Structure to the version number is required. TEE manufacturer information for the TEE is
     required in order to disambiguate the same TEE type created by different manufacturers and
     resolve potential assumptions around manufacturer provisioning, keying and support for the TEE.
 
@@ -1253,7 +1253,7 @@ a minimal set of claims which includes:
 
   - Additional Claims: (Optional - May be empty set) A TAM or SP may require specific additional claims in order
     to address potential assumptions, such as the requirement that a device's REE performed a secure boot,
-    or that the device is not currenlty in a debug or non-productions state. A TAM may require a device to
+    or that the device is not currently in a debug or non-productions state. A TAM may require a device to
     provide a device health attestation that may include some claims or measurements about the REE.
     These claims are TAM specific.
 
