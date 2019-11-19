@@ -58,6 +58,7 @@ normative:
 informative:
   RFC6024:
   I-D.ietf-teep-opentrustprotocol:
+  I-D.ietf-suit-manifest:
   I-D.ietf-teep-otrp-over-http:
   I-D.mandyam-eat:
   RFC7696:
@@ -564,7 +565,7 @@ install a TA, a list of TAMs may be provided. The TEEP Broker selects a single T
 is consistent with the list of trusted TAMs (trust anchors) provisioned on the device.
 For any client app, there should be only a single TAM for the TEEP Broker to contact.
 This is also the case when a Client App uses multiple TAs, or when one TA depends on
-anther TA in a software dependency (see section TBD). The reason is that the SP should
+another TA in a software dependency. The reason is that the SP should
 provide each TAM that it places in the Client App's manifest all the TAs that the app
 requires. There is no benefit to going to multiple different TAMs, and there is no
 need for a special TAM to be contacted for a specific TA.
@@ -576,12 +577,24 @@ attestation signatures as well. It is highly unlikely that a set of TAs would us
 different proprietary attestation mechanisms since a TEE is likely to support only
 one such proprietary scheme.\]
 
-\[Note: This situation gets more complex in situations where a Client App expects
-another application or a device to already have a specific TA installed. This
-situation does not occur with SGX, but could occur in situations where the secure
-world maintains an trusted operating system and runs an entire trusted system with
-multiple TAs running. This requires more discussion.\]
+Separate from the Client App's manifest, this framework relies on the use of the manifest 
+format in {{I-D.ietf-suit-manifest}} for expressing how to install the TA as well as
+dependencies on other TEE components and versions.
+That is, dependencies from TAs on other TEE components can be expressed in a SUIT manifest,
+including dependencies on any other TAs, or trusted OS code (if any), or trusted firmware.
+Installation steps can also be expressed in a SUIT manifest.
 
+For example, TEE's compliant
+with Global Platform may have a notion of a "security domain" (which is a grouping of
+one or more TAs installed on a device, that can share information within such a group)
+that must be created and into which one or more TAs can then be installed. It is thus up
+to the SUIT manifest to express a dependency on having such a security domain existing
+or being created first, as appropriate.
+
+Updating a TA may cause compatibility issues with any Untrusted Applications or other
+components that depend on the updated TA, just like updating the OS or a shared library
+could impact an Untrusted Application.  Thus, an implementation needs to take into
+account such issues.
 
 ## Client Apps, Trusted Apps, and Personalization Data
 
