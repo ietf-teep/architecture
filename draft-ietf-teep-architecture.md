@@ -289,8 +289,6 @@ This document uses the following abbreviations:
 
   - RoT: Root of Trust
 
-  - SD: Security Domain
-
   - SP: Service Provider
 
   - TA: Trusted Application
@@ -799,7 +797,7 @@ content of messages except for the TEE routing information.
 
 Each TEE comes with a trust store that contains a whitelist of Trust Anchors
 that are used to validate a TAM's certificate. A TEE
-will accept a TAM to create new Security Domains and install new TAs
+will accept a TAM to install new TAs
 on behalf of an SP only if the TAM's certificate is chained to one of
 the root CA certificates in the TEE's trust store.
 
@@ -961,15 +959,6 @@ messages created by the device TEE to respond to TAM messages.
 These messages are signed end-to-end and are typically encrypted such
 that only the targeted device TEE or TAM is able to decrypt and view
 the actual content.
-
-## Security Domain
-
-No security domain (SD) is explicitly assumed in a TEE for TA management.
-Some TEE, for example, some TEE compliant with Global Platform (GP),
-may continue to choose to use SD to organize resource partition and
-security boundaries. It is up to a TEE implementation to decide how
-a SD is attached to a TA installation, for example, one SD could be
-created per TA.
 
 ## A Sample Device Setup Flow
 
@@ -1300,7 +1289,7 @@ Attestations are required in TEEP under the following flows:
     response, "InstallTA" response, etc.
 
   - When a new key pair is generated for a TA-to-TAM or TA-to-SP communication, the keypair must be covered by
-    an attestation, including "CreateSecurityDomain" response, "UpdateSecurityDomain" response, etc.
+    an attestation.
 
 ## Attestation Key Example
 
