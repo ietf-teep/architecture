@@ -58,6 +58,7 @@ normative:
 informative:
   RFC6024:
   I-D.ietf-teep-opentrustprotocol:
+  I-D.ietf-suit-manifest:
   I-D.ietf-teep-otrp-over-http:
   I-D.mandyam-eat:
   RFC7696:
@@ -287,8 +288,6 @@ This document uses the following abbreviations:
   - REE: Rich Execution Environment
 
   - RoT: Root of Trust
-
-  - SD: Security Domain
 
   - SP: Service Provider
 
@@ -579,6 +578,25 @@ attestation signatures as well. It is highly unlikely that a set of TAs would us
 different proprietary attestation mechanisms since a TEE is likely to support only
 one such proprietary scheme.\]
 
+Separate from the Client App's manifest, this framework relies on the use of the manifest 
+format in {{I-D.ietf-suit-manifest}} for expressing how to install the TA as well as
+dependencies on other TEE components and versions.
+That is, dependencies from TAs on other TEE components can be expressed in a SUIT manifest,
+including dependencies on any other TAs, or trusted OS code (if any), or trusted firmware.
+Installation steps can also be expressed in a SUIT manifest.
+
+For example, TEE's compliant
+with Global Platform may have a notion of a "security domain" (which is a grouping of
+one or more TAs installed on a device, that can share information within such a group)
+that must be created and into which one or more TAs can then be installed. It is thus up
+to the SUIT manifest to express a dependency on having such a security domain existing
+or being created first, as appropriate.
+
+Updating a TA may cause compatibility issues with any Untrusted Applications or other
+components that depend on the updated TA, just like updating the OS or a shared library
+could impact an Untrusted Application.  Thus, an implementation needs to take into
+account such issues.
+
 ## Client Apps, Trusted Apps, and Personalization Data
 
 In TEEP, there is an explicit relationship and dependence between the client app
@@ -782,7 +800,7 @@ content of messages except for the TEE routing information.
 
 Each TEE comes with a trust store that contains a whitelist of Trust Anchors
 that are used to validate a TAM's certificate. A TEE
-will accept a TAM to create new Security Domains and install new TAs
+will accept a TAM to install new TAs
 on behalf of an SP only if the TAM's certificate is chained to one of
 the root CA certificates in the TEE's trust store.
 
@@ -829,7 +847,7 @@ security.
 | certificate | storage  |        | trusted by TAMs   |             |
 |             |          |        |                   |             |
 | 2. TEE key  | Device   | TEE CA | A whitelist of    | 1 per       |
-| pair and    | TEE      | under  | TEE root CA       | device      |
+| pair and    | TEE      | under  | TEE root CA       | TEE         |
 | certificate |          | a root | trusted by TAMs   |             |
 |             |          | CA     |                   |             |
 |             |          |        |                   |             |
@@ -870,9 +888,9 @@ security.
 2. TEE key pair and certificate:  It is used for device attestation
     to a remote TAM and SP.
 
-      - This key pair is burned into the device by the device manufacturer.
+      - This key pair is burned into the TEE by the TEE manufacturer.
        The key pair and its certificate are valid for the expected
-       lifetime of the device.
+       lifetime of the TEE.
 
       - Location:   Device TEE
 
@@ -882,7 +900,7 @@ security.
 
       - Checked Against:   A whitelist of TEE root CAs trusted by TAMs
 
-      - Cardinality:   One per device
+      - Cardinality:   One per TEE
 
 3. TAM key pair and certificate:  A TAM provider acquires a
     certificate from a CA that a TEE trusts.
@@ -944,15 +962,6 @@ messages created by the device TEE to respond to TAM messages.
 These messages are signed end-to-end and are typically encrypted such
 that only the targeted device TEE or TAM is able to decrypt and view
 the actual content.
-
-## Security Domain
-
-No security domain (SD) is explicitly assumed in a TEE for TA management.
-Some TEE, for example, some TEE compliant with Global Platform (GP),
-may continue to choose to use SD to organize resource partition and
-security boundaries. It is up to a TEE implementation to decide how
-a SD is attached to a TA installation, for example, one SD could be
-created per TA.
 
 ## A Sample Device Setup Flow
 
@@ -1283,7 +1292,7 @@ Attestations are required in TEEP under the following flows:
     response, "InstallTA" response, etc.
 
   - When a new key pair is generated for a TA-to-TAM or TA-to-SP communication, the keypair must be covered by
-    an attestation, including "CreateSecurityDomain" response, "UpdateSecurityDomain" response, etc.
+    an attestation.
 
 ## Attestation Key Example
 
