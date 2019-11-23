@@ -559,15 +559,18 @@ and different manufacturers trust different TAMs, the manifest will include diff
 TAMs that support this SP's client app and TA. Multiple TAMs allow the SP to provide
 their service and this app (and TA) to multiple different devices.
 
-When the TEEP Broker receives a request to contact the TAM for a Client App in order to
-install a TA, a list of TAMs may be provided. The TEEP Broker selects a single TAM that
-is consistent with the list of trusted TAMs (trust anchors) provisioned on the device.
-For any client app, there should be only a single TAM for the TEEP Broker to contact.
-This is also the case when a Client App uses multiple TAs, or when one TA depends on
-anther TA in a software dependency (see section TBD). The reason is that the SP should
-provide each TAM that it places in the Client App's manifest all the TAs that the app
-requires. There is no benefit to going to multiple different TAMs, and there is no
-need for a special TAM to be contacted for a specific TA.
+When a TEEP Broker receives a request from an Untrusted Application to install a TA,
+a list of TAM URIs may be provided for that TA, and the request is passed to the TEEP Agent.
+If the TEEP Agent decides that the TA needs to be installed, the TEEP Agent selects a single TAM URI
+that is consistent with the list of trusted TAMs provisioned on the device invokes the
+TEEP/HTTP layer to connect to the TAM URI and begin a TEEP protocol exchange.  When the TEEP Agent
+subsequently receives the TA to install and the TA's manifest indicates dependencies
+on any other trusted components, each dependency can include a list of TAM URIs for the
+relevant dependency.  If such dependencies exist that are prerequisites to install the TA,
+then the TEEP Agent recursively follows the same procedure for each dependency that needs to be installed
+or updated, including selecting a TAM URI that is consistent with the list of trusted TAMs provisioned
+on the device, and beginning a TEEP exchange.  If multiple TAM URIs are considered trusted,
+only one needs to be contacted and they can be attempted in some order until one responds.
 
 \[Note: This should always be the case. When a particular device or TEE supports
 only a special proprietary attestation mechanism, then a specific TAM will be
@@ -575,13 +578,6 @@ needed that supports that attestation scheme. The TAM should also support standa
 attestation signatures as well. It is highly unlikely that a set of TAs would use
 different proprietary attestation mechanisms since a TEE is likely to support only
 one such proprietary scheme.\]
-
-\[Note: This situation gets more complex in situations where a Client App expects
-another application or a device to already have a specific TA installed. This
-situation does not occur with SGX, but could occur in situations where the secure
-world maintains an trusted operating system and runs an entire trusted system with
-multiple TAs running. This requires more discussion.\]
-
 
 ## Client Apps, Trusted Apps, and Personalization Data
 
@@ -1453,6 +1449,19 @@ lifetimes that don't require device Trust Anchor update.  On the
 other hand, it is imperative that OEMs or device providers plan for
 support of Trust Anchor update in their shipped devices.
 
+## Keeping Secrets from the TAM
+
+In some scenarios, it is desirable to protect the TA binary or configuration
+from being disclosed to the TAM that distributes them.  In such a scenarios,
+the files can be encrypted end-to-end between an SP and a TEE.  However, there
+must be some means of provisioning the decryption key into the TEE and/or some
+means of the SP securely learning a public key of the TEE that it can use to
+encrypt.  One way to do this is for the SP to run its own TAM, merely to
+distribute the decryption key via the TEEP protocol, and the key file can be a
+dependency in the manifest of the encrypted TA.  Thus, the TEEP Agent would
+look at the TA manifest, determine there is a dependency with a TAM URI of the
+SP's TAM. The Agent would then install the dependency, and then continue with
+the TA installation steps, including decrypting the TA binary with the relevant key.
 
 #  IANA Considerations
 
