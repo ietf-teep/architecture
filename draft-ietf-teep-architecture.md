@@ -224,24 +224,21 @@ The following terms are used:
     device, the Device Administrator may choose to remotely
     administrate a device through a TAM.
 
-  - Trust Anchor: A public key in a device whose corresponding private
-    key is held by an entity implicitly trusted by the device. The
-    Trust Anchor may be a certificate or it may be a raw public key
+  - Trust Anchor: As defined in {{RFC6024}} and {{I-D.ietf-suit-manifest}},
+    "A trust anchor represents an authoritative entity via a public
+    key and associated data.  The public key is used to verify digital
+    signatures, and the associated data is used to constrain the types
+    of information for which the trust anchor is authoritative."
+    The Trust Anchor may be a certificate or it may be a raw public key
     along with additional data if necessary such as its public key
     algorithm and parameters.
-    The Trust Anchor is normally stored in a location that resists
-    unauthorized modification, insertion, or replacement. The digital
-    fingerprint of a Trust Anchor may be stored along with the Trust
-    Anchor certificate or public key. A device can use the
-    fingerprint to uniquely identify a Trust Anchor.
-    The Trust Anchor private key owner can sign certificates of other
-    public keys, which conveys trust about those keys to the device.
-    A certificate signed by the Trust Anchor communicates that the
-    private key holder of the signed certificate is trusted by the
-    Trust Anchor holder, and can therefore be trusted by the device.
-    Trust Anchors in a device may be updated by an authorized party
-    when a Trust Anchor should be deprecated or a new Trust Anchor
-    should be added.
+
+  - Trust Anchor Store: As defined in {{RFC6024}}, "A trust anchor
+    store is a set of one or more trust anchors stored in a device.
+    A device may have more than one trust anchor store, each of which
+    may be used by one or more applications."  As noted in {{I-D.ietf-suit-manifest}},
+    a trust anchor store must resist modification against unauthorized
+    insertion, deletion, and modification.
 
   - Trusted Application (TA): An application component that runs in a TEE.
 
@@ -872,7 +869,9 @@ security.
     TFW key. For example, a platform that uses a hardware based TEE
     can have attestation data signed by a hardware protected TFW key.
 
-      - Location:   Device secure storage
+      - Location:   Device secure storage, which is storage on the device
+                    that resists modification against unauthorized
+                    insertion, deletion, and modification
 
       - Supported Key Type:   RSA and ECC
 
@@ -889,7 +888,7 @@ security.
        The key pair and its certificate are valid for the expected
        lifetime of the TEE.
 
-      - Location:   Device TEE
+      - Location:   A Trust Anchor Store in the Device TEE
 
       - Supported Key Type:   RSA and ECC
 
