@@ -576,7 +576,7 @@ When the TEEP Broker receives a request to contact the TAM for an Untrusted Appl
 install a TA, a list of TAMs may be provided. The TEEP Broker selects a single TAM that
 is consistent with the list of trusted TAMs (trust anchors) provisioned on the device.
 For any Untrusted Application, there should be only a single TAM for the TEEP Broker to contact.
-This is also the case when a Untrusted Application uses multiple TAs, or when one TA depends on
+This is also the case when an Untrusted Application uses multiple TAs, or when one TA depends on
 anther TA in a software dependency (see section TBD). The reason is that the SP should
 provide each TAM that it places in the Untrusted Application's manifest all the TAs that the app
 requires. There is no benefit to going to multiple different TAMs, and there is no
@@ -600,7 +600,7 @@ multiple TAs running. This requires more discussion.]
 
 In TEEP, there is an explicit relationship and dependence between the Untrusted Application
 in the REE and one or more TAs in the TEE, as shown in {{notionalarch2}}.
-From the perspective of a device user, a Untrusted Application that uses one or more TA's in a TEE
+From the perspective of a device user, an Untrusted Application that uses one or more TA's in a TEE
 appears no different from any other Untrusted Application in the REE. However, the way
 the Untrusted Application and its corresponding TA's are packaged, delivered, and installed on
 the device can vary. The variations depend on whether the Untrusted Application and TA are bundled
