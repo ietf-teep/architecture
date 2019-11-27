@@ -53,7 +53,6 @@ author:
        email: maxpassion@gmail.com
 
 normative:
-  RFC2119:
   RFC8174:
 informative:
   RFC6024:
