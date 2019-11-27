@@ -165,12 +165,6 @@ The Trusted Execution Provisioning (TEEP) protocol addresses the following probl
 
 #  Terminology
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-"SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY",
-and "OPTIONAL" in this document are to be interpreted as described
-in BCP 14 {{RFC2119}} {{RFC8174}} when, and only when, they appear
-in all capitals, as shown here.
-
 The following terms are used:
 
   - Client Application: An application running in a Rich Execution
@@ -1164,7 +1158,7 @@ decisions are left up to the particular TAM/SP.
 Some TAMs or SPs may require additional claims in order to properly authorize a device or TEE. These
 additional claims may help clear up any assumptions for which the TAM/SP wants to alleviate. The specific
 format for these additional claims are outside the scope of this specification, but the TEEP protocol
-SHALL allow these additional claims to be included in the attestation messages.
+allows these additional claims to be included in the attestation messages.
 
 The following sub-sections define the cryptographic properties conveyed by the TEEP attestation,
 the basic set of TEEP claims required in a TEEP attestation, the TEEP attestation flow between the
@@ -1177,7 +1171,7 @@ the verifier; in the case of TEEP, the attestation must convey properties from t
 and/or SP. The properties required by TEEP include:
 
   - Non-repudiation, Unique Proof of Source - the cryptographic digital signature across the attestation,
-      and optionally along with information in the attestation itself SHALL uniquely identify a specific TEE
+      and optionally along with information in the attestation itself must uniquely identify a specific TEE
       in a specific device.
 
   - Integrity of claims - the cryptographic digital signature across the attestation SHALL cover the entire
@@ -1422,27 +1416,19 @@ is the responsibility of the TAM to protect data on its servers.
 ## Compromised CA
 
 A root CA for TAM certificates might get compromised.  Some TEE trust
-anchor update mechanism is expected from device OEMs.  A compromised
-intermediate CA is covered by OCSP stapling and OCSP validation check
-in the protocol.  A TEE should validate certificate revocation about
+anchor update mechanism is expected from device OEMs.  TEEs are
+responsible for validating certificate revocation about
 a TAM certificate chain.
 
 If the root CA of some TEE device certificates is compromised, these
 devices might be rejected by a TAM, which is a decision of the TAM
-implementation and policy choice.  Any intermediate CA for TEE device
-certificates SHOULD be validated by TAM with a Certificate Revocation
-List (CRL) or Online Certificate Status Protocol (OCSP) method.
+implementation and policy choice.  TAMs are responsible for validating
+any intermediate CA for TEE device certificates.
 
 ## Compromised TAM
 
-The TEE SHOULD use validation of the supplied TAM certificates and
-OCSP stapled data to validate that the TAM is trustworthy.
-
-Since PKI is used, the integrity of the clock within the TEE
-determines the ability of the TEE to reject an expired TAM
-certificate, or revoked TAM certificate.  Since OCSP stapling
-includes signature generation time, certificate validity dates are
-compared to the current time.
+Device TEEs are responsible for validating the supplied TAM certificates
+to determine that the TAM is trustworthy.
 
 ## Certificate Renewal
 
