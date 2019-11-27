@@ -560,7 +560,7 @@ their service and this app (and TA) to multiple different devices.
 
 When the TEEP Broker receives a request to contact the TAM for a Client App in order to
 install a TA, a list of TAMs may be provided. The TEEP Broker selects a single TAM that
-is consistent with the list of trusted TAMs (trust anchors) provisioned on the device.
+is consistent with the list of trusted TAMs (Trust Anchors) provisioned on the device.
 For any client app, there should be only a single TAM for the TEEP Broker to contact.
 This is also the case when a Client App uses multiple TAs, or when one TA depends on
 another TA in a software dependency. The reason is that the SP should
@@ -795,25 +795,24 @@ content of messages except for the TEE routing information.
 
 ## Trust Anchors in TEE
 
-Each TEE comes with a trust store that contains a whitelist of Trust Anchors
+Each TEE comes with a Trust Anchor store that contains a whitelist of Trust Anchors
 that are used to validate a TAM's certificate. A TEE
 will accept a TAM to install new TAs
 on behalf of an SP only if the TAM's certificate is chained to one of
 the root CA certificates in the TEE's trust store.
 
-A TEE's trust store is typically preloaded at manufacturing time.  It
-is out of the scope in this document to specify how the trust anchors
-should be updated when a new root certificate should be added or
-existing one should be updated or removed.  A device manufacturer is
-expected to provide its TEE trust anchors live update or out-of-band
-update to Device Administrators.
+A TEE's Trust Anchor store is typically preloaded at manufacturing time, and
+can be updated using the TEEP protocol if the TEE has some form of
+"Trust Anchor Manager TA" that has Trust Anchors in its configuration data.
+Thus, Trust Anchors can be updated similar to updating the configuration data
+for any other TA.
 
-When trust anchor update is carried out, it is imperative that any update
-must maintain integrity where only authentic trust anchor list from
+When Trust Anchor update is carried out, it is imperative that any update
+must maintain integrity where only authentic Trust Anchor list from
 a device manufacturer or a Device Administrator is accepted. This calls
-for a complete lifecycle flow in authorizing who can make trust anchor
-update and whether a given trust anchor list are non-tampered from the
-original provider. The signing of a trust anchor list for integrity
+for a complete lifecycle flow in authorizing who can make Trust Anchor
+update and whether a given Trust Anchor list are non-tampered from the
+original provider. The signing of a Trust Anchor list for integrity
 check and update authorization methods are desirable to be developed.
 This can be addressed outside of this architecture document.
 
@@ -1421,8 +1420,8 @@ is the responsibility of the TAM to protect data on its servers.
 
 ## Compromised CA
 
-A root CA for TAM certificates might get compromised.  Some TEE trust
-anchor update mechanism is expected from device OEMs.  A compromised
+A root CA for TAM certificates might get compromised.  Some TEE Trust
+Anchor update mechanism is expected from device OEMs.  A compromised
 intermediate CA is covered by OCSP stapling and OCSP validation check
 in the protocol.  A TEE should validate certificate revocation about
 a TAM certificate chain.
