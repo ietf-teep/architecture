@@ -553,7 +553,7 @@ specific TA. The TA itself is digitally signed, protecting its integrity, but th
 signature also links the TA back to the signer. The signer is usually the SP, but in
 some cases may be another party that the SP trusts. The SP selects one or more TAMs
 through which to offer their service, and communicates the information of the service
-and the specific client apps and TAs to the TAM.
+and the specific Untrusted Applications and TAs to the TAM.
 
 The SP chooses TAMs based upon the markets into which the TAM can provide access. There
 may be TAMs that provide services to specific types of mobile devices, or mobile device
@@ -569,13 +569,13 @@ for enterprise applications or SPs serving a closed community. For broad public 
 there will likely be multiple TAMs in the manifest - one servicing one brand of mobile
 device and another servicing a different manufacturer, etc. Because different devices
 and different manufacturers trust different TAMs, the manifest will include different
-TAMs that support this SP's client app and TA. Multiple TAMs allow the SP to provide
+TAMs that support this SP's Untrusted Application and TA. Multiple TAMs allow the SP to provide
 thier service and this app (and TA) to multiple different devices.
 
 When the TEEP Broker receives a request to contact the TAM for an Untrusted Application in order to
 install a TA, a list of TAMs may be provided. The TEEP Broker selects a single TAM that
 is consistent with the list of trusted TAMs (trust anchors) provisioned on the device.
-For any client app, there should be only a single TAM for the TEEP Broker to contact.
+For any Untrusted Application, there should be only a single TAM for the TEEP Broker to contact.
 This is also the case when a Untrusted Application uses multiple TAs, or when one TA depends on
 anther TA in a software dependency (see section TBD). The reason is that the SP should
 provide each TAM that it places in the Untrusted Application's manifest all the TAs that the app
@@ -598,14 +598,14 @@ multiple TAs running. This requires more discussion.]
 
 ## Untrusted Apps, Trusted Apps, and Personalization Data
 
-In TEEP, there is an explicit relationship and dependence between the client app
+In TEEP, there is an explicit relationship and dependence between the Untrusted Application
 in the REE and one or more TAs in the TEE, as shown in {{notionalarch2}}.
-From the perspective of a device user, a client app that uses one or more TA's in a TEE
+From the perspective of a device user, a Untrusted Application that uses one or more TA's in a TEE
 appears no different from any other Untrusted Application in the REE. However, the way
-the client app and its corresponding TA's are packaged, delivered, and installed on
-the device can vary. The variations depend on whether the client app and TA are bundled
+the Untrusted Application and its corresponding TA's are packaged, delivered, and installed on
+the device can vary. The variations depend on whether the Untrusted Application and TA are bundled
 together or are provided separately, and this has implications to the management of
-the TAs in the TEE. In addition to the client app and TA, the TA and/or TEE may require
+the TAs in the TEE. In addition to the Untrusted Application and TA, the TA and/or TEE may require
 some additional data to personalize the TA to the service provider or the device user.
 This personalization data is dependent on the TEE, the TA and the SP; an example of
 personalization data might be username and password of the device user's account with
@@ -634,7 +634,7 @@ In order to better understand these cases, it is helpful to review actual implem
 In Intel Software Guard Extensions (SGX), the Untrsuted Application and TA are typically bound into the
 same binary (Case 2). The TA is compiled into the Untrusted Application binary using SGX tools, and
 exists in the binary as a shared library (.so or .dll). The Untrusted Application loads the TA into
-an SGX enclave when the client needs the TA. This organization makes it easy to maintain
+an SGX enclave when the Untrusted Application needs the TA. This organization makes it easy to maintain
 compatibility between the Untrusted Application and the TA, since they are updated together. It is
 entirely possible to create an Untrusted Application that loads an external TA into an SGX enclave and
 use that TA (Case 3). In this case, the Untrusted Application would require a reference to an external
@@ -663,7 +663,7 @@ This section defines TEEP support for the three different cases for delivery of 
 App, TA, and personalization data.
 
 [Note: discussion of format of this single binary, and who/what is responsible for splitting
-these things apart, and installing the client app into the REE, the TA into the TEE, and the
+these things apart, and installing the Untrusted Application into the REE, the TA into the TEE, and the
 personalization data into the TEE or TA. Obviously the decryption must be done by the TEE
 but this may not be supported by all TAs.]
 
