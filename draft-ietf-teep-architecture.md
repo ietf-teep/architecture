@@ -452,7 +452,7 @@ all components are further explained in the following paragraphs.
     to pass the messages from the TAM to TEEs in the device.  This
     calls for a component in the REE that Untrusted Applications can use
     to pass messages to TEEs.  The TEEP Broker is thus an application
-    in the REE or software library that can relay messages from a Client
+    in the REE or software library that can relay messages from an Untrusted
     Application to a TEE in the device.  A device usually comes with
     only one active TEE.  A TEE may provide such a
     Broker to the device manufacturer to be bundled in devices.  Such
@@ -647,8 +647,8 @@ be in use at this time, since such a construction would required a special insta
 program and SGX TA to recieve the encrypted binary, decrypt it, separate it into the
 three different elements, and then install all three. This installation is complex,
 because the Untrusted Application decrypted inside the TEE must be passed out of the TEE to an
-installer in the REE which would install the Untrusted Application; this assumes that the Client
-App binary includes the TA code also, otherwise there is a significant problem in getting
+installer in the REE which would install the Untrusted Application; this assumes that the Untrusted
+Application binary includes the TA code also, otherwise there is a significant problem in getting
 the SGX encalve code (the TA) from the TEE, through the installer and into the Untrusted Application
 in a trusted fashion. Finally, the personalization data would need to be sent out of the
 TEE (encrypted in an SGX encalve-to-enclave manner) to the REE's installation app, which
@@ -659,8 +659,8 @@ and does not have direct communication to one another.
 [NOTE: Need to add an equivalent discussion for an ARM/TZ implementation]  
 
 ## TEEP Architectural Support for Untrusted Application, TA, and Personalization Data Delivery
-This section defines TEEP support for the three different cases for delivery of the Client
-App, TA, and personalization data.
+This section defines TEEP support for the three different cases for delivery of the Untrusted
+Application, TA, and personalization data.
 
 [Note: discussion of format of this single binary, and who/what is responsible for splitting
 these things apart, and installing the Untrusted Application into the REE, the TA into the TEE, and the
@@ -721,11 +721,11 @@ SW      |    |   |                             |       |
 two applications: 1) an Untrusted Application; 2) a TA
 that provides some security functions to be run inside
 a TEE. At step 2, the application developer uploads the
-Untrusted Application (2a) to an Application Store. The Client
+Untrusted Application (2a) to an Application Store. The Untrusted
 Application may optionally bundle the TA binary. Meanwhile,
 the application developer may provide its TA to a TAM provider
 that will be managing the TA in various devices. 3. A user
-will go to an Application Store to download the Client
+will go to an Application Store to download the Untrusted
 Application. The Untrusted Application will trigger TA installation
 by initiating communication with a TAM. This is the step 4. The Untrusted Application
 will get messages from TAM, and interacts with device
@@ -735,33 +735,33 @@ The following diagram shows a system diagram about
 the entity relationships between CAs, TAMs, SPs and devices.
 
 ~~~~
-        ------- Message Protocol  -----
-        |                             |
-        |                             |
- --------------------           ---------------   ----------
- |  REE   |  TEE    |           |    TAM      |   |  SP    |
- |  ---   |  ---    |           |    ---      |   |  --    |
- |        |         |           |             |   |        |
- | Client | TEEP    |           |      TA     |   |  TA    |
- |  Apps  | Agent   |           |     Mgmt    |   |        |
- |   |    |         |           |             |   |        |
- |   |    |  TAs    |           |             |   |        |
- |  TEEP  |         |           |             |   |        |
- | Broker | List of |           |  List of    |   |        |
- |        | Trusted |           |  Trusted    |   |        |
- |        |  TAM/SP |           |   FW/TEE    |   |        |
- |        |   CAs   |           |    CAs      |   |        |
- |        |         |           |             |   |        |
- |        |TEE Key/ |           |  TAM Key/   |   |SP Key/ |
- |        |  Cert   |           |    Cert     |   | Cert   |
- |        | FW Key/ |           |             |   |        |
- |        |  Cert   |           |             |   |        |
- --------------------           ---------------   ----------
-              |                        |              |
-              |                        |              |
-        -------------              ----------      ---------
-        | TEE CA    |              | TAM CA |      | SP CA |
-        -------------              ----------      ---------
+           ------- Message Protocol  -----
+           |                             |
+           |                             |
+ -----------------------           ---------------   ----------
+ |  REE      |  TEE    |           |    TAM      |   |  SP    |
+ |  ---      |  ---    |           |    ---      |   |  --    |
+ |           |         |           |             |   |        |
+ | Untrusted | TEEP    |           |      TA     |   |  TA    |
+ |  Apps     | Agent   |           |     Mgmt    |   |        |
+ |   |       |         |           |             |   |        |
+ |   |       |  TAs    |           |             |   |        |
+ |  TEEP     |         |           |             |   |        |
+ | Broker    | List of |           |  List of    |   |        |
+ |           | Trusted |           |  Trusted    |   |        |
+ |           |  TAM/SP |           |   FW/TEE    |   |        |
+ |           |   CAs   |           |    CAs      |   |        |
+ |           |         |           |             |   |        |
+ |           |TEE Key/ |           |  TAM Key/   |   |SP Key/ |
+ |           |  Cert   |           |    Cert     |   | Cert   |
+ |           | FW Key/ |           |             |   |        |
+ |           |  Cert   |           |             |   |        |
+ -----------------------           ---------------   ----------
+                 |                        |              |
+                 |                        |              |
+           -------------              ----------      ---------
+           | TEE CA    |              | TAM CA |      | SP CA |
+           -------------              ----------      ---------
 ~~~~
 {: #keys title="Keys"}
 
@@ -1029,7 +1029,7 @@ and TAM interaction to install all required TAs that an Untrusted Application
 depends. An Untrusted Application may have a metadata file that describes
 the TAs it depends on and the associated TAM that each TA installation
 goes to use. The REE Application Installer can inspect the
-application metadata file and installs TAs on behalf of the Client
+application metadata file and installs TAs on behalf of the Untrusted
 Application without requiring the Untrusted Application to run first.
 
 This interface for Untrusted Applications or Application Installers may be
@@ -1385,7 +1385,7 @@ device.
 
 ## Broker Trust Model
 
-A TEEP Broker could be malware in the vulnerable REE.  A Client
+A TEEP Broker could be malware in the vulnerable REE.  An Untrusted
 Application will connect its TAM provider for required TA
 installation.  It gets command messages from the TAM, and passes the
 message to the Broker.
