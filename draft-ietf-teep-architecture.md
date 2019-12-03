@@ -252,14 +252,6 @@ The following terms are used:
     RoTs are possible, including RoT for Integrity, and RoT for Measurement.
     Reference: NIST SP800-164 (Draft).
 
-  - Trusted Firmware (TFW): A firmware in a device that can be verified
-    with a Trust Anchor by RoT for Verification.
-
-  - Bootloader key: This symmetric key is protected by
-    electronic fuse (eFUSE) technology. In this context it is used to decrypt a
-    TFW private key, which belongs to a device-unique private/public key pair.
-    Not every device is equipped with a bootloader key.
-
 This document uses the following abbreviations:
 
   - CA: Certificate Authority
@@ -275,8 +267,6 @@ This document uses the following abbreviations:
   - TAM: Trusted Application Manager
 
   - TEE: Trusted Execution Environment
-
-  - TFW: Trusted Firmware
 
 # Assumptions
 
@@ -653,22 +643,6 @@ chain to. A device administrator may choose to accept a subset
 of the allowed TAs via consent or action of downloading.
 
 ~~~~
-PKI    CA    -- CA                                 CA --
-        |    |                                         |
-        |    |                                         |
-        |    |                                         |
-Device  |    |   ---    Agent / Client App   ---       |
-SW      |    |   |                             |       |
-        |    |   |                             |       |
-        |    |   |                             |       |
-        |    -- TEE                           TAM-------
-        |
-        |
-       FW
-~~~~
-{: #entities title="Entities"}
-
-~~~~
  (App Developer)    (App Store)    (TAM)     (Device with TEE)  (CAs)
         |                                            |
         |                               --> (Embedded TEE cert) <--
@@ -701,45 +675,6 @@ by initiating communication with a TAM. This is the step 4. The Client Applicati
 will get messages from TAM, and interacts with device
 TEE via an Agent.
 
-The following diagram shows a system diagram about
-the entity relationships between CAs, TAMs, SPs and devices.
-
-~~~~
-        ------- Message Protocol  -----
-        |                             |
-        |                             |
- --------------------           ---------------   ----------
- |  REE   |  TEE    |           |    TAM      |   |  SP    |
- |  ---   |  ---    |           |    ---      |   |  --    |
- |        |         |           |             |   |        |
- | Client | TEEP    |           |      TA     |   |  TA    |
- |  Apps  | Agent   |           |     Mgmt    |   |        |
- |   |    |         |           |             |   |        |
- |   |    |  TAs    |           |             |   |        |
- |  TEEP  |         |           |             |   |        |
- | Broker | List of |           |  List of    |   |        |
- |        | Trusted |           |  Trusted    |   |        |
- |        |  TAM/SP |           |   FW/TEE    |   |        |
- |        |   CAs   |           |    CAs      |   |        |
- |        |         |           |             |   |        |
- |        |TEE Key/ |           |  TAM Key/   |   |SP Key/ |
- |        |  Cert   |           |    Cert     |   | Cert   |
- |        | FW Key/ |           |             |   |        |
- |        |  Cert   |           |             |   |        |
- --------------------           ---------------   ----------
-              |                        |              |
-              |                        |              |
-        -------------              ----------      ---------
-        | TEE CA    |              | TAM CA |      | SP CA |
-        -------------              ----------      ---------
-~~~~
-{: #keys title="Keys"}
-
-In the previous diagram, different CAs can be used for different
-types of certificates.  Messages are always signed, where the signer
-key is the message originator's private key such as that of a TAM,
-the private key of trusted firmware (TFW), or a TEE's private key.
-
 The main components consist of a set of standard messages created by
 a TAM to deliver TA management commands to a device,
 and device attestation and response messages created by a TEE that
@@ -765,15 +700,58 @@ inside a TEE that is responsible to process TAM requests.
 The Broker in REE does not need to know the actual
 content of messages except for the TEE routing information.
 
+# Keys and Certificate Types
+
+This architecture leverages the following credentials, which allow
+delivering end-to-end security between a TAM and a TEEP Agent,
+without relying on any transport security.
+
+{{keys}} summarizes the relationships between various keys and where
+they are stored.  Each public/private key identifies an SP, TAM, or TEE,
+and gets a certificate that chains up to some CA.  A list of trusted
+certificates is then used to check a presented certificate against.
+
+Different CAs can be used for different
+types of certificates.  TEEP messages are always signed, where the signer
+key is the message originator's private key such as that of a TAM,
+or a TEE's private key.  In addition to the keys shown in {{keys}},
+there may be additional keys used for attestation.  Refer to the 
+RATS Architecture for more discussion.
+
+~~~~
+                    Cardinality &                    Location of
+                     Location of    Private Key     Corresponding
+Purpose              Private Key       Signs          CA Certs
+------------------   -----------   -------------    -------------
+Authenticating TEE    1 per TEE    TEEP responses       TAM
+
+Authenticating TAM    1 per TAM    TEEP requests     TEEP Agent
+
+Code Signing          1 per SP       TA binary          TEE
+
+~~~~
+{: #keys title="Keys"}
+
+The TEE key pair and certificate are used for authenticating the TEE
+to a remote TAM.  Often, the key pair is burned into the TEE by the
+TEE manufacturer and the key pair and its certificate are valid for
+the expected lifetime of the TEE.  A TAM provider is responsible
+for configuring its TAM with the manufacturer certificates or CAs
+that are used to sign TEE keys.
+
+The TAM key pair and certificate are used for authenticating a TAM
+to a remote TEE.  A TAM provider is responsible for acquiring a
+certificate from a CA that is trusted by the TEEs it manages.
+
+The SP key pair and certificate are used to sign TAs that the TEE
+will consider authorized to execute.  TEEs must be configured with
+the CAs that it considers authorized to sign TAs that it will execute.
+
 ## Trust Anchors in TEE
 
-Each TEE comes with a Trust Anchor store that contains a whitelist of Trust Anchors
-that are used to validate a TAM's certificate. A TEE
-will accept a TAM to install new TAs
-on behalf of an SP only if the TAM's certificate is chained to one of
-the root CA certificates in the TEE's trust store.
-
-A TEE's Trust Anchor store is typically preloaded at manufacturing time, and
+A TEEP Agent's Trust Anchor store contains a list of Trust Anchors, which
+are CA certificates that sign various TAM certificates.  The list
+is typically preloaded at manufacturing time, and
 can be updated using the TEEP protocol if the TEE has some form of
 "Trust Anchor Manager TA" that has Trust Anchors in its configuration data.
 Thus, Trust Anchors can be updated similar to updating the configuration data
@@ -790,121 +768,14 @@ This can be addressed outside of this architecture document.
 
 Before a TAM can begin operation in the marketplace to support a
 device with a particular TEE, it must obtain a TAM
-certificate from a CA that is listed in the trust store of the TEE.
+certificate from a CA that is listed in the Trust Anchor store of the TEE.
 
 ## Trust Anchors in TAM
 
-The Trust Anchor store in a TAM consists of a list of CA certificates
-that sign various device TEE certificates.  A TAM will accept a
+The Trust Anchor store in a TAM consists of a list of Trust Anchors, which
+are CA certificates that sign various device TEE certificates.  A TAM will accept a
 device for TA management if the TEE in the device uses a TEE certificate
 that is chained to a CA that the TAM trusts.
-
-## Keys and Certificate Types
-
-This architecture leverages the following credentials, which allow
-delivering end-to-end security without relying on any transport
-security.
-
-~~~~
-+-------------+----------+--------+-------------------+-------------+
-| Key Entity  | Location | Issuer | Checked Against   | Cardinality |
-| Name        |          |        |                   |             |
-+-------------+----------+--------+-------------------+-------------+
-| 1. TFW key  | Device   | FW CA  | A whitelist of    | 1 per       |
-| pair and    | secure   |        | FW root CA        | device      |
-| certificate | storage  |        | trusted by TAMs   |             |
-|             |          |        |                   |             |
-| 2. TEE key  | Device   | TEE CA | A whitelist of    | 1 per       |
-| pair and    | TEE      | under  | TEE root CA       | TEE         |
-| certificate |          | a root | trusted by TAMs   |             |
-|             |          | CA     |                   |             |
-|             |          |        |                   |             |
-| 3. TAM key  | TAM      | TAM CA | A whitelist of    | 1 or        |
-| pair and    | provider | under  | TAM root CA       | multiple    |
-| certificate |          | a root | embedded in TEE   | can be used |
-|             |          | CA     |                   | by a TAM    |
-|             |          |        |                   |             |
-| 4. SP key   | SP       | SP     | A SP uses a TAM.  | 1 or        |
-| pair and    |          | signer | TA is signed by a | multiple    |
-| certificate |          | CA     | SP signer. TEE    | can be used |
-|             |          |        | delegates trust   | by a TAM    |
-|             |          |        | of TA to TAM. SP  |             |
-|             |          |        | signer is         |             |
-|             |          |        | associated with a |             |
-|             |          |        | TA as the owner.  |             |
-+-------------+----------+--------+-------------------+-------------+
-~~~~
-{: #keytypelist title="Key and Certificate Types"}
-
-1. TFW key pair and certificate:  A key pair and certificate for
-    evidence of trustworthy firmware in a device. This key pair is
-    optional for TEEP architecture. Some TEE may present its
-    trusted attributes to a TAM using signed attestation with a
-    TFW key. For example, a platform that uses a hardware based TEE
-    can have attestation data signed by a hardware protected TFW key.
-
-      - Location:   Device secure storage, which is storage on the device
-                    that resists modification against unauthorized
-                    insertion, deletion, and modification
-
-      - Supported Key Type:   RSA and ECC
-
-      - Issuer:   OEM CA
-
-      - Checked Against:   A whitelist of FW root CA trusted by TAMs
-
-      - Cardinality:   One per device
-
-2. TEE key pair and certificate:  It is used for device attestation
-    to a remote TAM and SP.
-
-      - This key pair is burned into the TEE by the TEE manufacturer.
-       The key pair and its certificate are valid for the expected
-       lifetime of the TEE.
-
-      - Location:   A Trust Anchor Store in the Device TEE
-
-      - Supported Key Type:   RSA and ECC
-
-      - Issuer:   A CA that chains to a TEE root CA
-
-      - Checked Against:   A whitelist of TEE root CAs trusted by TAMs
-
-      - Cardinality:   One per TEE
-
-3. TAM key pair and certificate:  A TAM provider acquires a
-    certificate from a CA that a TEE trusts.
-
-      - Location:   TAM provider
-
-      - Supported Key Type:   RSA and ECC.
-
-      - Supported Key Size:   RSA 2048-bit, ECC P-256 and P-384.  Other
-        sizes should be anticipated in future.
-
-      - Issuer:   TAM CA that chains to a root CA
-
-      - Checked Against:   A whitelist of TAM root CAs embedded in a TEE
-
-      - Cardinality:   One or multiple can be used by a TAM
-
-4. SP key pair and certificate:  An SP uses its own key pair and
-    certificate to sign a TA.
-
-      - Location:   SP
-
-      - Supported Key Type:   RSA and ECC
-
-      - Supported Key Size:   RSA 2048-bit, ECC P-256 and P-384.  Other
-        sizes should be anticipated in future.
-
-      - Issuer:   An SP signer CA that chains to a root CA
-
-      - Checked Against:   An SP uses a TAM.  A TEE trusts an SP by
-        validating trust against a TAM that the SP uses.  A TEE trusts
-        a TAM to ensure that a TA is trustworthy.
-
-      - Cardinality:   One or multiple can be used by an SP
 
 ## Scalability
 
@@ -932,40 +803,6 @@ messages created by the device TEE to respond to TAM messages.
 These messages are signed end-to-end and are typically encrypted such
 that only the targeted device TEE or TAM is able to decrypt and view
 the actual content.
-
-## A Sample Device Setup Flow
-
-Step 1: Prepare Images for Devices
-
-  1.  \[TEE vendor\] Deliver TEE Image (CODE Binary) to device OEM
-
-  2.  \[CA\]  Deliver root CA Whitelist
-
-  3.  \[Soc\]  Deliver TFW Image
-
-Step 2: Inject Key Pairs and Images to Devices
-
-  1.  \[OEM\] Generate TFW Key Pair (May be shared among multiple
-       devices)
-
-  2.  \[OEM\] Flash signed TFW Image and signed TEE Image onto devices
-       (signed by TFW Key)
-
-Step 3: Set up attestation key pairs in devices
-
-  1.  \[OEM\] Flash TFW Public Key and a bootloader key.
-
-  2.  \[TFW/TEE\] Generate a unique attestation key pair and get a
-       certificate for the device.
-
-Step 4: Set up Trust Anchors in devices
-
-  1.  \[TFW/TEE\] Store the key and certificate encrypted with the
-        bootloader key
-
-  2.  \[TEE vendor or OEM\] Store trusted CA certificate list into
-       devices
-
 
 # TEEP Broker
 
@@ -1259,7 +1096,7 @@ to determine that the TAM is trustworthy.
 
 ## Certificate Renewal
 
-TFW and TEE device certificates are expected to be long lived, longer
+TEE device certificates are expected to be long lived, longer
 than the lifetime of a device.  A TAM certificate usually has a
 moderate lifetime of 2 to 5 years.  A TAM should get renewed or
 rekeyed certificates.  The root CA certificates for a TAM, which are
