@@ -1107,7 +1107,7 @@ and not all attestations are acceptable to every verifier.  A third entity (a Re
 can then use "attestation results", in the form of another series of claims, from a Verifier
 to make authorization decisions.
 
-In TEEP, as depicted in {{attestation}},
+In TEEP, as depicted in {{attestation-roles}},
 the primary purpose of an attestation is to allow a device (the Attester) to prove to TAMs
 (the Relying Parties) that a TEE in the device has particular properties, was built by a particular
 manufacturer, or is executing a particular TA. Other claims are possible; TEEP
@@ -1126,7 +1126,7 @@ of extended claims.
    | +------------+ |            +----------+  Attestation  +----------+
    +----------------+                             Result
 ~~~~
-{: #attestation title="TEEP Attestation Roles"}        
+{: #attestation-roles title="TEEP Attestation Roles"}        
 
 As of the writing of this specification, device and TEE attestations have not been standardized
 across the market. Different devices, manufacturers, and TEEs support different attestation
