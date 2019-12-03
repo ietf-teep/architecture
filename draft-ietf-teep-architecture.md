@@ -52,8 +52,6 @@ author:
        organization: Alibaba Group
        email: maxpassion@gmail.com
 
-normative:
-  RFC8174:
 informative:
   RFC6024:
   I-D.ietf-teep-opentrustprotocol:
