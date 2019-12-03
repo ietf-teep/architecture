@@ -70,9 +70,11 @@ informative:
 
 --- abstract
 
-A Trusted Execution Environment (TEE) is designed to provide a
-hardware-isolation mechanism to separate a regular operating system
-from security-sensitive application components.
+A Trusted Execution Environment (TEE) is an environment that enforces that
+only authorized code can execute within the TEE, and data used by that
+code cannot be read or tampered with by code outside the TEE.  For example,
+a TEE might be used to protect security-sensitive application components
+from a regular operating system.
 
 This architecture document motivates the design and standardization
 of a protocol for managing the lifecycle of trusted applications
@@ -236,20 +238,10 @@ The following terms are used:
 
   - Trusted Application (TA): An application component that runs in a TEE.
 
-  - Trusted Execution Environment (TEE): An execution environment that
-    runs alongside of, but is isolated from, an REE. A TEE has security
-    capabilities and meets certain security-related requirements. It
-    protects TEE assets from general software attacks, defines rigid
-    safeguards as to data and functions that a program can access,
-    and resists a set of defined threats. It should have at least
-    the following three properties:
-
-    (a) A device unique credential that cannot be cloned;
-
-    (b) Assurance that only authorized code can run in the TEE;
-
-    (c) Memory that cannot be read by code outside the TEE.
-
+  - Trusted Execution Environment (TEE): An execution environment that enforces that
+    only authorized code can execute within the TEE, and data used by that
+    code cannot be read or tampered with by code outside the TEE.
+    A TEE also generally has a device unique credential that cannot be cloned.
     There are multiple technologies that can be used to implement
     a TEE, and the level of security achieved varies accordingly.
 
