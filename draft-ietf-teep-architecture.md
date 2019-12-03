@@ -1,7 +1,7 @@
 ---
 title: Trusted Execution Environment Provisioning (TEEP) Architecture
 abbrev: TEEP Architecture
-docname: draft-ietf-teep-architecture-03
+docname: draft-ietf-teep-architecture-04
 category: info
 
 ipr: pre5378Trust200902
@@ -52,9 +52,6 @@ author:
        organization: Alibaba Group
        email: maxpassion@gmail.com
 
-normative:
-  RFC2119:
-  RFC8174:
 informative:
   RFC6024:
   I-D.ietf-teep-opentrustprotocol:
@@ -72,9 +69,11 @@ informative:
 
 --- abstract
 
-A Trusted Execution Environment (TEE) is designed to provide a
-hardware-isolation mechanism to separate a regular operating system
-from security-sensitive application components.
+A Trusted Execution Environment (TEE) is an environment that enforces that
+only authorized code can execute within the TEE, and data used by that
+code cannot be read or tampered with by code outside the TEE.  For example,
+a TEE might be used to protect security-sensitive application components
+from a regular operating system.
 
 This architecture document motivates the design and standardization
 of a protocol for managing the lifecycle of trusted applications
@@ -164,12 +163,6 @@ The Trusted Execution Provisioning (TEEP) protocol addresses the following probl
 
 #  Terminology
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-"SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY",
-and "OPTIONAL" in this document are to be interpreted as described
-in BCP 14 {{RFC2119}} {{RFC8174}} when, and only when, they appear
-in all capitals, as shown here.
-
 The following terms are used:
 
   - Client Application: An application running in a Rich Execution
@@ -223,41 +216,28 @@ The following terms are used:
     device, the Device Administrator may choose to remotely
     administrate a device through a TAM.
 
-  - Trust Anchor: A public key in a device whose corresponding private
-    key is held by an entity implicitly trusted by the device. The
-    Trust Anchor may be a certificate or it may be a raw public key
+  - Trust Anchor: As defined in {{RFC6024}} and {{I-D.ietf-suit-manifest}},
+    "A trust anchor represents an authoritative entity via a public
+    key and associated data.  The public key is used to verify digital
+    signatures, and the associated data is used to constrain the types
+    of information for which the trust anchor is authoritative."
+    The Trust Anchor may be a certificate or it may be a raw public key
     along with additional data if necessary such as its public key
     algorithm and parameters.
-    The Trust Anchor is normally stored in a location that resists
-    unauthorized modification, insertion, or replacement. The digital
-    fingerprint of a Trust Anchor may be stored along with the Trust
-    Anchor certificate or public key. A device can use the
-    fingerprint to uniquely identify a Trust Anchor.
-    The Trust Anchor private key owner can sign certificates of other
-    public keys, which conveys trust about those keys to the device.
-    A certificate signed by the Trust Anchor communicates that the
-    private key holder of the signed certificate is trusted by the
-    Trust Anchor holder, and can therefore be trusted by the device.
-    Trust Anchors in a device may be updated by an authorized party
-    when a Trust Anchor should be deprecated or a new Trust Anchor
-    should be added.
+
+  - Trust Anchor Store: As defined in {{RFC6024}}, "A trust anchor
+    store is a set of one or more trust anchors stored in a device.
+    A device may have more than one trust anchor store, each of which
+    may be used by one or more applications."  As noted in {{I-D.ietf-suit-manifest}},
+    a trust anchor store must resist modification against unauthorized
+    insertion, deletion, and modification.
 
   - Trusted Application (TA): An application component that runs in a TEE.
 
-  - Trusted Execution Environment (TEE): An execution environment that
-    runs alongside of, but is isolated from, an REE. A TEE has security
-    capabilities and meets certain security-related requirements. It
-    protects TEE assets from general software attacks, defines rigid
-    safeguards as to data and functions that a program can access,
-    and resists a set of defined threats. It should have at least
-    the following three properties:
-
-    (a) A device unique credential that cannot be cloned;
-
-    (b) Assurance that only authorized code can run in the TEE;
-
-    (c) Memory that cannot be read by code outside the TEE.
-
+  - Trusted Execution Environment (TEE): An execution environment that enforces that
+    only authorized code can execute within the TEE, and data used by that
+    code cannot be read or tampered with by code outside the TEE.
+    A TEE also generally has a device unique credential that cannot be cloned.
     There are multiple technologies that can be used to implement
     a TEE, and the level of security achieved varies accordingly.
 
@@ -559,7 +539,7 @@ their service and this app (and TA) to multiple different devices.
 
 When the TEEP Broker receives a request to contact the TAM for a Client App in order to
 install a TA, a list of TAMs may be provided. The TEEP Broker selects a single TAM that
-is consistent with the list of trusted TAMs (trust anchors) provisioned on the device.
+is consistent with the list of trusted TAMs (Trust Anchors) provisioned on the device.
 For any client app, there should be only a single TAM for the TEEP Broker to contact.
 This is also the case when a Client App uses multiple TAs, or when one TA depends on
 another TA in a software dependency. The reason is that the SP should
@@ -787,25 +767,24 @@ content of messages except for the TEE routing information.
 
 ## Trust Anchors in TEE
 
-Each TEE comes with a trust store that contains a whitelist of Trust Anchors
+Each TEE comes with a Trust Anchor store that contains a whitelist of Trust Anchors
 that are used to validate a TAM's certificate. A TEE
 will accept a TAM to install new TAs
 on behalf of an SP only if the TAM's certificate is chained to one of
 the root CA certificates in the TEE's trust store.
 
-A TEE's trust store is typically preloaded at manufacturing time.  It
-is out of the scope in this document to specify how the trust anchors
-should be updated when a new root certificate should be added or
-existing one should be updated or removed.  A device manufacturer is
-expected to provide its TEE trust anchors live update or out-of-band
-update to Device Administrators.
+A TEE's Trust Anchor store is typically preloaded at manufacturing time, and
+can be updated using the TEEP protocol if the TEE has some form of
+"Trust Anchor Manager TA" that has Trust Anchors in its configuration data.
+Thus, Trust Anchors can be updated similar to updating the configuration data
+for any other TA.
 
-When trust anchor update is carried out, it is imperative that any update
-must maintain integrity where only authentic trust anchor list from
+When Trust Anchor update is carried out, it is imperative that any update
+must maintain integrity where only authentic Trust Anchor list from
 a device manufacturer or a Device Administrator is accepted. This calls
-for a complete lifecycle flow in authorizing who can make trust anchor
-update and whether a given trust anchor list are non-tampered from the
-original provider. The signing of a trust anchor list for integrity
+for a complete lifecycle flow in authorizing who can make Trust Anchor
+update and whether a given Trust Anchor list are non-tampered from the
+original provider. The signing of a Trust Anchor list for integrity
 check and update authorization methods are desirable to be developed.
 This can be addressed outside of this architecture document.
 
@@ -864,7 +843,9 @@ security.
     TFW key. For example, a platform that uses a hardware based TEE
     can have attestation data signed by a hardware protected TFW key.
 
-      - Location:   Device secure storage
+      - Location:   Device secure storage, which is storage on the device
+                    that resists modification against unauthorized
+                    insertion, deletion, and modification
 
       - Supported Key Type:   RSA and ECC
 
@@ -881,7 +862,7 @@ security.
        The key pair and its certificate are valid for the expected
        lifetime of the TEE.
 
-      - Location:   Device TEE
+      - Location:   A Trust Anchor Store in the Device TEE
 
       - Supported Key Type:   RSA and ECC
 
@@ -1261,28 +1242,20 @@ is the responsibility of the TAM to protect data on its servers.
 
 ## Compromised CA
 
-A root CA for TAM certificates might get compromised.  Some TEE trust
-anchor update mechanism is expected from device OEMs.  A compromised
-intermediate CA is covered by OCSP stapling and OCSP validation check
-in the protocol.  A TEE should validate certificate revocation about
+A root CA for TAM certificates might get compromised.  Some TEE Trust
+Anchor update mechanism is expected from device OEMs.  TEEs are
+responsible for validating certificate revocation about
 a TAM certificate chain.
 
 If the root CA of some TEE device certificates is compromised, these
 devices might be rejected by a TAM, which is a decision of the TAM
-implementation and policy choice.  Any intermediate CA for TEE device
-certificates SHOULD be validated by TAM with a Certificate Revocation
-List (CRL) or Online Certificate Status Protocol (OCSP) method.
+implementation and policy choice.  TAMs are responsible for validating
+any intermediate CA for TEE device certificates.
 
 ## Compromised TAM
 
-The TEE SHOULD use validation of the supplied TAM certificates and
-OCSP stapled data to validate that the TAM is trustworthy.
-
-Since PKI is used, the integrity of the clock within the TEE
-determines the ability of the TEE to reject an expired TAM
-certificate, or revoked TAM certificate.  Since OCSP stapling
-includes signature generation time, certificate validity dates are
-compared to the current time.
+Device TEEs are responsible for validating the supplied TAM certificates
+to determine that the TAM is trustworthy.
 
 ## Certificate Renewal
 
