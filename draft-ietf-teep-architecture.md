@@ -597,21 +597,28 @@ There are three possible cases for bundling of the Client App, TA, and personali
   1. The Client App, TA, and personalization data are all bundled together in a single
      package by the SP and provided to the TEEP Broker through the TAM.
 
-  2. The Client App and the TA are bundled together in a single binary, which the TAM or
-     a publicly accessible app store maintains in repository, and the personalization data
-     is separately provided by the SP. In this case, the personalization data is collected
-     by the TAM and included in the InstallTA message to the TEEP Broker.
+  2. The Client App and the TA are bundled together in a single package, which a TAM or
+     a publicly accessible app store maintains, and the personalization data
+     is separately provided by the SP's TAM.
 
   3. All components are independent. The device user installs the Client App through some
      independent or device-specific mechanism, and the TAM provides the TA and personalization
      data from the SP. Delivery of the TA and personalization data may be combined or separate.
 
+The TEEP protocol treats the TA, any dependencies the TA has, and personalization data as
+separate components with separate installation steps that are expressed in SUIT manifests,
+and a SUIT manifest might contain or reference multiple binaries (see {{I-D.ietf-suit-manifest}
+for more details). The TEEP Agent is responsible for handling any installation steps
+that need to be performed inside the TEE, such as decryption of private TA bianries or
+personalization data.
+
 ## Examples of Application Delivery Mechanisms in Existing TEEs
+
 In order to better understand these cases, it is helpful to review actual implementations of TEEs and their application delivery mechanisms.
 
-In Intel Software Guard Extensions (SGX), the Client App and TA are typically bound into the
-same binary (Case 2). The TA is compiled into the Client App binary using SGX tools, and
-exists in the binary as a shared library (.so or .dll). The Client App loads the TA into
+In Intel Software Guard Extensions (SGX), the Client App and TA are typically bundled into the
+same package (Case 2). The TA 
+exists in the package as a shared library (.so or .dll). The Client App loads the TA into
 an SGX enclave when the client needs the TA. This organization makes it easy to maintain
 compatibility between the Client App and the TA, since they are updated together. It is
 entirely possible to create a Client App that loads an external TA into an SGX enclave and
@@ -626,25 +633,22 @@ program and SGX TA to receive the encrypted binary, decrypt it, separate it into
 three different elements, and then install all three. This installation is complex,
 because the Client App decrypted inside the TEE must be passed out of the TEE to an
 installer in the REE which would install the Client App; this assumes that the Client
-App binary includes the TA code also, otherwise there is a significant problem in getting
+App package includes the TA code also, since otherwise there is a significant problem in getting
 the SGX enclave code (the TA) from the TEE, through the installer and into the Client App
 in a trusted fashion. Finally, the personalization data would need to be sent out of the
 TEE (encrypted in an SGX enclave-to-enclave manner) to the REE's installation app, which
 would pass this data to the installed Client App, which would in turn send this data
 to the SGX enclave (TA). This complexity is due to the fact that each SGX enclave is separate
-and does not have direct communication to one another.
+and does not have direct communication to other SGX enclaves.
 
-\[Note: Need to add an equivalent discussion for an ARM/TZ implementation\]
-
-## TEEP Architectural Support for Client App, TA, and Personalization Data Delivery
-This section defines TEEP support for the three different cases for delivery of the Client
-App, TA, and personalization data.
-
-\[Note: discussion of format of this single binary, and who/what is responsible for splitting
-these things apart, and installing the client app into the REE, the TA into the TEE, and the
-personalization data into the TEE or TA. Obviously the decryption must be done by the TEE
-but this may not be supported by all TAs.\]
-
+In ARM TrustZone based environments, the Untrusted Application and TA may or may not be
+bundled together. This differs from SGX since in TrustZone the TA lifetime is not inherently tied
+to a specific Untrused Application process lifetime as occurs in SGX.  A TA is loaded by
+a trusted OS running in the TEE, where the trusted OS is separate from the OS in the REE.
+Thus Cases 2 and 3 are equally applicable.  In addition, it is possible for TAs to communicate
+with each other without involving the Untrusted Application, and so the complexity of Case 1
+is lower than in the SGX example, and so Case 1 is possible as well though still more
+complex than Cases 2 and 3.
 
 ## Entity Relations
 
