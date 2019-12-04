@@ -208,7 +208,7 @@ The following terms are used:
     the (primary) device user to also own the device, making the device
     user/owner also the device administrator. In enterprise environments
     it is more common for the enterprise to own the device, and any device
-    users have no or limited administration rights. In this case, the
+    user has no or limited administration rights. In this case, the
     enterprise appoints a device administrator that is not the device
     owner.
 
