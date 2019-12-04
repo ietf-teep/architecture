@@ -562,7 +562,7 @@ When a TEEP Broker receives a request from an Untrusted Application to install a
 a list of TAM URIs may be provided for that TA, and the request is passed to the TEEP Agent.
 If the TEEP Agent decides that the TA needs to be installed, the TEEP Agent selects a single TAM URI
 that is consistent with the list of trusted TAMs provisioned on the device invokes the
-TEEP/HTTP layer to connect to the TAM URI and begin a TEEP protocol exchange.  When the TEEP Agent
+HTTP transport for TEEP to connect to the TAM URI and begins a TEEP protocol exchange.  When the TEEP Agent
 subsequently receives the TA to install and the TA's manifest indicates dependencies
 on any other trusted components, each dependency can include a list of TAM URIs for the
 relevant dependency.  If such dependencies exist that are prerequisites to install the TA,
@@ -1461,7 +1461,7 @@ support of Trust Anchor update in their shipped devices.
 ## Keeping Secrets from the TAM
 
 In some scenarios, it is desirable to protect the TA binary or configuration
-from being disclosed to the TAM that distributes them.  In such a scenarios,
+from being disclosed to the TAM that distributes them.  In such a scenario,
 the files can be encrypted end-to-end between an SP and a TEE.  However, there
 must be some means of provisioning the decryption key into the TEE and/or some
 means of the SP securely learning a public key of the TEE that it can use to
