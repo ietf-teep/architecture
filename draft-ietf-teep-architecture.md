@@ -537,15 +537,18 @@ and different manufacturers trust different TAMs, the manifest will include diff
 TAMs that support this SP's Untrusted Application and TA. Multiple TAMs allow the SP to provide
 their service and this app (and TA) to multiple different devices.
 
-When the TEEP Broker receives a request to contact the TAM for an Untrusted Application in order to
-install a TA, a list of TAMs may be provided. The TEEP Broker selects a single TAM that
-is consistent with the list of trusted TAMs (Trust Anchors) provisioned on the device.
-For any Untrusted Application, there should be only a single TAM for the TEEP Broker to contact.
-This is also the case when an Untrusted Application uses multiple TAs, or when one TA depends on
-another TA in a software dependency. The reason is that the SP should
-provide each TAM that it places in the Untrusted Application's manifest all the TAs that the app
-requires. There is no benefit to going to multiple different TAMs, and there is no
-need for a special TAM to be contacted for a specific TA.
+When a TEEP Broker receives a request from an Untrusted Application to install a TA,
+a list of TAM URIs may be provided for that TA, and the request is passed to the TEEP Agent.
+If the TEEP Agent decides that the TA needs to be installed, the TEEP Agent selects a single TAM URI
+that is consistent with the list of trusted TAMs provisioned on the device invokes the
+HTTP transport for TEEP to connect to the TAM URI and begins a TEEP protocol exchange.  When the TEEP Agent
+subsequently receives the TA to install and the TA's manifest indicates dependencies
+on any other trusted components, each dependency can include a list of TAM URIs for the
+relevant dependency.  If such dependencies exist that are prerequisites to install the TA,
+then the TEEP Agent recursively follows the same procedure for each dependency that needs to be installed
+or updated, including selecting a TAM URI that is consistent with the list of trusted TAMs provisioned
+on the device, and beginning a TEEP exchange.  If multiple TAM URIs are considered trusted,
+only one needs to be contacted and they can be attempted in some order until one responds.
 
 \[Note: This should always be the case. When a particular device or TEE supports
 only a special proprietary attestation mechanism, then a specific TAM will be
@@ -1426,6 +1429,19 @@ lifetimes that don't require device Trust Anchor update.  On the
 other hand, it is imperative that OEMs or device providers plan for
 support of Trust Anchor update in their shipped devices.
 
+## Keeping Secrets from the TAM
+
+In some scenarios, it is desirable to protect the TA binary or configuration
+from being disclosed to the TAM that distributes them.  In such a scenario,
+the files can be encrypted end-to-end between an SP and a TEE.  However, there
+must be some means of provisioning the decryption key into the TEE and/or some
+means of the SP securely learning a public key of the TEE that it can use to
+encrypt.  One way to do this is for the SP to run its own TAM, merely to
+distribute the decryption key via the TEEP protocol, and the key file can be a
+dependency in the manifest of the encrypted TA.  Thus, the TEEP Agent would
+look at the TA manifest, determine there is a dependency with a TAM URI of the
+SP's TAM. The Agent would then install the dependency, and then continue with
+the TA installation steps, including decrypting the TA binary with the relevant key.
 
 #  IANA Considerations
 
