@@ -123,7 +123,7 @@ To simplify the life of developers and service providers interacting
 with TAs in a TEE, an interoperable protocol for managing TAs running in
 different TEEs of various devices is needed. In this TEE ecosystem,
 there often arises a need for an external trusted party to verify the
-identity, claims, and rights of Service Providers(SP), devices, and their TEEs.
+identity, claims, and rights of Service Providers (SP), devices, and their TEEs.
 This trusted third party is the Trusted Application Manager (TAM).
 
 The Trusted Execution Provisioning (TEEP) protocol addresses the following problems:
@@ -131,8 +131,8 @@ The Trusted Execution Provisioning (TEEP) protocol addresses the following probl
   - A Service Provider (SP) intending to provide services through a TA
     to users of a device needs to determine security-relevant
     information of a device before provisioning their TA to the TEE
-    within the device. Examples include the verification of the device
-    'root of trust' and the type of TEE included in a device.
+    within the device. An example is the verification of 
+    the type of TEE included in a device.
 
   - A TEE in a device needs to determine whether a Service Provider (SP)
     that wants to manage a TA in the device is authorized to manage TAs
@@ -167,7 +167,11 @@ The following terms are used:
   - Untrusted Application: An application running in a Rich Execution
     Environment, such as an Android, Windows, or iOS application.
 
-  - Device: A physical piece of hardware that hosts a TEE along with
+  - Trusted Application Manager (TAM): An entity that manages Trusted
+    Applications (TAs) running in different TEEs of various devices.
+
+  - Device: A physical piece of hardware that hosts one or more TEEs,
+    often along with
     a Rich Execution Environment. A Device contains a default list
     of Trust Anchors that identify entities (e.g., TAMs) that are
     trusted by the Device. This list is normally set by the Device
@@ -239,43 +243,9 @@ The following terms are used:
     A TEE also generally has a device unique credential that cannot be cloned.
     There are multiple technologies that can be used to implement
     a TEE, and the level of security achieved varies accordingly.
-
-  - Root-of-Trust (RoT): A hardware or software component in a device
-    that is inherently trusted to perform a certain security-critical
-    function. A RoT should ideally be secure by design, small, and protected
-    by hardware against modification or interference. Examples of
-    RoTs include software/firmware measurement and verification using
-    a Trust Anchor (RoT for Verification), provide signed assertions
-    using a protected attestation key (RoT for Reporting), or protect the
-    storage and/or use of cryptographic keys (RoT for Storage). Other
-    RoTs are possible, including RoT for Integrity, and RoT for Measurement.
-    Reference: NIST SP800-164 (Draft).
-
-This document uses the following abbreviations:
-
-  - CA: Certificate Authority
-
-  - REE: Rich Execution Environment
-
-  - RoT: Root of Trust
-
-  - SP: Service Provider
-
-  - TA: Trusted Application
-
-  - TAM: Trusted Application Manager
-
-  - TEE: Trusted Execution Environment
-
-# Assumptions
-
-This specification assumes that an applicable device is equipped with
-one or more TEEs and each TEE is pre-provisioned with a device-unique
-public/private key pair, which is securely stored.
-
-A TEE uses an isolation mechanism between Trusted Applications to ensure
-that one TA cannot read, modify or delete the data and code of another
-TA.
+    In addition, TEEs typically use an isolation mechanism between Trusted Applications to ensure
+    that one TA cannot read, modify or delete the data and code of another
+    TA.
 
 # Use Cases
 
@@ -363,16 +333,16 @@ all components are further explained in the following paragraphs.
     with devices. DAs may elect to use a TAM for remote administration
     of TAs instead of managing each device directly.
 
-  - TAM:  A TAM is responsible for performing lifecycle
+  - Trusted Application Manager (TAM):  A TAM is responsible for performing lifecycle
     management activity on TA's on behalf of Service
     Providers and Device Administrators. This includes creation and
-    deletion of TA's, and may include, for example,  over-the-air
+    deletion of TA's, and may include, for example, over-the-air
     updates to keep an SP's TAs up-to-date and clean up when a version
     should be removed. TAMs may provide services that make it easier for
     SPs or DAs to use the TAM's service to manage multiple devices,
     although that is not required of a TAM.
 
-    The TAM performs its management of TA's through  an
+    The TAM performs its management of TA's through an
     interaction with a Device's TEEP Broker. As shown in
     {{notionalarch}}, the TAM cannot directly contact a Device, but must
     wait for the TEEP Broker to contact
@@ -437,7 +407,7 @@ all components are further explained in the following paragraphs.
 There is nothing prohibiting a device from implementing multiple TEEs. In
 addition, some TEEs (for example, SGX) present themselves as separate containers
 within memory without a controlling manager within the TEE. In these cases,
-the Rich Execution Environment hosts multiple TEEP brokers, where each broker manages
+the Rich Execution Environment hosts multiple TEEP brokers, where each Broker manages
 a particular TEE or set of TEEs. Enumeration and access to the appropriate
 TEEP Broker is up to the Rich Execution Environment and the Untrusted Applications. Verification that the correct TA
 has been reached then becomes a matter of properly verifying TA attestations,
@@ -539,7 +509,7 @@ or updated, including selecting a TAM URI that is consistent with the list of tr
 on the device, and beginning a TEEP exchange.  If multiple TAM URIs are considered trusted,
 only one needs to be contacted and they can be attempted in some order until one responds.
 
-Separate from the Client App's manifest, this framework relies on the use of the manifest 
+Separate from the Untrusted Application's manifest, this framework relies on the use of the manifest 
 format in {{I-D.ietf-suit-manifest}} for expressing how to install the TA as well as
 dependencies on other TEE components and versions.
 That is, dependencies from TAs on other TEE components can be expressed in a SUIT manifest,
@@ -801,41 +771,30 @@ Messages created by a TAM are used to deliver TA
 management commands to a device, and device attestation and
 messages created by the device TEE to respond to TAM messages.
 
-These messages are signed end-to-end and are typically encrypted such
+These messages are signed end-to-end between a TEEP Agent and a TAM, and are typically encrypted such
 that only the targeted device TEE or TAM is able to decrypt and view
 the actual content.
 
 # TEEP Broker
 
-A TEE and TAs do not generally have the capability to communicate to the
+A TEE and TAs often do not have the capability to directly communicate
 outside of the hosting device.  For example, GlobalPlatform
 {{GPTEE}} specifies one such architecture.  This calls for a software
-module in the REE world to handle the network communication.  Each
-Untrusted Application in the REE might carry this communication functionality
-but such functionality must also interact with the TEE for the message exchange.  
-The TEE interaction will vary according to different TEEs.  In order for
-an Untrusted Application to transparently support different TEEs, it is
-imperative to have a common interface for an Untrusted Application to
-invoke for exchanging messages with TEEs.
+module in the REE world to handle network communication with a TAM.
 
-A shared module in REE comes to meet this need.  A TEEP broker is an application
+A TEEP Broker is an application component
 running in the REE of the device or an SDK that facilitates
 communication between a TAM and a TEE.  It also provides interfaces for
 Untrusted Applications to query and trigger TA installation that the
 application needs to use.
 
-It isn't always that an Untrusted Application directly calls such a Broker
-to interact with a TEE. A REE Application Installer might carry out TEE
-and TAM interaction to install all required TAs that an Untrusted Application
-depends. An Untrusted Application may have a metadata file that describes
-the TAs it depends on and the associated TAM that each TA installation
-goes to use. The REE Application Installer can inspect the
-application metadata file and installs TAs on behalf of the Untrusted
+An Untrusted Application might communicate with the TEEP Broker at runtime
+to trigger TA installation itself. Or an Untrusted Application might simply
+have a metadata file that describes the TAs it depends on and the associated TAM(s) for each TA,
+and an REE Application Installer can inspect this
+application metadata file and invoke the TEEP Broker to trigger TA installation
+on behalf of the Untrusted
 Application without requiring the Untrusted Application to run first.
-
-This interface for Untrusted Applications or Application Installers may be
-commonly in a form of an OS service call for an REE OS.  An Untrusted Application
-or an Application Installer interacts with the device TEE and the TAMs.
 
 ## Role of the TEEP Broker
 
@@ -888,7 +847,7 @@ The following conceptual APIs exist from a TEEP Broker to a TEEP Agent:
 4. ProcessError: A notification that the TEEP Broker could not deliver an outbound
    TEEP message to a TAM.
 
-For comparison, similar APIs may exist on the TAM side, where a broker may or may not
+For comparison, similar APIs may exist on the TAM side, where a Broker may or may not
 exist (depending on whether the TAM uses a TEE or not):
 
 1. ProcessConnect: A notification that an incoming TEEP session is being requested by a TEEP Agent.
@@ -1049,9 +1008,7 @@ trustworthiness of a TA.  A TEEP Broker has a function to allow an
 application to query the information about a TA.
 
 An Untrusted Application may perform verification of the TA by
-verifying the signature of the TA.  The GetTAInformation function is
-available to return the TEE supplied TA signer and TAM signer
-information to the application.  An application can do additional
+verifying the signature of the TA.  An application can do additional
 trust checks on the certificate returned for this TA.  It might trust
 the TAM, or require additional SP signer trust chaining.
 
