@@ -35,6 +35,12 @@ author:
        email: hannes.tschofenig@arm.com
 
  -
+       ins: D. Thaler
+       name: Dave Thaler
+       organization: Microsoft
+       email: dthaler@microsoft.com
+
+ -
        ins: D. Wheeler
        name: David Wheeler
        organization: Intel
@@ -1093,12 +1099,3 @@ Nick Cook and Minho Yoo for the initial document content, and
 contributors Brian Witten, Tyler Kim, and Alin Mutu.
 
 --- back
-
-# History
-
-RFC EDITOR: PLEASE REMOVE THIS SECTION
-
-IETF Drafts
-
-draft-00:
-- Initial working group document
