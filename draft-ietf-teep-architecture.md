@@ -787,10 +787,10 @@ the actual content.
 
 # TEEP Broker
 
-A TEE and TAs often do not have the capability to directly communicate
-outside of the hosting device.  For example, GlobalPlatform
-{{GPTEE}} specifies one such architecture.  This calls for a software
+A TEE and TAs do not have the capability to directly communicate
+outside of the hosting device. This calls for a software
 module in the REE world to handle network communication with a TAM.
+For example, GlobalPlatform {{GPTEE}} specifies one such architecture.  
 
 A TEEP Broker is an application component
 running in the REE of the device or an SDK that facilitates
