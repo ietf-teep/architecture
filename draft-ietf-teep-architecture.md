@@ -957,12 +957,12 @@ allows these additional claims to be included in the attestation messages.
 
 ## Information Required in TEEP Claims
 
-  - Device Identifying Info: TEEP attestations must uniquely identify a device to the TAM and SP. This
-    identifier allows the TAM to provide services unique to the device, such as managing installed
+  - Device Identifying Info: TEEP attestations may need to uniquely identify a device to the TAM and SP. 
+    Unique device identification allows the TAM to provide services to the device, such as managing installed
     TAs, and providing subscriptions to services, and locating device-specific keying material to
-    communicate with or authenticate the device. Additionally, device manufacturer information must
-    be provided to provide better universal uniqueness qualities without requiring globally unique
-    identifiers for all devices.
+    communicate with or authenticate the device. In some use cases it may be sufficient to identify 
+    only the class of the device. The security and privacy requirements regarding device identification 
+    will vary with the type of TA provisioned to the TEE. 
 
   - TEE Identifying info: The type of TEE that generated this attestation must be identified. Standard
     TEE types are identified by an IANA number, but also must include version identification information
