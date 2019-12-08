@@ -548,9 +548,8 @@ some additional data to personalize the TA to the service provider or the device
 This personalization data is dependent on the TEE, the TA and the SP; an example of
 personalization data might be username and password of an account with
 the SP, or a secret symmetric key used by the TA to communicate with the SP. The
-personalization data must be encrypted to preserve the confidentiality of potentially
-sensitive data contained within it. Other than this requirement to support confidentiality,
-TEEP place no limitations or requirements on the personalization data.
+personalization data may need to be encrypted to preserve the confidentiality of potentially
+sensitive data contained within it. 
 
 There are three possible cases for bundling of the Untrusted Application, TA, and personalization data:
 
