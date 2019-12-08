@@ -350,9 +350,9 @@ all components are further explained in the following paragraphs.
 
     The TAM performs its management of TA's through an
     interaction with a Device's TEEP Broker. As shown in
-    {{notionalarch}}, the TAM cannot directly contact a Device, but must
+    {{notionalarch}}, the TAM cannot directly contact a TEEP Agent, but must
     wait for the TEEP Broker to contact
-    the TAM requesting a particular service. This architecture is
+    the TEEP Agent requesting a particular service. This architecture is
     intentional in order to accommodate network and application firewalls
     that normally protect user and enterprise devices from arbitrary
     connections from external network entities.
