@@ -279,18 +279,14 @@ TEE-protected security key strength and trusted code execution.
 
 ## Internet of Things
 
-The Internet of Things (IoT) has been posing threats to networks and
-national infrastructures because of existing weak security in devices.
-It is very desirable that IoT devices can prevent malware from
+The Internet of Things (IoT) has been posing threats to 
+critical infrastructure because of weak security in devices.
+It is desirable that IoT devices can prevent malware from
 manipulating actuators (e.g., unlocking a door), or
-stealing or modifying sensitive data such as authentication credentials
+stealing or modifying sensitive data, such as authentication credentials
 in the device. A TEE can be the best way to implement such IoT
 security functions.
 
-TEEs could be used to store variety of sensitive data for IoT devices.
-For example, a TEE could be used in smart door locks to store a user's
-biometric information for identification, and for protecting access
-the locking mechanism.
 
 ## Confidential Cloud Computing
 
