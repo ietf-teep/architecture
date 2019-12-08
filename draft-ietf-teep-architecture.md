@@ -1,7 +1,7 @@
 ---
 title: Trusted Execution Environment Provisioning (TEEP) Architecture
 abbrev: TEEP Architecture
-docname: draft-ietf-teep-architecture-04
+docname: draft-ietf-teep-architecture-05
 category: info
 
 ipr: pre5378Trust200902
@@ -46,21 +46,8 @@ author:
        organization: Intel
        email: david.m.wheeler@intel.com
 
- -
-       ins: A. Atyeo
-       name: Andrew Atyeo
-       organization: Intercede
-       email: andrew.atyeo@intercede.com
-
- -
-       ins: L. Dapeng
-       name: Liu Dapeng
-       organization: Alibaba Group
-       email: maxpassion@gmail.com
-
 informative:
   RFC6024:
-  I-D.ietf-teep-opentrustprotocol:
   I-D.ietf-suit-manifest:
   I-D.ietf-teep-otrp-over-http:
   RFC7696:
@@ -1091,11 +1078,19 @@ the TA installation steps, including decrypting the TA binary with the relevant 
 
 This document does not require actions by IANA.
 
+# Contributors
+
+- Andrew Atyeo
+- Intercede
+- andrew.atyeo@intercede.com
+
+- Liu Dapeng
+- Alibaba Group
+- maxpassion@gmail.com
+
 # Acknowledgements
 
-Some content of this document is based on text in a previous OTrP protocol document
-{{I-D.ietf-teep-opentrustprotocol}}.  We thank the former co-authors
-Nick Cook and Minho Yoo for the initial document content, and
-contributors Brian Witten, Tyler Kim, and Alin Mutu.
+We would like to thank Nick Cook, Minho Yoo, Brian Witten, Tyler Kim, Alin Mutu, Juergen Schoenwaelder, Nicolae Paladi, Sorin Faibish
+Ned Smith, Russ Housley, Jeremy O'Donoghue, and Anders Rundgren for their feedback.
 
 --- back
