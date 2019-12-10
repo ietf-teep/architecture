@@ -166,7 +166,7 @@ The Trusted Execution Provisioning (TEEP) protocol addresses the following probl
     between cooperating TAs under the SP's control, and specify whether
     the TAs can communicate, share data, and/or share key material.
 
-Note: The Service Provider requires the help of a TAM in order to provision
+Note: The Service Provider requires the help of a TAM to provision
 the Trusted Applications to remote devices and the TEEP protocol exchanges
 messages between a Trusted Application Manager (TAM) and a TEEP Agent via 
 a TEEP Broker. 
