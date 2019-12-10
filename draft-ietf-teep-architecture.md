@@ -647,8 +647,7 @@ Note that {{experience}} shows the app developer as a TA signer
 and not the SP. However, the App Developer is either closely
 associated with the SP or the SP delegates the signing authority 
 to the app aeveloper. For the purpose of this document there
-is no difference between the SP and the app developer by
-untangling their relationships by using the term TA signer. 
+is no difference between the SP and the app developer.
 
 {{experience}} shows an application developer building
 two applications: 1) an Untrusted Application; 2) a TA
