@@ -270,7 +270,7 @@ for local identification of the user.
 A trusted user interface (UI) may be used in a mobile device to
 prevent malicious software from stealing sensitive user input data.
 Such an implementation often relies on a TEE for providing access 
-to peripherals. 
+to peripherals, such as PIN input. 
 
 ## Authentication
 
