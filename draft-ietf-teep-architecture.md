@@ -114,7 +114,7 @@ sensitive data. An application component running inside a TEE is referred to as 
 Trusted Application (TA), while an application running outside any TEE
 is referred to as an Untrusted Application (UA).
 
-TEEs use hardware enforcement combined with software protection to protect TAs and
+TEEs typically use hardware enforcement combined with software protection to secure TAs and
 its data, but also presents a more limited set of services to applications inside the
 TEE than is normally available to Untrusted Applications.
 
