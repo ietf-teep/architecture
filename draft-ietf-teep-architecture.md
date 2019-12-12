@@ -150,6 +150,11 @@ The Trusted Execution Provisioning (TEEP) protocol addresses the following probl
     between cooperating TAs under the SP's control, and specify whether
     the TAs can communicate, share data, and/or share key material.
 
+Note: The Service Provider requires the help of a TAM to provision
+the Trusted Applications to remote devices and the TEEP protocol exchanges
+messages between a Trusted Application Manager (TAM) and a TEEP Agent via 
+a TEEP Broker. 
+    
 #  Terminology
 
 The following terms are used:
@@ -180,8 +185,6 @@ The following terms are used:
 
   - Service Provider (SP): An entity that wishes to provide a service
     on Devices that requires the use of one or more Trusted Applications.
-    A Service Provider requires the help of a TAM in order to provision
-    the Trusted Applications to remote devices.
 
   - Device User: A human being that uses a device. Many devices have
     a single device user. Some devices have a primary device user with
