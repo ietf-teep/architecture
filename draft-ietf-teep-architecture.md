@@ -668,8 +668,7 @@ content of messages except for the TEE routing information.
 # Keys and Certificate Types
 
 This architecture leverages the following credentials, which allow
-delivering end-to-end security between a TAM and a TEEP Agent,
-without relying on any transport security.
+delivering end-to-end security between a TAM and a TEEP Agent.
 
 {{keys}} summarizes the relationships between various keys and where
 they are stored.  Each public/private key identifies an SP, TAM, or TEE,
@@ -693,9 +692,12 @@ Authenticating TEE    1 per TEE    TEEP responses       TAM
 Authenticating TAM    1 per TAM    TEEP requests     TEEP Agent
 
 Code Signing          1 per SP       TA binary          TEE
-
 ~~~~
 {: #keys title="Keys"}
+
+Note that personalization data is not included in the table above. 
+The use of personalization data is dependent on how TAs are used 
+and what their security requirements are. 
 
 The TEE key pair and certificate are used for authenticating the TEE
 to a remote TAM.  Often, the key pair is burned into the TEE by the
