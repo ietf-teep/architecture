@@ -402,7 +402,7 @@ the Rich Execution Environment hosts multiple TEEP brokers, where each Broker ma
 a particular TEE or set of TEEs. Enumeration and access to the appropriate
 TEEP Broker is up to the Rich Execution Environment and the Untrusted Applications. Verification that the correct TA
 has been reached then becomes a matter of properly verifying TA attestations,
-which are unforgeable. The multiple TEE approach is shown in the diagram below.
+which are unforgeable. The multiple TEEP Broker approach is shown in the diagram below.
 For brevity, TEEP Broker 2 is shown interacting with only one TAM and UA, but
 no such limitation is intended to be implied in the architecture.
 
