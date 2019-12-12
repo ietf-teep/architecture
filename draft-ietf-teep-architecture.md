@@ -262,8 +262,9 @@ to peripherals, such as PIN input.
 ## Authentication
 
 For better security of authentication, a device may store its
-sensitive authentication keys inside a TEE, providing
-TEE-protected security key strength and trusted code execution.
+keys and cryptographic libraries inside a TEE limiting access to 
+cryptographic functions via a well-defined interface and thereby 
+reducing access to keying material. 
 
 ## Internet of Things
 
