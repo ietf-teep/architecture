@@ -125,15 +125,12 @@ The Trusted Execution Provisioning (TEEP) protocol addresses the following probl
     to users of a device needs to determine security-relevant
     information of a device before provisioning their TA to the TEE
     within the device. An example is the verification of 
-    the type of TEE included in a device.
+    the type of TEE included in a device and that it is capable of 
+    providing the security protections required by a particular TA.
 
   - A TEE in a device needs to determine whether a Service Provider (SP)
     that wants to manage a TA in the device is authorized to manage TAs
     in the TEE, and what TAs the SP is permitted to manage.
-
-  - The parties involved in the protocol must be able to attest that a
-    TEE is genuine and capable of providing the security protections
-    required by a particular TA.
 
   - A Service Provider (SP) must be able to determine if a TA exists (is
     installed) on a device (in the TEE), and if not, install the TA in
