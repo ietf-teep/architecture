@@ -627,6 +627,12 @@ of the allowed TAs via consent or action of downloading.
 ~~~~
 {: #experience title="Developer Experience"}
 
+Note that {{experience}} shows the app developer as a TA signer
+and not the SP. However, the App Developer is either closely
+associated with the SP or the SP delegates the signing authority 
+to the app developer. For the purpose of this document there
+is no difference between the SP and the app developer.
+
 {{experience}} shows an application developer building
 two applications: 1) an Untrusted Application; 2) a TA
 that provides some security functions to be run inside
