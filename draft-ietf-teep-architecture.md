@@ -251,12 +251,13 @@ to provide strong identification and proof of transaction.
 
 For a mobile payment application, some biometric identification
 information could also be stored in a TEE. The mobile payment
-application can use such information for authentication.
+application can use such information for unlocking the phone and 
+for local identification of the user.
 
-A secure user interface (UI) may be used in a mobile device to
+A trusted user interface (UI) may be used in a mobile device to
 prevent malicious software from stealing sensitive user input data.
-Such an application implementation often relies on a TEE for user
-input protection.
+Such an implementation often relies on a TEE for providing access 
+to peripherals, such as PIN input. 
 
 ## Authentication
 
