@@ -171,7 +171,7 @@ The following terms are used:
     a Rich Execution Environment. A device contains a default list
     of Trust Anchors that identify entities (e.g., TAMs) that are
     trusted by the device. This list is normally set by the device
-    Manufacturer, and may be governed by the device's network carrier.
+    manufacturer, and may be governed by the device's network carrier.
     The list of Trust Anchors is normally modifiable by the device's
     owner or Device Administrator. However the device manufacturer
     and network carrier may restrict some modifications, for example,
