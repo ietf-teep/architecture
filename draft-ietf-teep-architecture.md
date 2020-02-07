@@ -654,23 +654,14 @@ and device attestation and response messages created by a TEE that
 responds to a TAM's message.
 
 It should be noted that network communication capability is generally
-not available in TAs in today's TEE-powered devices.  Trusted
-Applications need to rely on a broker in the REE to interact
-with a TEE for network message exchanges.  Consequently, a TAM generally
-communicates with an Untrusted Application about how it gets messages
-that originate from a TEE inside a device.  Similarly, a TA or TEE
-generally gets messages from a TAM via 
-a TEEP Broker in this protocol architecture, not directly
-from the network.
+not available in TAs in today's TEE-powered devices.  Consequently, Trusted
+Applications generally rely on broker in the REE to provide access to
+nnetwork functionality in the REE.  A broker does not need to know the actual
+content of messages to facilitate such access.
 
-It is imperative to have an interoperable protocol to communicate
-with different TAMs and different TEEs in different devices.
-This is the role of the
-Broker, which is a software component that bridges communication
-between a TAM and a TEE. Furthermore the Broker communicates with a Agent
-inside a TEE that is responsible to process TAM requests.
-The Broker in the REE does not need to know the actual
-content of messages except for the TEE routing information.
+Similarly, since the TEEP Agent runs inside a TEE, the TEEP Agent generally
+relies on a TEEP Broker in the REE to provide network access, and relay
+TAM requests to the TEEP Agent and relay the responses back to the TAM.
 
 # Keys and Certificate Types
 
@@ -1002,18 +993,7 @@ A TA binary is signed by a TA signer certificate.  This TA signing
 certificate/private key belongs to the SP, and may be self-signed
 (i.e., it need not participate in a trust hierarchy).  It is the
 responsibility of the TAM to only allow verified TAs from trusted SPs
-into the system.  Delivery of that TA to the TEE is then the
-responsibility of the TEE, using the security mechanisms provided by
-the protocol.
-
-We allow a way for an Untrusted Application to check the
-trustworthiness of a TA.  A TEEP Broker has a function to allow an
-application to query the information about a TA.
-
-An Untrusted Application may perform verification of the TA by
-verifying the signature of the TA.  An application can do additional
-trust checks on the certificate returned for this TA.  It might trust
-the TAM, or require additional SP signer trust chaining.
+into the system.
 
 ## One TA Multiple SP Case
 
@@ -1023,13 +1003,10 @@ device.
 
 ## Broker Trust Model
 
-A TEEP Broker could be malware in the vulnerable REE.  An Untrusted
-Application will connect its TAM provider for required TA
-installation.  It gets command messages from the TAM, and passes the
-message to the Broker.
-
-The architecture enables the TAM to communicate with the device's TEE
-to manage TAs.  All TAM messages are signed and sensitive
+The architecture enables the TAM to communicate, via a TEEP Broker, with the device's TEE
+to manage TAs.  Since the TEEP Broker runs in a potentially vulnerable REE,
+the TEEP Broker could, however, be (or be infected by) malware.
+As such, all TAM messages are signed and sensitive
 data is encrypted such that the TEEP Broker cannot modify or capture
 sensitive data.
 
