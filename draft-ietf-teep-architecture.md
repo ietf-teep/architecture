@@ -419,8 +419,8 @@ within memory without a controlling manager within the TEE. As such,
 there might be multiple TEEP Brokers in the Rich Execution Environment,
 where each TEEP Broker communicates with one or more TEEs associated with it.
 
-Enumeration and access to the appropriate
-TEEP Broker is up to the Rich Execution Environment and the Untrusted Applications. Verification that the correct TA
+It is up to the Rich Execution Environment and the Untrusted Applications
+how they select the correct TEEP broker. Verification that the correct TA
 has been reached then becomes a matter of properly verifying TA attestations,
 which are unforgeable. 
 
