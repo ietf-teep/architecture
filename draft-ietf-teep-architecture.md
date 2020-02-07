@@ -239,7 +239,7 @@ The following terms are used:
     TA.
 
   - Untrusted Application: An application running in a Rich Execution
-    Environment, such as an Android, Windows, or iOS application.
+    Environment.
 
 # Use Cases
 
