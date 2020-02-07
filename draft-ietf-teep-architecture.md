@@ -679,8 +679,8 @@ RATS Architecture {{I-D.ietf-rats-architecture}} for more discussion.
 
 ~~~~
                     Cardinality &                    Location of
-                     Location of    Private Key     Corresponding
-Purpose              Private Key       Signs          CA Certs
+                     Location of    Private Key     Trust Anchor
+Purpose              Private Key       Signs           Store
 ------------------   -----------   -------------    -------------
 Authenticating TEE    1 per TEE    TEEP responses       TAM
 
@@ -700,17 +700,21 @@ to a remote TAM.  Often, the key pair is burned into the TEE by the
 TEE manufacturer and the key pair and its certificate are valid for
 the expected lifetime of the TEE.  A TAM provider is responsible
 for configuring its TAM with the manufacturer certificates or CAs
-that are used to sign TEE keys.
+that are used to sign TEE keys. This is discussed further in
+{{trust-anchors-in-tam}} below.
 
 The TAM key pair and certificate are used for authenticating a TAM
 to a remote TEE.  A TAM provider is responsible for acquiring a
-certificate from a CA that is trusted by the TEEs it manages.
+certificate from a CA that is trusted by the TEEs it manages. This
+is discussed further in {{trust-anchors-in-teep-agent}} below.
 
 The TA developer key pair and certificate are used to sign TAs that the TEE
 will consider authorized to execute.  TEEs must be configured with
-the CAs that it considers authorized to sign TAs that it will execute.
+the certificates or keys that it considers authorized to sign TAs
+that it will execute.  This is discussed further in
+{{trust-anchors-in-tee}} below.
 
-## Trust Anchors in a TEE
+## Trust Anchors in a TEEP Agent {#trust-anchors-in-teep-agent}
 
 A TEEP Agent's Trust Anchor Store contains a list of Trust Anchors, which
 are CA certificates that sign various TAM certificates.  The list
@@ -733,18 +737,30 @@ Before a TAM can begin operation in the marketplace to support a
 device with a particular TEE, it must obtain a TAM
 certificate from a CA that is listed in the Trust Anchor store of the TEE.
 
-## Trust Anchors in a TAM
+## Trust Anchors in a TEE {#trust-anchors-in-tee}
+
+A TEE determines whether TA binaries are allowed to execute by 
+verifying whether the TA's signer chains up to a certificate
+in a list in the TEE's Trust Anchor Store. The list
+is typically preloaded at manufacturing time, and
+can be updated using the TEEP protocol if the TEE has some form of
+"Trust Anchor Manager TA" that has Trust Anchors in its configuration data.
+Thus, Trust Anchors can be updated similar to updating the configuration data
+for any other TA, as discussed in {{trust-anchors-in-teep-agent}}.
+
+## Trust Anchors in a TAM {#trust-anchors-in-tam}
 
 The Trust Anchor Store in a TAM consists of a list of Trust Anchors, which
-are CA certificates that sign various device TEE certificates.  A TAM will accept a
+are certificates that sign various device TEE certificates.  A TAM will accept a
 device for TA management if the TEE in the device uses a TEE certificate
-that is chained to a CA that the TAM trusts.
+that is chained to a certificate that the TAM trusts.
 
 ## Scalability
 
-This architecture uses a PKI.  Trust Anchors exist on the devices to
-enable the TEE to authenticate TAMs, and TAMs use Trust Anchors to
-authenticate TEEs.  Since a PKI is used, many intermediate CA
+This architecture uses a PKI, although self-signed certificates are
+also permitted.  Trust Anchors exist on the devices to
+enable the TEE to authenticate TAMs and TA signers, and TAMs use Trust Anchors to
+authenticate TEEs.  When a PKI is used, many intermediate CA
 certificates can chain to a root certificate, each of which can issue
 many certificates.  This makes the protocol highly scalable.  New
 factories that produce TEEs can join the ecosystem.  In this case,
@@ -755,7 +771,8 @@ join the ecosystem, providing they are issued a TAM certificate that
 chains to an existing root whereby existing TEEs will be allowed to
 be personalized by the TAM without requiring changes to the TEE
 itself.  This enables the ecosystem to scale, and avoids the need for
-centralized databases of all TEEs produced or all TAMs that exist.
+centralized databases of all TEEs produced or all TAMs that exist or
+all TA developers that exist.
 
 ## Message Security
 
@@ -984,14 +1001,6 @@ is more likely for the TAM to support one or more attestation
 techniques whereas the device may only support one.
 
 # Security Considerations
-
-## TA Trust Check at TEE
-
-A TA binary is signed by a TA signer certificate.  This TA signing
-certificate/private key belongs to the TA developer, and may be self-signed
-(i.e., it need not participate in a trust hierarchy).  It is the
-responsibility of the TAM to only allow verified TAs from trusted TA developers
-into the system.
 
 ## One TA Multiple TA Developers Case
 
