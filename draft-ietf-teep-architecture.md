@@ -410,17 +410,23 @@ all components are further explained in the following paragraphs.
     different CAs can be chosen by each TAM, and different device CAs
     can be used by different device manufacturers.
 
-## Different Renditions of TEEP Architecture
-There is nothing prohibiting a device from implementing multiple TEEs. In
-addition, some TEEs (for example, SGX) present themselves as separate containers
-within memory without a controlling manager within the TEE. In these cases,
-the Rich Execution Environment hosts multiple TEEP brokers, where each Broker manages
-a particular TEE or set of TEEs. Enumeration and access to the appropriate
+## Multiple TEEs in a Device
+Some devices might implement multiple TEEs. 
+In these cases, there might be one shared TEEP Broker 
+that interacts with all the TEEs in the device.
+However, some TEEs (for example, SGX) present themselves as separate containers
+within memory without a controlling manager within the TEE. As such,
+there might be multiple TEEP Brokers in the Rich Execution Environment,
+where each TEEP Broker communicates with one or more TEEs associated with it.
+
+Enumeration and access to the appropriate
 TEEP Broker is up to the Rich Execution Environment and the Untrusted Applications. Verification that the correct TA
 has been reached then becomes a matter of properly verifying TA attestations,
-which are unforgeable. The multiple TEEP Broker approach is shown in the diagram below.
-For brevity, TEEP Broker 2 is shown interacting with only one TAM and Untrusted Application, but
-no such limitation is intended to be implied in the architecture.
+which are unforgeable. 
+
+The multiple TEEP Broker approach is shown in the diagram below.
+For brevity, TEEP Broker 2 is shown interacting with only one TAM and Untrusted Application and only one TEE, but
+no such limitations are intended to be implied in the architecture.
 
 ~~~~
    +-------------------------------------------+
@@ -468,8 +474,6 @@ challenges for a TAM in completely managing the device, since a TAM may not
 interact with all the TEEP Brokers on a particular platform. In addition, since
 TEEs may be physically separated, with wholly different resources, there may be no
 need for TEEP Brokers to share information on installed TAs or resource usage.
-However, the architecture guarantees that the TAM will receive all the relevant
-information from the TEEP Broker to which it communicates.
 
 ## Multiple TAMs and Relationship to TAs
 
@@ -884,21 +888,6 @@ For further discussion on these APIs, see {{I-D.ietf-teep-otrp-over-http}}.
 
 The Broker installation is commonly carried out at OEM time. A user
 can dynamically download and install a Broker on-demand.
-
-### Number of TEEP Brokers
-
-There should be generally only one shared TEEP Broker in a device.
-The device's TEE vendor will most probably supply one Broker. When
-multiple TEEs are present in a device, one TEEP Broker per TEE may be used.
-
-When only one Broker is used per device, the Broker provider is responsible
-to allow multiple TAMs and TEE providers to achieve interoperability.  With a
-standard Broker interface, each TAM can implement its own SDK for its TA developer
-Untrusted Applications to work with this Broker.
-
-Multiple independent Broker providers can be used as long as they have
-standard interface to an Untrusted Application or TAM SDK.  Only one
-Broker is generally expected in a device.
 
 # Attestation
 Attestation is the process through which one entity (an Attester) presents "evidence", in the form
