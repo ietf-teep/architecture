@@ -204,9 +204,6 @@ The following terms are used:
     and hypervisors; it is outside of any TEE. This environment and
     applications running on it are considered untrusted.
 
-  - Service Provider (SP): An entity that wishes to provide a service
-    on devices that requires the use of one or more Trusted Applications.
-
   - Trust Anchor: As defined in {{RFC6024}} and {{I-D.ietf-suit-manifest}},
     "A trust anchor represents an authoritative entity via a public
     key and associated data.  The public key is used to verify digital
