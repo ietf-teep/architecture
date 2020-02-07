@@ -160,12 +160,6 @@ a TEEP Broker.
 
 The following terms are used:
 
-  - Untrusted Application: An application running in a Rich Execution
-    Environment, such as an Android, Windows, or iOS application.
-
-  - Trusted Application Manager (TAM): An entity that manages Trusted
-    Applications (TAs) running in different TEEs of various devices.
-
   - Device: A physical piece of hardware that hosts one or more TEEs,
     often along with
     a Rich Execution Environment. A device contains a default list
@@ -178,27 +172,6 @@ The following terms are used:
     by not allowing the manufacturer or carrier's Trust Anchor to be
     removed or disabled.
 
-  - Rich Execution Environment (REE): An environment that is provided
-    and governed by a typical OS (e.g., Linux, Windows, Android, iOS),
-    potentially in conjunction with other supporting operating systems
-    and hypervisors; it is outside of any TEE. This environment and
-    applications running on it are considered untrusted.
-
-  - Device User: A human being that uses a device. Many devices have
-    a single device user. Some devices have a primary device user with
-    other human beings as secondary device users (e.g., parent allowing
-    children to use their tablet or laptop). Other devices are not used
-    by a human being and hence have no device user. Relates to Device Owner
-    and Device Administrator.
-
-  - Device Owner: A device is always owned by someone. In some cases, it is common for
-    the (primary) device user to also own the device, making the device
-    user/owner also the Device Administrator. In enterprise environments
-    it is more common for the enterprise to own the device, and any device
-    user has no or limited administration rights. In this case, the
-    enterprise appoints a Device Administrator that is not the device
-    owner.
-
   - Device Administrator (DA):  An entity that is responsible for administration
     of a device, which could be the device owner. A Device Administrator
     has privileges on the device to install and remove Untrusted Applications and TAs,
@@ -209,6 +182,30 @@ The following terms are used:
     privileges and device-specific controls to locally administer a
     device, the Device Administrator may choose to remotely
     administrate a device through a TAM.
+
+  - Device Owner: A device is always owned by someone. In some cases, it is common for
+    the (primary) device user to also own the device, making the device
+    user/owner also the Device Administrator. In enterprise environments
+    it is more common for the enterprise to own the device, and any device
+    user has no or limited administration rights. In this case, the
+    enterprise appoints a Device Administrator that is not the device
+    owner.
+
+  - Device User: A human being that uses a device. Many devices have
+    a single device user. Some devices have a primary device user with
+    other human beings as secondary device users (e.g., parent allowing
+    children to use their tablet or laptop). Other devices are not used
+    by a human being and hence have no device user. Relates to Device Owner
+    and Device Administrator.
+
+  - Rich Execution Environment (REE): An environment that is provided
+    and governed by a typical OS (e.g., Linux, Windows, Android, iOS),
+    potentially in conjunction with other supporting operating systems
+    and hypervisors; it is outside of any TEE. This environment and
+    applications running on it are considered untrusted.
+
+  - Service Provider (SP): An entity that wishes to provide a service
+    on devices that requires the use of one or more Trusted Applications.
 
   - Trust Anchor: As defined in {{RFC6024}} and {{I-D.ietf-suit-manifest}},
     "A trust anchor represents an authoritative entity via a public
@@ -231,6 +228,9 @@ The following terms are used:
   - Trusted Application (TA) Developer: An entity that wishes to provide functionality
     on devices that requires the use of one or more Trusted Applications.
 
+  - Trusted Application Manager (TAM): An entity that manages Trusted
+    Applications (TAs) running in different TEEs of various devices.
+
   - Trusted Execution Environment (TEE): An execution environment that enforces that
     only authorized code can execute within the TEE, and data used by that
     code cannot be read or tampered with by code outside the TEE.
@@ -240,6 +240,9 @@ The following terms are used:
     In addition, TEEs typically use an isolation mechanism between Trusted Applications to ensure
     that one TA cannot read, modify or delete the data and code of another
     TA.
+
+  - Untrusted Application: An application running in a Rich Execution
+    Environment, such as an Android, Windows, or iOS application.
 
 # Use Cases
 
