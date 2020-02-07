@@ -165,10 +165,12 @@ The following terms are used:
     a Rich Execution Environment. A device contains a default list
     of Trust Anchors that identify entities (e.g., TAMs) that are
     trusted by the device. This list is normally set by the device
-    manufacturer, and may be governed by the device's network carrier.
+    manufacturer, and may be governed by the device's network carrier
+    when it is a mobile device.
     The list of Trust Anchors is normally modifiable by the device's
     owner or Device Administrator. However the device manufacturer
-    and network carrier may restrict some modifications, for example,
+    or network carrier (in the mobile device case) may restrict some
+    modifications, for example,
     by not allowing the manufacturer or carrier's Trust Anchor to be
     removed or disabled.
 
@@ -345,7 +347,8 @@ all components are further explained in the following paragraphs.
 
     A TAM may be publicly available for use by many TA developers, or a TAM
     may be private, and accessible by only one or a limited number of
-    TA developers. It is expected that manufacturers and carriers will run their
+    TA developers. It is expected that manufacturers and network carriers
+    will run their
     own private TAM. Another example of a private TAM is a TAM running as
     a Software-as-a-Service (SaaS) hosted by a TA developer.
 
@@ -358,7 +361,8 @@ all components are further explained in the following paragraphs.
 
     A TA developer or Device Administrator is free to utilize multiple TAMs. This may
     be required for a TA developer to manage multiple different types of devices
-    from different manufacturers, or devices on different carriers, since
+    from different manufacturers, or to manage mobile devices on
+    different network carriers, since
     the Trust Anchor list on these different devices may contain different
     TAMs. A Device Administrator may be able to add their own TAM's
     public key or certificate to the Trust Anchor list on all their devices,
@@ -366,7 +370,7 @@ all components are further explained in the following paragraphs.
 
     Any entity is free to operate a TAM. For a TAM to be successful, it must
     have its public key or certificate installed in a device's Trust Anchor list.
-    A TAM may set up a relationship with device manufacturers or carriers
+    A TAM may set up a relationship with device manufacturers or network carriers
     to have them install the TAM's keys in their device's Trust Anchor list.
     Alternatively, a TAM may publish its certificate and allow Device
     Administrators to install the TAM's certificate in their devices as
@@ -471,7 +475,7 @@ some cases may be another party that the TA developer trusts. The TA developer s
 through which to offer their TA(s), and communicates the TA(s) to the TAM.
 
 The TA developer chooses TAMs based upon the markets into which the TAM can provide access. There
-may be TAMs that provide services to specific types of mobile devices, or mobile device
+may be TAMs that provide services to specific types of devices, or device
 operating systems, or specific geographical regions or network carriers. A TA developer may be
 motivated to utilize multiple TAMs for its service in order to maximize market penetration
 and availability on multiple types of devices. This likely means that the same TA
