@@ -480,11 +480,17 @@ As shown in {{notionalarch2}}, the TEEP Broker provides connections from the TEE
 the Untrusted Application to one or more TAMs. The selection of which TAM to communicate with is
 dependent on information from the Untrusted Application and is directly related to the TA.
 
-When a TA developer authors a TA,
-the TA itself is digitally signed, protecting its integrity, but the
-signature also links the TA back to the signer. The signer is usually the TA developer, but in
-some cases may be another party that the TA developer trusts. The TA developer selects one or more TAMs
+Each TA is digitally signed, protecting its integrity, and linking
+the TA back to the signer. The signer is usually the TA software author, but in
+some cases might be another party that the TA software author trusts, or a party
+to whom the code has been licensed (in which case the same code might
+be signed by multiple parties and distributed as if it were different TAs).
+
+A TA author or signer selects one or more TAMs
 through which to offer their TA(s), and communicates the TA(s) to the TAM.
+In this document, we use the term "TA developer" to refer to the entity that
+selects a TAM and publishes a signed TA to it, independent of whether the
+publishing entity is the TA software author or the signer or both.
 
 The TA developer chooses TAMs based upon the markets into which the TAM can provide access. There
 may be TAMs that provide services to specific types of devices, or device
