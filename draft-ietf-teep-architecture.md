@@ -948,8 +948,8 @@ allows these additional claims to be included in the attestation messages.
     only the class of the device. The security and privacy requirements regarding device identification 
     will vary with the type of TA provisioned to the TEE. 
 
-  - TEE Identifying info: The type of TEE that generated this attestation must be identified. Standard
-    TEE types are identified by an IANA number, but also must include version identification information
+  - TEE Identifying info: The type of TEE that generated this attestation must be identified,
+    including version identification information
     such as the hardware, firmware, and software version of the TEE, as applicable by the
     TEE type. TEE manufacturer information for the TEE is
     required in order to disambiguate the same TEE type created by different manufacturers and
