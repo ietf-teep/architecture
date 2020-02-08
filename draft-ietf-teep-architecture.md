@@ -1033,6 +1033,15 @@ As such, all TAM messages are signed and sensitive
 data is encrypted such that the TEEP Broker cannot modify or capture
 sensitive data.
 
+A TEEP Agent in a TEE is responsible for protecting against potential attacks
+from a compromised 
+TEEP Broker or rogue malware in the REE. A rogue TEEP Broker
+might send corrupted data to the TEEP Agent, or launch a DoS attack by sending a flood
+of TEEP protocol requests. The TEEP Agent validates the signature of each TEEP protocol request
+and checks the signing certificate against its Trust Anchors. To mitigate
+DoS attacks, it might also add some protection
+scheme such as a threshold on repeated requests or number of TAs that can be installed.
+
 ## Data Protection at TAM and TEE
 
 The TEE implementation provides protection of data on the device.  It
