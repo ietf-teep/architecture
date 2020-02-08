@@ -1053,22 +1053,22 @@ to determine that the TAM is trustworthy.
 ## Malicious TA Removal
 
 It is possible that a rogue developer distributes a malicious Untrusted 
-Application and intends to get a malicious TA installed. It’s the responsibility 
-of the TAM to not install malicious trusted apps in the first plalce. TEEP
+Application and intends to get a malicious TA installed. It's the responsibility
+of the TAM to not install malicious trusted apps in the first place. The TEEP
 architecture allows a TEEP Agent to decide which TAMs it trusts via Trust Anchors, 
 and delegates the TA authenticity check to the TAMs it trusts.
 
-It may happen that a TA was considered trustworthy but find to be buggy or compromised.
-In this case, the TAM should initiate the removal of the TA process by notifying devices 
-to remove the TA and the device owner to remove also potentially malicious Untrusted 
-Application that use the TA. Since a TA removal request needs to be launched from the 
-device side, some communication channels to the device with the TA should be available 
-for a TA removal. A TAM provider might publish the TA list that were previously authorized
-but not trusted anymore in a way that the device can query or be notified. There are
-mutliple ways how the interaction can be done. One of the ways, for example, can use 
-some software in a device that periodically scan for TA list that should be removed, 
-and launch the removal. A TAM provider may define a flow and provide tools how a TAM 
-initiated TA removal can be done.
+It may happen that a TA was previously considered trustworthy but is later
+found to be buggy or compromised.
+In this case, the TAM can initiate the removal of the TA by notifying devices 
+to remove the TA (and potentially the REE or device owner to remove any Untrusted 
+Application that depend on the TA).  If the TAM does not currently have a
+connection to the TEEP Agent on a device, such a notification would occur
+the next time connectivity does exist.
+
+Furthermore the policy in the Verifier in an attestation process can be
+updated so that any evidence that includes the malicious TA would result
+in an attestation failure.
 
 ## Certificate Renewal
 
