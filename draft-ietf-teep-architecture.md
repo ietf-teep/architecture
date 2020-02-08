@@ -394,8 +394,8 @@ all components are further explained in the following paragraphs.
     that runs in an REE). A TEEP Agent in the TEE may parse requests or
     forward requests to other processing modules in a TEE, which is
     up to a TEE provider's implementation. A response message
-    corresponding to a TAM request is sent by a TEEP Agent back
-    to a TEEP Broker.
+    corresponding to a TAM request is sent back to the TAM, again typically
+    relayed via a TEEP Broker.
 
   - Certification Authority (CA):  Certificate-based credentials used for
     authenticating a device, a TAM and a TA developer.  A device embeds a list
