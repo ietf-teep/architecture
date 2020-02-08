@@ -723,12 +723,9 @@ for any other TA.
 
 When Trust Anchor update is carried out, it is imperative that any update
 must maintain integrity where only an authentic Trust Anchor list from
-a device manufacturer or a Device Administrator is accepted. This calls
-for a complete lifecycle flow in authorizing who can make Trust Anchor
-update and whether a given Trust Anchor list are non-tampered from the
-original provider. The signing of a Trust Anchor list for integrity
-check and update authorization methods are desirable to be developed.
-This can be addressed outside of this architecture document.
+a device manufacturer or a Device Administrator is accepted. Details
+are out of scope of the architecture and can be addressed in a protocol
+document.
 
 Before a TAM can begin operation in the marketplace to support a
 device with a particular TEE, it must obtain a TAM
