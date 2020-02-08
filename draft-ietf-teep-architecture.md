@@ -477,15 +477,16 @@ motivated to utilize multiple TAMs for its service in order to maximize market p
 and availability on multiple types of devices. This likely means that the same TA
 will be available through multiple TAMs.
 
-When the TA developer publishes the Untrusted Application to an app store or other app repository, the TA developer
-binds the Untrusted Application with a manifest that identifies what TAMs can be contacted for
-the TA. In some situations, a TA developer may use only a single TAM - this is likely the case
+When the developer of an Untrusted Application that depends on a TA publishes
+the Untrusted Application to an app store or other app repository, the developer
+optionally binds the Untrusted Application with a manifest that identifies
+what TAMs can be contacted for
+the TA. In some situations, a TA may only be available via a single TAM - this is likely the case
 for enterprise applications or TA developers serving a closed community. For broad public apps,
 there will likely be multiple TAMs in the manifest - one servicing one brand of mobile
 device and another servicing a different manufacturer, etc. Because different devices
-and different manufacturers trust different TAMs, the manifest will include different
-TAMs that support this TA developer's Untrusted Application and TA. Multiple TAMs allow the TA developer to provide
-their TA to multiple different devices.
+and different manufacturers trust different TAMs, the manifest can include multiple
+TAMs that support the required TA.
 
 When a TEEP Broker receives a request from an Untrusted Application to install a TA,
 a list of TAM URIs may be provided for that TA, and the request is passed to the TEEP Agent.
