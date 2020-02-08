@@ -339,7 +339,7 @@ all components are further explained in the following paragraphs.
     management activity on TAs on behalf of TA developers
     and Device Administrators. This includes creation and
     deletion of TAs, and may include, for example, over-the-air
-    updates to keep a TA developer's TAs up-to-date and clean up when a version
+    updates to keep TAs up-to-date and clean up when a version
     should be removed. TAMs may provide services that make it easier for
     TA developers or Device Administators to use the TAM's service to manage multiple devices,
     although that is not required of a TAM.
