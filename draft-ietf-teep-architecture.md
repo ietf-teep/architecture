@@ -344,8 +344,8 @@ all components are further explained in the following paragraphs.
     TA developers or Device Administators to use the TAM's service to manage multiple devices,
     although that is not required of a TAM.
 
-    The TAM performs its management of TAs through an
-    interaction with a device's TEEP Broker. As shown in
+    The TAM performs its management of TAs through
+    interactions with a device's TEEP Broker. As shown in
     {{notionalarch}}, the TAM cannot directly contact a TEEP Agent, but must
     wait for the TEEP Broker to contact
     the TAM requesting a particular service. This architecture is
