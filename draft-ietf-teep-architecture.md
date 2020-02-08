@@ -976,7 +976,7 @@ allows these additional claims to be included in the attestation messages.
     required in order to disambiguate the same TEE type created by different manufacturers and
     resolve potential assumptions around manufacturer provisioning, keying and support for the TEE.
 
-  - Liveness Proof: A claim that includes liveness information must be included, such as a nonce
+  - Freshness Proof: A claim that includes freshness information must be included, such as a nonce
     or timestamp.
 
   - Requested Components: A list of zero or more components (TAs or other dependencies needed by a TEE)
