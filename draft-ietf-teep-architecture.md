@@ -390,8 +390,8 @@ all components are further explained in the following paragraphs.
     the TAM to the TEE, and for returning the TEE's responses to the TAM.
 
   - TEEP Agent: the TEEP Agent is a processing module running inside
-    a TEE that receives TAM requests that are relayed via a TEEP Broker
-    that runs in an REE. A TEEP Agent in the TEE may parse requests or
+    a TEE that receives TAM requests (typically relayed via a TEEP Broker
+    that runs in an REE). A TEEP Agent in the TEE may parse requests or
     forward requests to other processing modules in a TEE, which is
     up to a TEE provider's implementation. A response message
     corresponding to a TAM request is sent by a TEEP Agent back
