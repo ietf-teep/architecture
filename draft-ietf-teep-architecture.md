@@ -304,7 +304,7 @@ liability and increased cloud adoption.
 
 ## System Components
 
-The following are the main components in the system. Full descriptions of
+{{notionalarch}} shows the main components in a typical device with an REE. Full descriptions of
 components not previously defined are provided below. Interactions of
 all components are further explained in the following paragraphs.
 
@@ -346,7 +346,7 @@ all components are further explained in the following paragraphs.
     TA developers or Device Administators to use the TAM's service to manage multiple devices,
     although that is not required of a TAM.
 
-    The TAM performs its management of TAs through
+    The TAM performs its management of TAs on the device through
     interactions with a device's TEEP Broker, which relays
     messages between a TAM and a TEEP Agent running inside the TEE. As shown in
     {{notionalarch}}, the TAM cannot directly contact a TEEP Agent, but must
@@ -392,6 +392,8 @@ all components are further explained in the following paragraphs.
     a TAM and a TEE in a device. A TEEP Broker does not process messages
     on behalf of a TEE, but merely is responsible for relaying messages from
     the TAM to the TEE, and for returning the TEE's responses to the TAM.
+    In devices with no REE, the TEEP Broker would be absent and instead the
+    TEEP protocol transport would be implemented inside the TEE itself.
 
   - TEEP Agent: The TEEP Agent is a processing module running inside
     a TEE that receives TAM requests (typically relayed via a TEEP Broker
