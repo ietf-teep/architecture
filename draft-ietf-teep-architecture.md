@@ -106,7 +106,7 @@ TEEs use hardware enforcement combined with software protection to secure TAs an
 its data. TEEs typically offer a more limited set of services to TAs than is 
 normally available to Untrusted Applications.
 
-But not all TEEs are the same, and different vendors may have different
+Not all TEEs are the same, however, and different vendors may have different
 implementations of TEEs with different security properties, different
 features, and different control mechanisms to operate on TAs. Some
 vendors may themselves market multiple different TEEs with different
@@ -120,41 +120,50 @@ there often arises a need for an external trusted party to verify the
 identity, claims, and rights of TA developers, devices, and their TEEs.
 This trusted third party is the Trusted Application Manager (TAM).
 
-The Trusted Execution Provisioning (TEEP) protocol addresses the following problems:
+The Trusted Execution Environment Provisioning (TEEP) protocol addresses
+the following problems:
 
-  - A TA developer providing a TA
-    to users of a device needs to determine security-relevant
-    information of a device before provisioning their TA to the TEE
-    within the device. An example is the verification of 
+  - An installer of an Untrusted Application that depends on a given TA
+    wants to request installation of that TA in the device's TEE
+    so that the Untrusted Application can complete, but the TEE
+    needs to verify whether such a TA is actually authorized to
+    run in the TEE and consume potentially scarce TEE resources.
+
+  - A TA developer providing a TA whose code itself is considered
+    confidential wants to determine 
+    security-relevant information of a device before allowing their
+    TA to be provisioned to the TEE within the device. An example 
+    is the verification of 
     the type of TEE included in a device and that it is capable of 
-    providing the security protections required by a particular TA.
+    providing the security protections required.
 
-  - A TEE in a device needs to determine whether a TA developer
+  - A TEE in a device wants to determine whether an entity
     that wants to manage a TA in the device is authorized to manage TAs
-    in the TEE, and what TAs the TA developer is permitted to manage.
+    in the TEE, and what TAs the entity is permitted to manage.
 
-  - A TA developer must be able to determine if a TA exists (is
+  - A TAM (e.g., operated by a device administrator)
+    wants to determine if a TA exists (is
     installed) on a device (in the TEE), and if not, install the TA in
     the TEE.
 
-  - A TA developer must be able to check whether a TA in a
+  - A TAM wants to check whether a TA in a
     device's TEE is the most up-to-date version, and if not, update the
     TA in the TEE.
 
-  - A TA developer must be able to remove a TA in a device's
-    TEE if the TA developer is no longer offering such TAs or the TAs
-    are being revoked from a particular user (or device). For example,
+  - A TA developer wants to remove a confidential TA from a device's TEE if
+    the TA developer is no longer offering such TAs or the TAs are
+    being revoked from a particular user (or device).  For example,
     if a subscription or contract for a particular service has expired,
     or a payment by the user has not been completed or has been rescinded.
 
-  - A TA developer must be able to define the relationship
-    between cooperating TAs under the TA developer's control, and specify whether
+  - A TA developer wants to define the relationship
+    between cooperating TAs under the TA developer's control, and 
+    specify whether
     the TAs can communicate, share data, and/or share key material.
 
 Note: The TA developer requires the help of a TAM to provision
 the Trusted Applications to remote devices and the TEEP protocol exchanges
-messages between a Trusted Application Manager (TAM) and a TEEP Agent via 
-a TEEP Broker. 
+messages between a TAM and a TEEP Agent via a TEEP Broker. 
     
 #  Terminology
 
