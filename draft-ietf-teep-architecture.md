@@ -174,10 +174,12 @@ The following terms are used:
     a Rich Execution Environment. A device contains a default list
     of Trust Anchors that identify entities (e.g., TAMs) that are
     trusted by the device. This list is normally set by the device
-    manufacturer, and may be governed by the device's network carrier.
+    manufacturer, and may be governed by the device's network carrier
+    when it is a mobile device.
     The list of Trust Anchors is normally modifiable by the device's
     owner or Device Administrator. However the device manufacturer
-    and network carrier may restrict some modifications, for example,
+    or network carrier (in the mobile device case) may restrict some
+    modifications, for example,
     by not allowing the manufacturer or carrier's Trust Anchor to be
     removed or disabled.
 
@@ -345,7 +347,8 @@ all components are further explained in the following paragraphs.
     although that is not required of a TAM.
 
     The TAM performs its management of TAs through
-    interactions with a device's TEEP Broker. As shown in
+    interactions with a device's TEEP Broker, which relays
+    messages between a TAM and a TEEP Agent running inside the TEE. As shown in
     {{notionalarch}}, the TAM cannot directly contact a TEEP Agent, but must
     wait for the TEEP Broker to contact
     the TAM requesting a particular service. This architecture is
@@ -355,8 +358,8 @@ all components are further explained in the following paragraphs.
 
     A TAM may be publicly available for use by many TA developers, or a TAM
     may be private, and accessible by only one or a limited number of
-    TA developers. It is expected that many manufacturers and carriers will run their
-    own private TAM.
+    TA developers. It is expected that many manufacturers and network carriers
+    will run their own private TAM.
 
     A TA developer or Device Administrator chooses a particular TAM based on
     whether the TAM is trusted by a device or set of devices. The
@@ -369,7 +372,8 @@ all components are further explained in the following paragraphs.
 
     A TA developer or Device Administrator is free to utilize multiple TAMs. This may
     be required for a TA developer to manage multiple different types of devices
-    from different manufacturers, or devices on different carriers, since
+    from different manufacturers, or to manage mobile devices on
+    different network carriers, since
     the Trust Anchor list on these different devices may contain different
     TAMs. A Device Administrator may be able to add their own TAM's
     public key or certificate to the Trust Anchor list on all their devices,
@@ -377,7 +381,7 @@ all components are further explained in the following paragraphs.
 
     Any entity is free to operate a TAM. For a TAM to be successful, it must
     have its public key or certificate installed in a device's Trust Anchor list.
-    A TAM may set up a relationship with device manufacturers or carriers
+    A TAM may set up a relationship with device manufacturers or network carriers
     to have them install the TAM's keys in their device's Trust Anchor list.
     Alternatively, a TAM may publish its certificate and allow Device
     Administrators to install the TAM's certificate in their devices as
@@ -475,14 +479,20 @@ As shown in {{notionalarch2}}, the TEEP Broker provides connections from the TEE
 the Untrusted Application to one or more TAMs. The selection of which TAM to communicate with is
 dependent on information from the Untrusted Application and is directly related to the TA.
 
-When a TA developer authors a TA,
-the TA itself is digitally signed, protecting its integrity, but the
-signature also links the TA back to the signer. The signer is usually the TA developer, but in
-some cases may be another party that the TA developer trusts. The TA developer selects one or more TAMs
+Each TA is digitally signed, protecting its integrity, and linking
+the TA back to the signer. The signer is usually the TA software author, but in
+some cases might be another party that the TA software author trusts, or a party
+to whom the code has been licensed (in which case the same code might
+be signed by multiple licensees and distributed as if it were different TAs).
+
+A TA author or signer selects one or more TAMs
 through which to offer their TA(s), and communicates the TA(s) to the TAM.
+In this document, we use the term "TA developer" to refer to the entity that
+selects a TAM and publishes a signed TA to it, independent of whether the
+publishing entity is the TA software author or the signer or both.
 
 The TA developer chooses TAMs based upon the markets into which the TAM can provide access. There
-may be TAMs that provide services to specific types of mobile devices, or mobile device
+may be TAMs that provide services to specific types of devices, or device
 operating systems, or specific geographical regions or network carriers. A TA developer may be
 motivated to utilize multiple TAMs for its service in order to maximize market penetration
 and availability on multiple types of devices. This likely means that the same TA
@@ -1008,12 +1018,6 @@ techniques whereas the device may only support one.
 
 # Security Considerations
 
-## One TA Multiple TA Developers Case
-
-A TA for multiple TA developers must have a different identifier per TA developer.  They
-should appear as different TAs when they are installed in the same
-device.
-
 ## Broker Trust Model
 
 The architecture enables the TAM to communicate, via a TEEP Broker, with the device's TEE
@@ -1023,10 +1027,48 @@ As such, all TAM messages are signed and sensitive
 data is encrypted such that the TEEP Broker cannot modify or capture
 sensitive data.
 
+A TEEP Agent in a TEE is responsible for protecting against potential attacks
+from a compromised 
+TEEP Broker or rogue malware in the REE. A rogue TEEP Broker
+might send corrupted data to the TEEP Agent, or launch a DoS attack by sending a flood
+of TEEP protocol requests. The TEEP Agent validates the signature of each TEEP protocol request
+and checks the signing certificate against its Trust Anchors. To mitigate
+DoS attacks, it might also add some protection
+scheme such as a threshold on repeated requests or number of TAs that can be installed.
+
 ## Data Protection at TAM and TEE
 
 The TEE implementation provides protection of data on the device.  It
 is the responsibility of the TAM to protect data on its servers.
+
+## Compromised REE
+
+It is possible that the REE of a device is compromised. If the REE is
+compromised, several DoS attacks may be launched. The compromised REE
+may terminate the TEEP Broker such that TEEP transactions cannot reach the TEE.
+However, while a DoS attack cannot be prevented, the REE cannot access
+anything in the TEE if it is implemented correctly.
+Some TEEs may have some watchdog scheme to observe REE state and mitigate DoS
+attacks against it but most TEEs don't have have such capability.
+
+In some other scenarios, the compromised REE may ask a TEEP Broker
+to make repeated requests to a TEEP Agent in a TEE to install or
+uninstall a TA.  A TA installation or uninstallation request constructed
+by the TEEP Broker or REE will be rejected by the TEEP Agent because
+the request won't have the correct signature from a TAM to pass the request
+signature validation.
+
+This can become a DoS attack by exhausting resources in a TEE with
+repeated requests. In general, a DoS attack threat exists when the REE
+is compromised, and a DoS attack can happen to other resources. The TEEP
+architecture doesn't change this.
+
+A compromised REE might also request initiating the full flow of
+installation of TAs that are not necessary.
+It may also repeat a prior legitimate TA installation
+request. A TEEP Agent implementation is responsible for ensuring that it
+can recognize and decline such repeated requests. It is also responsible
+for protecting the resource usage allocated for TA management.
 
 ## Compromised CA
 
@@ -1044,6 +1086,26 @@ any intermediate CA for TEE device certificates.
 
 Device TEEs are responsible for validating the supplied TAM certificates
 to determine that the TAM is trustworthy.
+
+## Malicious TA Removal
+
+It is possible that a rogue developer distributes a malicious Untrusted 
+Application and intends to get a malicious TA installed. It's the responsibility
+of the TAM to not install malicious trusted apps in the first place. The TEEP
+architecture allows a TEEP Agent to decide which TAMs it trusts via Trust Anchors, 
+and delegates the TA authenticity check to the TAMs it trusts.
+
+It may happen that a TA was previously considered trustworthy but is later
+found to be buggy or compromised.
+In this case, the TAM can initiate the removal of the TA by notifying devices 
+to remove the TA (and potentially the REE or device owner to remove any Untrusted 
+Application that depend on the TA).  If the TAM does not currently have a
+connection to the TEEP Agent on a device, such a notification would occur
+the next time connectivity does exist.
+
+Furthermore the policy in the Verifier in an attestation process can be
+updated so that any evidence that includes the malicious TA would result
+in an attestation failure.
 
 ## Certificate Renewal
 
