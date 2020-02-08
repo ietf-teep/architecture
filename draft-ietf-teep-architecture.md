@@ -100,7 +100,7 @@ TEE. Typically, application components are chosen to execute inside a TEE becaus
 those application components perform security sensitive operations or operate on
 sensitive data. An application component running inside a TEE is referred to as a
 Trusted Application (TA), while an application running outside any TEE
-is referred to as an Untrusted Application.
+is referred to as an Untrusted Application (UTA).
 
 TEEs use hardware enforcement combined with software protection to secure TAs and
 its data. TEEs typically offer a more limited set of services to TAs than is 
@@ -249,7 +249,7 @@ The following terms are used:
     that one TA cannot read, modify or delete the data and code of another
     TA.
 
-  - Untrusted Application: An application running in a Rich Execution
+  - Untrusted Application (UTA): An application running in a Rich Execution
     Environment.
 
 # Use Cases
@@ -619,33 +619,30 @@ complex than Cases 2 and 3.
 ## Entity Relations
 
 This architecture leverages asymmetric cryptography to
-authenticate a device to a TAM. Additionally, a TEE
-in a device authenticates a TAM and TA signer. The
+authenticate a device to a TAM. Additionally, a TEE Agent
+in a device authenticates a TAM. The
 provisioning of Trust Anchors to a device may be different from
 one use case to the other. A Device Administrator may want to
 have the capability to control what TAs are allowed.
-A device manufacturer enables verification of the TA signers
-and TAM providers; it may embed a list of default Trust Anchors
-that the signer of an allowed TA's signer certificate should
-chain to. A Device Administrator may choose to accept a subset
-of the allowed TAs via consent or action of downloading.
+A device manufacturer enables verification of the TAM providers and TA binary signers; 
+it may embed a list of default Trust Anchors into the TEEP Agent
+and TEE for TAM trust verification and TA signer verification. 
 
 ~~~~
  (App Developer)    (App Store)    (TAM)     (Device with TEE)  (CAs)
-        |                                            |
-        |                               --> (Embedded TEE cert) <--
-        |                                            |
-        | <------------------------------  Get an app cert ----- |
-        |                           | <--  Get a TAM cert ------ |
-        |
+        |               |           |                |            |
+        |               |           |      (Embedded TEE cert) <--|
+        |               |           |                |            |
+        | <--- Get an app cert -----------------------------------|
+        |               |           | <-- Get a TAM cert ---------|
+        |               |           |                |            |
 1. Build two apps:
-   Untrusted Application
-       TA
-        |
-        |
-   Untrusted Application -- 2a. --> | ----- 3. Install -------> |
-       TA ----------------- 2b. Supply ------> | 4. Messaging-->|
-        |                           |          |                |
+     UTA, TA
+        |               |           |                |            |
+        |               |           |                |            |
+       UTA -- 2a. --->  | --- 3. Install ----------> |            |
+       TA --- 2b. Supply ---------> | 4. Messaging-->|            |
+        |               |           |                |            |
 ~~~~
 {: #experience title="Developer Experience"}
 
@@ -664,8 +661,12 @@ that will be managing the TA in various devices. At step 3, a user
 will go to an Application Store to download the Untrusted
 Application. The Untrusted Application will trigger TA installation
 by initiating communication with a TAM. This is the step 4. The Untrusted Application
-will get messages from TAM, and interacts with device
-TEE via an Agent.
+will interact with TAM via a TEEP Broker that faciliates communications between a TAM
+and the TEEP Agent in TEE.
+
+Some TA installation might ask for a user's consent. On the other hand,
+a Device Administrator may choose what Untrusted Applications and related TAs to
+be installed. A user consention flow is out of scope of the TEEP architecture.
 
 The main components consist of a set of standard messages created by
 a TAM to deliver TA management commands to a device,
