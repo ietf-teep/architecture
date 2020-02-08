@@ -172,7 +172,7 @@ The following terms are used:
     by not allowing the manufacturer or carrier's Trust Anchor to be
     removed or disabled.
 
-  - Device Administrator (DA):  An entity that is responsible for administration
+  - Device Administrator:  An entity that is responsible for administration
     of a device, which could be the device owner. A Device Administrator
     has privileges on the device to install and remove Untrusted Applications and TAs,
     approve or reject Trust Anchors, and approve or reject TA developers,
@@ -181,7 +181,7 @@ The following terms are used:
     Anchors on the device. Although a Device Administrator may have
     privileges and device-specific controls to locally administer a
     device, the Device Administrator may choose to remotely
-    administrate a device through a TAM.
+    administer a device through a TAM.
 
   - Device Owner: A device is always owned by someone. In some cases, it is common for
     the (primary) device user to also own the device, making the device
@@ -202,7 +202,8 @@ The following terms are used:
     and governed by a typical OS (e.g., Linux, Windows, Android, iOS),
     potentially in conjunction with other supporting operating systems
     and hypervisors; it is outside of any TEE. This environment and
-    applications running on it are considered untrusted.
+    applications running on it are considered untrusted (or more precisely,
+    less trusted than the TEE).
 
   - Trust Anchor: As defined in {{RFC6024}} and {{I-D.ietf-suit-manifest}},
     "A trust anchor represents an authoritative entity via a public
@@ -226,7 +227,7 @@ The following terms are used:
     on devices that requires the use of one or more Trusted Applications.
 
   - Trusted Application Manager (TAM): An entity that manages Trusted
-    Applications (TAs) running in different TEEs of various devices.
+    Applications (TAs) running in TEEs of various devices.
 
   - Trusted Execution Environment (TEE): An execution environment that enforces that
     only authorized code can execute within the TEE, and data used by that
@@ -320,9 +321,9 @@ all components are further explained in the following paragraphs.
 ~~~~
 {: #notionalarch title="Notional Architecture of TEEP"}
 
-  - TA developers and Device Administrators (DA) utilize the services
+  - TA developers and Device Administrators utilize the services
     of a TAM to manage TAs on devices. TA developers do not directly interact
-    with devices. DAs may elect to use a TAM for remote administration
+    with devices. Device Administators may elect to use a TAM for remote administration
     of TAs instead of managing each device directly.
 
   - Trusted Application Manager (TAM):  A TAM is responsible for performing lifecycle
@@ -331,7 +332,7 @@ all components are further explained in the following paragraphs.
     deletion of TAs, and may include, for example, over-the-air
     updates to keep a TA developer's TAs up-to-date and clean up when a version
     should be removed. TAMs may provide services that make it easier for
-    TA developers or DAs to use the TAM's service to manage multiple devices,
+    TA developers or Device Administators to use the TAM's service to manage multiple devices,
     although that is not required of a TAM.
 
     The TAM performs its management of TAs through an
