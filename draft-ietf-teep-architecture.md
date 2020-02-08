@@ -840,11 +840,9 @@ the TAM.
 
 ## TEEP Broker Implementation Consideration
 
-   A Provider should consider methods of distribution, scope and
-   concurrency on devices and runtime options when implementing a TEEP Broker.
-   Several non-exhaustive options are discussed below.  Providers are
-   encouraged to take advantage of the latest communication and platform
-   capabilities to offer the best user experience.
+   TEEP Broker implementers should consider methods of distribution, scope and
+   concurrency on devices and runtime options.
+   Several non-exhaustive options are discussed below. 
 
 ### TEEP Broker APIs
 
