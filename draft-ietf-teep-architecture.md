@@ -898,7 +898,7 @@ of a series of claims, to another entity (a Verifier), and provides sufficient p
 are true. Different Verifiers may have different standards for attestation proofs
 and not all attestations are acceptable to every verifier.  A third entity (a Relying Party)
 can then use "attestation results", in the form of another series of claims, from a Verifier
-to make authorization decisions.
+to make authorization decisions.  (See {{I-D.ietf-rats-architecture}} for more discussion.)
 
 In TEEP, as depicted in {{attestation-roles}},
 the primary purpose of an attestation is to allow a device (the Attester) to prove to a TAM
