@@ -750,7 +750,7 @@ certificate from a CA that is listed in the Trust Anchor Store of the TEEP Agent
 
 A TEE determines whether TA binaries are allowed to execute by 
 verifying whether the TA's signer chains up to a certificate
-in a list in the TEE's Trust Anchor Store. The list
+in the TEE's Trust Anchor Store. The list
 is typically preloaded at manufacturing time, and
 can be updated using the TEEP protocol if the TEE has some form of
 "Trust Anchor Manager TA" that has Trust Anchors in its configuration data.
