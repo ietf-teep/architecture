@@ -387,13 +387,13 @@ all components are further explained in the following paragraphs.
     Administrators to install the TAM's certificate in their devices as
     an after-market-action.
 
-  - TEEP Broker: The TEEP Broker is an application component running in a Rich
+  - TEEP Broker: A TEEP Broker is an application component running in a Rich
     Execution Environment (REE) that enables the message protocol exchange between
-    a TAM and a TEE in a device. The TEEP Broker does not process messages
+    a TAM and a TEE in a device. A TEEP Broker does not process messages
     on behalf of a TEE, but merely is responsible for relaying messages from
     the TAM to the TEE, and for returning the TEE's responses to the TAM.
 
-  - TEEP Agent: the TEEP Agent is a processing module running inside
+  - TEEP Agent: The TEEP Agent is a processing module running inside
     a TEE that receives TAM requests (typically relayed via a TEEP Broker
     that runs in an REE). A TEEP Agent in the TEE may parse requests or
     forward requests to other processing modules in a TEE, which is
@@ -420,7 +420,7 @@ there might be multiple TEEP Brokers in the Rich Execution Environment,
 where each TEEP Broker communicates with one or more TEEs associated with it.
 
 It is up to the Rich Execution Environment and the Untrusted Applications
-how they select the correct TEEP broker. Verification that the correct TA
+how they select the correct TEEP Broker. Verification that the correct TA
 has been reached then becomes a matter of properly verifying TA attestations,
 which are unforgeable. 
 
