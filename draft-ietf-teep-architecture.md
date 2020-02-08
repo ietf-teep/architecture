@@ -477,9 +477,11 @@ need for TEEP Brokers to share information on installed TAs or resource usage.
 
 ## Multiple TAMs and Relationship to TAs
 
-As shown in {{notionalarch2}}, the TEEP Broker provides connections from the TEE and
-the Untrusted Application to one or more TAMs. The selection of which TAM to communicate with is
-dependent on information from the Untrusted Application and is directly related to the TA.
+As shown in {{notionalarch2}}, a TEEP Broker provides communication between 
+one or more TEEP Agents and
+one or more TAMs. The selection of which TAM to communicate with might be
+made with or without input from an Untrusted Application, but is ultimately
+the decision of a TEEP Agent.
 
 Each TA is digitally signed, protecting its integrity, and linking
 the TA back to the signer. The signer is usually the TA software author, but in
