@@ -335,7 +335,7 @@ all components are further explained in the following paragraphs.
     although that is not required of a TAM.
 
     The TAM performs its management of TAs through an
-    interaction with a device's TEEP Broker, that relays
+    interaction with a device's TEEP Broker, which relays
     messages between a TAM and a TEEP Agent running inside the TEE. As shown in
     {{notionalarch}}, the TAM cannot directly contact the TEEP Agent, but must
     wait for the TEEP Broker to contact
