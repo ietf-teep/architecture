@@ -999,12 +999,6 @@ certificate/private key belongs to the TA developer, and may be self-signed
 responsibility of the TAM to only allow verified TAs from trusted TA developers
 into the system.
 
-## One TA Multiple TA Developers Case
-
-A TA for multiple TA developers must have a different identifier per TA developer.  They
-should appear as different TAs when they are installed in the same
-device.
-
 ## Broker Trust Model
 
 The architecture enables the TAM to communicate, via a TEEP Broker, with the device's TEE
