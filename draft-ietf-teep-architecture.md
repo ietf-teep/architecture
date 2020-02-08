@@ -831,8 +831,7 @@ A compliant TEEP protocol should include a target TEE identifier for a
 TEEP Broker when multiple TEEs are present.
 
 The Broker relays the response messages generated from a TEEP Agent in a TEE
-to the TAM. The Broker is not expected to handle any network connection
-with an application or TAM.
+to the TAM.
 
 The Broker only needs to return a (transport) error message if the TEE is
 not reachable for some reason.  Other errors are represented as
