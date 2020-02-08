@@ -468,7 +468,7 @@ Each TA is digitally signed, protecting its integrity, and linking
 the TA back to the signer. The signer is usually the TA software author, but in
 some cases might be another party that the TA software author trusts, or a party
 to whom the code has been licensed (in which case the same code might
-be signed by multiple parties and distributed as if it were different TAs).
+be signed by multiple licensees and distributed as if it were different TAs).
 
 A TA author or signer selects one or more TAMs
 through which to offer their TA(s), and communicates the TA(s) to the TAM.
