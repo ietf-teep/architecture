@@ -355,9 +355,8 @@ all components are further explained in the following paragraphs.
 
     A TAM may be publicly available for use by many TA developers, or a TAM
     may be private, and accessible by only one or a limited number of
-    TA developers. It is expected that manufacturers and carriers will run their
-    own private TAM. Another example of a private TAM is a TAM running as
-    a Software-as-a-Service (SaaS) hosted by a TA developer.
+    TA developers. It is expected that many manufacturers and carriers will run their
+    own private TAM.
 
     A TA developer or Device Administrator chooses a particular TAM based on
     whether the TAM is trusted by a device or set of devices. The
