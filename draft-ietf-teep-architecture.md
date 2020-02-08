@@ -701,7 +701,7 @@ The TEE key pair and certificate are used for authenticating the TEE
 to a remote TAM.  Often, the key pair is burned into the TEE by the
 TEE manufacturer and the key pair and its certificate are valid for
 the expected lifetime of the TEE.  A TAM provider is responsible
-for configuring its TAM with the manufacturer certificates or CAs
+for configuring the TAM's Trust Anchor Store with the manufacturer certificates or CAs
 that are used to sign TEE keys. This is discussed further in
 {{trust-anchors-in-tam}} below.
 
@@ -737,7 +737,7 @@ This can be addressed outside of this architecture document.
 
 Before a TAM can begin operation in the marketplace to support a
 device with a particular TEE, it must obtain a TAM
-certificate from a CA that is listed in the Trust Anchor store of the TEE.
+certificate from a CA that is listed in the Trust Anchor Store of the TEEP Agent.
 
 ## Trust Anchors in a TEE {#trust-anchors-in-tee}
 
