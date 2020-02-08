@@ -354,8 +354,9 @@ all components are further explained in the following paragraphs.
     TAM is trusted by a device if the TAM's public key is, or chains up to,
     an authorized
     Trust Anchor in the device. A TA developer or Device Administrator may run
-    their own TAM, however the devices they wish to manage must include
-    this TAM's pubic key in the Trust Anchor list.
+    their own TAM, but the devices they wish to manage must include
+    this TAM's public key/certificate, or a certificate it chains up to, in the
+    Trust Anchor list.
 
     A TA developer or Device Administrator is free to utilize multiple TAMs. This may
     be required for a TA developer to manage multiple different types of devices
