@@ -1022,6 +1022,35 @@ sensitive data.
 The TEE implementation provides protection of data on the device.  It
 is the responsibility of the TAM to protect data on its servers.
 
+## Compromised REE
+
+It is possible that the REE of a device is compromised. If the REE is
+compromised, several DoS attack may be launched. The compromised REE
+may terminate TEEP Broker such that TEEP transactions cannot reach TEE.
+However, the REE side cannot access anything in the TEE if it is
+implemented correctly while a DoS attack cannot be prevented.
+Some TEE may have some scheme to detect REE state and mitigate DoS
+attack against it but most TEEs don't have have such capability.
+
+In some other scenario, the compromised REE may request TEEP Broker
+to make repeated requests to the TEEP Agent in the TEE to install or
+uninstall a TA.  A TA installation or uninstallation request constructed
+by the TEEP Broker or REE will be rejected by the TEEP Agent because
+the request won't have the correct signature to pass the request
+signature validation.
+
+This can become a DoS attack by exhausting resources in TEE with
+repeated requests. In general, DoS attack threat exists when the REE
+is compromised, and DoS attack can happen to other resources. TEEP
+architecture doesn't change this for REE.
+
+The compromised REE may also request to initiate the full flow of
+installation of TAs that are not necessary with the TEEP Broker and
+TEEP Agent. It may also repeat a prior legitimate TA installation
+request message. The TEE implementation should make sure that it
+can recognize and decline the repeated requests. It should also
+protect the resource usage allocated for TA management.
+
 ## Compromised CA
 
 A root CA for TAM certificates might get compromised.  Some TEE Trust
