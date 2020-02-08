@@ -1024,12 +1024,6 @@ techniques whereas the device may only support one.
 
 # Security Considerations
 
-## One TA Multiple TA Developers Case
-
-A TA for multiple TA developers must have a different identifier per TA developer.  They
-should appear as different TAs when they are installed in the same
-device.
-
 ## Broker Trust Model
 
 The architecture enables the TAM to communicate, via a TEEP Broker, with the device's TEE
