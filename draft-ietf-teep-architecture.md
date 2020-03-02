@@ -1100,7 +1100,15 @@ the next time connectivity does exist.
 
 Furthermore the policy in the Verifier in an attestation process can be
 updated so that any evidence that includes the malicious TA would result
-in an attestation failure.
+in an attestation failure.  There is, however, a time window during which
+a malicious TA might be able to operate successfully, which is the
+validity time of the previous attestation result.  For example, if
+the Verifier in {{attestation-roles}} is updated to treat a previously
+valid TA as no longer trustworthy, any attestation result it previously
+generated saying that the TA is valid will continue to be used until
+the attestation result expires.  As such, the TAM's Verifier should
+take into account the acceptable time window when generating attestation
+results. See {{I-D.ietf-rats-architecture}} for further discussion.
 
 ## Certificate Renewal
 
