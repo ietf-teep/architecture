@@ -1020,7 +1020,8 @@ to manage TAs.  Since the TEEP Broker runs in a potentially vulnerable REE,
 the TEEP Broker could, however, be (or be infected by) malware.
 As such, all TAM messages are signed and sensitive
 data is encrypted such that the TEEP Broker cannot modify or capture
-sensitive data.
+sensitive data, but the TEEP Broker can still conduct DoS attacks
+as discussed in {{compromised-ree}}.
 
 A TEEP Agent in a TEE is responsible for protecting against potential attacks
 from a compromised 
@@ -1036,11 +1037,12 @@ scheme such as a threshold on repeated requests or number of TAs that can be ins
 The TEE implementation provides protection of data on the device.  It
 is the responsibility of the TAM to protect data on its servers.
 
-## Compromised REE
+## Compromised REE {#compromised-ree}
 
 It is possible that the REE of a device is compromised. If the REE is
 compromised, several DoS attacks may be launched. The compromised REE
-may terminate the TEEP Broker such that TEEP transactions cannot reach the TEE.
+may terminate the TEEP Broker such that TEEP transactions cannot reach the TEE,
+or might drop or delay messages between a TAM and a TEEP Agent.
 However, while a DoS attack cannot be prevented, the REE cannot access
 anything in the TEE if it is implemented correctly.
 Some TEEs may have some watchdog scheme to observe REE state and mitigate DoS
