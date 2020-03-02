@@ -727,8 +727,15 @@ Note that personalization data is not included in the table above.
 The use of personalization data is dependent on how TAs are used 
 and what their security requirements are. 
 
-The TEE key pair and certificate are used for authenticating the TEE
-to a remote TAM.  Often, the key pair is burned into the TEE by the
+TEEP requests from a TAM to a TEEP Agent can be encrypted with the
+TEE public key (to provide confidentiality), and are then signed with the TAM
+private key (for authentication and integrity protection).
+Conversely, TEEP responses from a TEEP Agent to a TAM can be encrypted
+with the TAM public key, and are then signed with the TEE private key.  
+
+The TEE key pair and certificate are thus used for authenticating the TEE
+to a remote TAM, and for sending private data to the TEE.  Often, 
+the key pair is burned into the TEE by the
 TEE manufacturer and the key pair and its certificate are valid for
 the expected lifetime of the TEE.  A TAM provider is responsible
 for configuring the TAM's Trust Anchor Store with the manufacturer certificates or CAs
@@ -736,7 +743,8 @@ that are used to sign TEE keys. This is discussed further in
 {{trust-anchors-in-tam}} below.
 
 The TAM key pair and certificate are used for authenticating a TAM
-to a remote TEE.  A TAM provider is responsible for acquiring a
+to a remote TEE, and for sending private data to the TAM.  A TAM provider
+is responsible for acquiring a
 certificate from a CA that is trusted by the TEEs it manages. This
 is discussed further in {{trust-anchors-in-teep-agent}} below.
 
