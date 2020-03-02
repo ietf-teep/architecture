@@ -165,7 +165,7 @@ Note: The TA developer requires the help of a TAM to provision
 the Trusted Applications to remote devices and the TEEP protocol exchanges
 messages between a TAM and a TEEP Agent via a TEEP Broker. 
     
-#  Terminology
+#  Terminology {#terminology}
 
 The following terms are used:
 
@@ -214,7 +214,7 @@ The following terms are used:
     potentially in conjunction with other supporting operating systems
     and hypervisors; it is outside of any TEE. This environment and
     applications running on it are considered untrusted (or more precisely,
-    less trusted than the TEE).
+    less trusted than a TEE).
 
   - Trust Anchor: As defined in {{RFC6024}} and {{I-D.ietf-suit-manifest}},
     "A trust anchor represents an authoritative entity via a public
@@ -392,7 +392,10 @@ all components are further explained in the following paragraphs.
     a TAM and a TEE in a device. A TEEP Broker does not process messages
     on behalf of a TEE, but merely is responsible for relaying messages from
     the TAM to the TEE, and for returning the TEE's responses to the TAM.
-    In devices with no REE, the TEEP Broker would be absent and instead the
+    In devices with no REE (e.g., a microcontroller where all code runs
+    in an environment that meets the definition of a Trusted Execution
+    Environment in {{terminology}}), the TEEP Broker would be absent and
+    instead the
     TEEP protocol transport would be implemented inside the TEE itself.
 
   - TEEP Agent: The TEEP Agent is a processing module running inside
