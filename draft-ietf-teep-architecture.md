@@ -485,6 +485,10 @@ one or more TAMs. The selection of which TAM to communicate with might be
 made with or without input from an Untrusted Application, but is ultimately
 the decision of a TEEP Agent.
 
+A TEEP Agent is assumed to be able to determine, for any given TA,
+whether that TA is installed (or minimally, is running) in a TEE with
+which the TEEP Agent is associated.
+
 Each TA is digitally signed, protecting its integrity, and linking
 the TA back to the signer. The signer is usually the TA software author, but in
 some cases might be another party that the TA software author trusts, or a party
