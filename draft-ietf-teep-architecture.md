@@ -64,7 +64,7 @@ informative:
 --- abstract
 
 A Trusted Execution Environment (TEE) is an environment that
-enforces that only authorized code can execute within that environment,
+enforces that any code within that environment cannot be tampered with,
 and that any data used by such code cannot be read or tampered with
 by any code outside that environment.
 This architecture document motivates the design and standardization
@@ -89,8 +89,9 @@ concern to its owner, but a compromise of a banking application raises
 even greater concerns.
 
 The Trusted Execution Environment (TEE) concept is designed to execute
-applications in a protected environment that enforces that only authorized 
-code can execute within that environment, and that any data used by such code 
+applications in a protected environment that enforces that any code 
+within that environment cannot be tampered with, 
+and that any data used by such code 
 cannot be read or tampered with by any code outside that environment,
 including by a commodity operating system (if present).
 
