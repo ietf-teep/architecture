@@ -1,7 +1,7 @@
 ---
 title: Trusted Execution Environment Provisioning (TEEP) Architecture
 abbrev: TEEP Architecture
-docname: draft-ietf-teep-architecture-07
+docname: draft-ietf-teep-architecture-08
 category: info
 
 ipr: pre5378Trust200902
