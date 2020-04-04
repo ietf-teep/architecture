@@ -880,7 +880,7 @@ the TAM.
    concurrency on devices and runtime options.
    Several non-exhaustive options are discussed below. 
 
-### TEEP Broker APIs
+### TEEP Broker APIs {#apis}
 
 The following conceptual APIs exist from a TEEP Broker to a TEEP Agent:
 
@@ -1114,7 +1114,9 @@ In this case, the TAM can initiate the removal of the TA by notifying devices
 to remove the TA (and potentially the REE or device owner to remove any Untrusted 
 Application that depend on the TA).  If the TAM does not currently have a
 connection to the TEEP Agent on a device, such a notification would occur
-the next time connectivity does exist.
+the next time connectivity does exist.  That is, to recover, the TEEP Agent
+must be able to reach out to the TAM, for example whenever the 
+RequestPolicyCheck API ({{apis}}) is invoked by a timer or other event.
 
 Furthermore the policy in the Verifier in an attestation process can be
 updated so that any evidence that includes the malicious TA would result
