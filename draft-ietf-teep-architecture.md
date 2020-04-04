@@ -1062,7 +1062,7 @@ or might drop or delay messages between a TAM and a TEEP Agent.
 However, while a DoS attack cannot be prevented, the REE cannot access
 anything in the TEE if it is implemented correctly.
 Some TEEs may have some watchdog scheme to observe REE state and mitigate DoS
-attacks against it but most TEEs don't have have such capability.
+attacks against it but most TEEs don't have such a capability.
 
 In some other scenarios, the compromised REE may ask a TEEP Broker
 to make repeated requests to a TEEP Agent in a TEE to install or
