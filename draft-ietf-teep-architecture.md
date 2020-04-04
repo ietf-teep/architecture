@@ -567,8 +567,8 @@ together or are provided separately, and this has implications to the management
 the TAs in a TEE. In addition to the Untrusted Application and TA(s), the TA(s) and/or TEE may require
 some additional data to personalize the TA to the TA developer or the device or a user.
 This personalization data is dependent on the TEE, the TA, and the TA developer; an example of
-personalization data might be a secret symmetric key used by the TA to communicate with the TA developer. The
-personalization data must be encrypted to preserve the confidentiality of potentially
+personalization data might be a secret symmetric key used by the TA to communicate with the TA developer. Implementations must support encryption of
+personalization data to preserve the confidentiality of potentially
 sensitive data contained within it. Other than this requirement to support confidentiality,
 the TEEP architecture places no limitations or requirements on the personalization data.
 
