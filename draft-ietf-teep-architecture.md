@@ -735,11 +735,12 @@ Note that personalization data is not included in the table above.
 The use of personalization data is dependent on how TAs are used 
 and what their security requirements are. 
 
-TEEP requests from a TAM to a TEEP Agent can be encrypted with the
-TEE public key (to provide confidentiality), and are then signed with the TAM
+TEEP requests from a TAM to a TEEP Agent can be signed with the TAM
 private key (for authentication and integrity protection).
-Conversely, TEEP responses from a TEEP Agent to a TAM can be encrypted
-with the TAM public key, and are then signed with the TEE private key.  
+Conversely, TEEP responses from a TEEP Agent to a TAM can be 
+signed with the TEE private key. For encryption of the personalization
+data and the TA binary, the TA developer has to use public keys 
+unique to the TEE.
 
 The TEE key pair and certificate are thus used for authenticating the TEE
 to a remote TAM, and for sending private data to the TEE.  Often, 
@@ -780,12 +781,13 @@ document.
 
 Before a TAM can begin operation in the marketplace to support a
 device with a particular TEE, it must obtain a TAM
-certificate from a CA that is listed in the Trust Anchor Store of the TEEP Agent.
+certificate from a CA or the raw public key of a TAM that is listed in 
+the Trust Anchor Store of the TEEP Agent.
 
 ## Trust Anchors in a TEE {#trust-anchors-in-tee}
 
 A TEE determines whether TA binaries are allowed to execute by 
-verifying whether the TA's signer chains up to a certificate
+verifying whether their signature can be verified by certificate(s)
 in the TEE's Trust Anchor Store. The list
 is typically preloaded at manufacturing time, and
 can be updated using the TEEP protocol if the TEE has some form of
@@ -798,12 +800,12 @@ for any other TA, as discussed in {{trust-anchors-in-teep-agent}}.
 The Trust Anchor Store in a TAM consists of a list of Trust Anchors, which
 are certificates that sign various device TEE certificates.  A TAM will accept a
 device for TA management if the TEE in the device uses a TEE certificate
-that is chained to a certificate that the TAM trusts.
+that is chained to a certificate that the TAM trusts, is contained in a whitelist, 
+is not found on a blacklist and fulfills other policy criteria.
 
 ## Scalability
 
-This architecture uses a PKI, although self-signed certificates are
-also permitted.  Trust Anchors exist on the devices to
+This architecture uses a PKI. Trust Anchors exist on the devices to
 enable the TEE to authenticate TAMs and TA signers, and TAMs use Trust Anchors to
 authenticate TEEs.  When a PKI is used, many intermediate CA
 certificates can chain to a root certificate, each of which can issue
