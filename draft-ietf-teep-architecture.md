@@ -116,7 +116,9 @@ one or more TEEs into their devices depending on market needs.
 
 To simplify the life of TA developers interacting
 with TAs in a TEE, an interoperable protocol for managing TAs running in
-different TEEs of various devices is needed. In this TEE ecosystem,
+different TEEs of various devices is needed. This software update protocol 
+needs to make sure that compatible trusted and untrusted components of an 
+application are installed on the correct device. In this TEE ecosystem,
 there often arises a need for an external trusted party to verify the
 identity, claims, and rights of TA developers, devices, and their TEEs.
 This trusted third party is the Trusted Application Manager (TAM).
@@ -151,20 +153,19 @@ the following problems:
     device's TEE is the most up-to-date version, and if not, update the
     TA in the TEE.
 
-  - A TA developer wants to remove a confidential TA from a device's TEE if
-    the TA developer is no longer offering such TAs or the TAs are
-    being revoked from a particular user (or device).  For example,
-    if a subscription or contract for a particular service has expired,
-    or a payment by the user has not been completed or has been rescinded.
+  - A Device Administrator wants to remove a TA from a device's TEE if
+    the TA developer is no longer maintaining that TA, when the TA has
+    been revoked or is not used for other reasons anymore (e.g. due to an 
+    expired subscription).
 
   - A TA developer wants to define the relationship
     between cooperating TAs under the TA developer's control, and 
     specify whether
     the TAs can communicate, share data, and/or share key material.
 
-Note: The TA developer requires the help of a TAM to provision
-the Trusted Applications to remote devices and the TEEP protocol exchanges
-messages between a TAM and a TEEP Agent via a TEEP Broker. 
+Note: The TA developer requires the help of a TAM and most likely the Device 
+Administrator to provision the Trusted Applications to remote devices and 
+the TEEP protocol exchanges messages between a TAM and a TEEP Agent via a TEEP Broker. 
     
 #  Terminology {#terminology}
 
