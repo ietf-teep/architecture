@@ -101,7 +101,11 @@ TEE. Typically, application components are chosen to execute inside a TEE becaus
 those application components perform security sensitive operations or operate on
 sensitive data. An application component running inside a TEE is referred to as a
 Trusted Application (TA), while an application running outside any TEE
-is referred to as an Untrusted Application.
+is referred to as an Untrusted Application. In the example of a banking application, 
+code that relates to the authentication protocol could reside in a TA while the 
+application logic including HTTP protocol parsing would be contained in the 
+Untrusted Application. The precise code split is ultimately a decision of the 
+developer based on the asssets he or she tries to protected according to the thread model. 
 
 TEEs use hardware enforcement combined with software protection to secure TAs and
 its data. TEEs typically offer a more limited set of services to TAs than is 
