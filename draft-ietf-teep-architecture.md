@@ -1,7 +1,7 @@
 ---
 title: Trusted Execution Environment Provisioning (TEEP) Architecture
 abbrev: TEEP Architecture
-docname: draft-ietf-teep-architecture-08
+docname: draft-ietf-teep-architecture-09
 category: info
 
 ipr: pre5378Trust200902
@@ -52,6 +52,7 @@ informative:
   I-D.ietf-suit-manifest:
   I-D.ietf-teep-otrp-over-http:
   RFC7696:
+  RFC5280: 
   GPTEE:
     author:
       org: GlobalPlatform
