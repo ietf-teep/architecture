@@ -236,7 +236,14 @@ The following terms are used:
   - Trusted Application (TA): An application component that runs in a TEE.
 
   - Trusted Application (TA) Developer: An entity that wishes to provide functionality
-    on devices that requires the use of one or more Trusted Applications.
+    on devices that requires the use of one or more Trusted Applications. The TA 
+    developer signs the TA binary (or more precisely the manifest 
+    associated with the TA binary) or uses another entity on his or her behalf to get 
+    the TA binary signed. (A TA binary may also be encrypted by the developer or 
+    by some third party service.) For editorial reasons, we assume that the TA 
+    developer signs the TA binary ignoring the distinction between the binary and the 
+    manifest and by simplifying the case where the TA developer outsources signing 
+    and encryption to a third party entity or service. 
 
   - Trusted Application Manager (TAM): An entity that manages Trusted
     Applications (TAs) running in TEEs of various devices.
@@ -407,16 +414,19 @@ all components are further explained in the following paragraphs.
     corresponding to a TAM request is sent back to the TAM, again typically
     relayed via a TEEP Broker.
 
-  - Certification Authority (CA):  Certificate-based credentials used for
-    authenticating a device, a TAM and a TA developer.  A device embeds a list
-    of root certificates (Trust Anchors), from trusted CAs that a TAM
-    will be validated against.  A TAM will remotely attest a device
-    by checking whether a device comes with a certificate from a CA
-    that the TAM trusts.  The CAs do not need to be the same;
+  - Certification Authority (CA): A CA is an entity that issues digital 
+    certificates (especially X.509 certificates) and vouches for the 
+    binding between the data items in a certificate {{RFC4949}}. 
+    Certificates are then used for authenticating a device, a TAM and a 
+    TA developer. A device embeds a list of root certificates (Trust Anchors), 
+    from trusted CAs that a TAM will be validated against.  A TAM will remotely 
+    attest a device by checking whether a device comes with a certificate 
+    from a CA that the TAM trusts.  The CAs do not need to be the same;
     different CAs can be chosen by each TAM, and different device CAs
     can be used by different device manufacturers.
 
 ## Multiple TEEs in a Device
+
 Some devices might implement multiple TEEs. 
 In these cases, there might be one shared TEEP Broker 
 that interacts with all the TEEs in the device.
@@ -494,8 +504,8 @@ whether that TA is installed (or minimally, is running) in a TEE with
 which the TEEP Agent is associated.
 
 Each TA is digitally signed, protecting its integrity, and linking
-the TA back to the signer. The signer is usually the TA software author, but in
-some cases might be another party that the TA software author trusts, or a party
+the TA back to the signer. The signer is usually the TA developer, but in
+some cases might be another party that the TA developer trusts, or a party
 to whom the code has been licensed (in which case the same code might
 be signed by multiple licensees and distributed as if it were different TAs).
 
@@ -503,7 +513,7 @@ A TA author or signer selects one or more TAMs
 through which to offer their TA(s), and communicates the TA(s) to the TAM.
 In this document, we use the term "TA developer" to refer to the entity that
 selects a TAM and publishes a signed TA to it, independent of whether the
-publishing entity is the TA software author or the signer or both.
+publishing entity is the TA developer or the signer or both.
 
 The TA developer chooses TAMs based upon the markets into which the TAM can provide access. There
 may be TAMs that provide services to specific types of devices, or device
@@ -566,10 +576,10 @@ the device can vary. The variations depend on whether the Untrusted Application 
 together or are provided separately, and this has implications to the management of
 the TAs in a TEE. In addition to the Untrusted Application and TA(s), the TA(s) and/or TEE may require
 some additional data to personalize the TA to the TA developer or the device or a user.
-This personalization data is dependent on the TEE, the TA, and the TA developer; an example of
-personalization data might be a secret symmetric key used by the TA to communicate with the TA developer. Implementations must support encryption of
+This personalization data may dependent on the type of TEE, a particular TEE instance, the TA, the TA developer and even the user of the device; an example of
+personalization data might be a secret symmetric key used by the TA to communicate with some service. Implementations must support encryption of
 personalization data to preserve the confidentiality of potentially
-sensitive data contained within it. Other than this requirement to support confidentiality,
+sensitive data contained within it. Other than this requirement to support confidentiality and integrity,
 the TEEP architecture places no limitations or requirements on the personalization data.
 
 There are three possible cases for bundling of an Untrusted Application, TA(s), and personalization data:
@@ -592,9 +602,9 @@ for more details). The TEEP Agent is responsible for handling any installation s
 that need to be performed inside the TEE, such as decryption of private TA binaries or
 personalization data.
 
-### Examples of Application Delivery Mechanisms in Existing TEEs
-
 In order to better understand these cases, it is helpful to review actual implementations of TEEs and their application delivery mechanisms.
+
+### Example: Application Delivery Mechanisms in Intel SGX
 
 In Intel Software Guard Extensions (SGX), the Untrusted Application and TA are typically bundled into the
 same package (Case 2). The TA 
@@ -621,6 +631,8 @@ would pass this data to the installed Untrusted Application, which would in turn
 to the SGX enclave (TA). This complexity is due to the fact that each SGX enclave is separate
 and does not have direct communication to other SGX enclaves.
 
+### Example: Application Delivery Mechanisms in Arm TrustZone
+
 In Arm TrustZone for A- and R-class devices, the Untrusted Application and TA may or may not be
 bundled together. This differs from SGX since in TrustZone the TA lifetime is not inherently tied
 to a specific Untrused Application process lifetime as occurs in SGX.  A TA is loaded by
@@ -638,9 +650,9 @@ in a device authenticates a TAM. The
 provisioning of Trust Anchors to a device may be different from
 one use case to the other. A Device Administrator may want to
 have the capability to control what TAs are allowed.
-A device manufacturer enables verification of the TAM providers and TA binary signers; 
+A device manufacturer enables verification by one or more TAMs and by TA developers; 
 it may embed a list of default Trust Anchors into the TEEP Agent
-and TEE for TAM trust verification and TA signer verification. 
+and TEE for TAM and TA trust verification. 
 
 ~~~~
  (App Developers)   (App Store)   (TAM)      (Device with TEE)  (CAs)
@@ -661,9 +673,9 @@ and TEE for TAM trust verification and TA signer verification.
 ~~~~
 {: #experience title="Developer Experience"}
 
-Note that {{experience}} shows the TA developer as a TA signer.
-The TA signer is either the same as the TA developer, or is a related
-entity trusted to sign the developer's TAs.
+Note that {{experience}} shows the view from a TA developer point of view. 
+The TA developer signs the TA or is a related
+entity trusted to sign the developer-created TAs.
 
 {{experience}} shows an example where the same developer builds
 two applications: 1) an Untrusted Application; 2) a TA
@@ -804,7 +816,7 @@ that is chained to a certificate that the TAM trusts.
 
 This architecture uses a PKI, although self-signed certificates are
 also permitted.  Trust Anchors exist on the devices to
-enable the TEE to authenticate TAMs and TA signers, and TAMs use Trust Anchors to
+enable the TEE to authenticate TAMs and TA developer, and TAMs use Trust Anchors to
 authenticate TEEs.  When a PKI is used, many intermediate CA
 certificates can chain to a root certificate, each of which can issue
 many certificates.  This makes the protocol highly scalable.  New
