@@ -251,9 +251,10 @@ The following terms are used:
     that one TA cannot read, modify or delete the data and code of another
     TA.
 
-  - Untrusted Application: An application running in a Rich Execution
-    Environment.
-
+  - Untrusted Application: An application running in a REE. An Untrusted Application 
+    may be dependent on one or more TAs.
+  
+  
 # Use Cases
 
 ## Payment
