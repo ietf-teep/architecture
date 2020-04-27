@@ -92,16 +92,18 @@ The Trusted Execution Environment (TEE) concept is designed to execute
 applications in a protected environment that enforces that any code 
 within that environment cannot be tampered with, 
 and that any data used by such code 
-cannot be read or tampered with by any code outside that environment in the 
-Rich Execution Environment (REE), including by a commodity operating system (if present).
+cannot be read or tampered with by any code outside that environment, 
+including by a commodity operating system (if present).
+In a system with multiple TEEs, this also means that code in one TEE 
+cannot be read or tampered with by code in the other TEE.
 
 This separation reduces the possibility
 of a successful attack on application components and the data contained inside the
 TEE. Typically, application components are chosen to execute inside a TEE because
 those application components perform security sensitive operations or operate on
 sensitive data. An application component running inside a TEE is referred to as a
-Trusted Application (TA), while an application running outside any TEE
-is referred to as an Untrusted Application.
+Trusted Application (TA), while an application running outside any TEE, i.e. in the 
+Rich Execution Environment (REE), is referred to as an Untrusted Application.
 
 TEEs use hardware enforcement combined with software protection to secure TAs and
 its data. TEEs typically offer a more limited set of services to TAs than is 
