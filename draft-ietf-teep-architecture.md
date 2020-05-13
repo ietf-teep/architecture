@@ -621,7 +621,7 @@ would pass this data to the installed Untrusted Application, which would in turn
 to the SGX enclave (TA). This complexity is due to the fact that each SGX enclave is separate
 and does not have direct communication to other SGX enclaves.
 
-In Arm TrustZone for A- and R-class devices, the Untrusted Application and TA may or may not be
+In Arm TrustZone for A-class devices, the Untrusted Application and TA may or may not be
 bundled together. This differs from SGX since in TrustZone the TA lifetime is not inherently tied
 to a specific Untrused Application process lifetime as occurs in SGX.  A TA is loaded by
 a trusted OS running in the TEE, where the trusted OS is separate from the OS in the REE.
