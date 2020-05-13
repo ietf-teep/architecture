@@ -596,7 +596,9 @@ some additional data to personalize the TA to the TA developer or the device or 
 This personalization data may dependent on the type of TEE, a particular TEE instance, the TA, the TA developer and even the user of the device; an example of
 personalization data might be a secret symmetric key used by the TA to communicate with some service. Implementations must support encryption of
 personalization data to preserve the confidentiality of potentially
-sensitive data contained within it. Other than this requirement to support confidentiality and integrity,
+sensitive data contained within it and support integrity protection
+of the personalization data.
+Other than the requirement to support confidentiality and integrity protection,
 the TEEP architecture places no limitations or requirements on the personalization data.
 
 There are three possible cases for bundling of an Untrusted Application, TA(s), and personalization data:
