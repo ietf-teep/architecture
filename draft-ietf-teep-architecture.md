@@ -155,7 +155,7 @@ the following problems:
 
   - A Device Administrator wants to remove a TA from a device's TEE if
     the TA developer is no longer maintaining that TA, when the TA has
-    been revoked or is not used for other reasons anymore (e.g. due to an 
+    been revoked or is not used for other reasons anymore (e.g., due to an 
     expired subscription).
 
   - A TA developer wants to define the relationship
