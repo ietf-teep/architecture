@@ -950,8 +950,7 @@ be colocated in the TAM). However, it should be recognized
 that not all Verifiers may be able to process all proprietary forms of attestation evidence.
 Similarly, the TEEP protocol is agnostic as to the format of attestation results, and the protocol
 (if any) used between the TAM and a verifier, as long as they convey at least the required set of claims
-in some format. Note that the respective attestation algorithms are not defined in TEEP protocol itself; the 
-impact is on the attestation token format used within the TEEP protocol instead. 
+in some format. Note that the respective attestation algorithms are not defined in the TEEP protocol itself; see {{I-D.ietf-rats-architecture}} and {{I-D.ietf-teep-protocol}} for more discussion. 
 
 The assumptions that may apply to an attestation have to do with the quality of the attestation
 and the quality and security provided by the TEE, the device, the manufacturer, or others involved
