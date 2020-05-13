@@ -105,7 +105,7 @@ is referred to as an Untrusted Application. In the example of a banking applicat
 code that relates to the authentication protocol could reside in a TA while the 
 application logic including HTTP protocol parsing could be contained in the 
 Untrusted Application. The precise code split is ultimately a decision of the 
-developer based on the asssets he or she tries to protected according to the thread model. 
+developer based on the assets he or she wants to protect according to the threat model. 
 
 TEEs use hardware enforcement combined with software protection to secure TAs and
 its data. TEEs typically offer a more limited set of services to TAs than is 
