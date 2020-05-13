@@ -1,7 +1,7 @@
 ---
 title: Trusted Execution Environment Provisioning (TEEP) Architecture
 abbrev: TEEP Architecture
-docname: draft-ietf-teep-architecture-08
+docname: draft-ietf-teep-architecture-09
 category: info
 
 ipr: pre5378Trust200902
@@ -52,6 +52,7 @@ informative:
   I-D.ietf-suit-manifest:
   I-D.ietf-teep-otrp-over-http:
   RFC7696:
+  RFC5280: 
   GPTEE:
     author:
       org: GlobalPlatform
@@ -1029,9 +1030,9 @@ higher-end IoT devices, creates the need for different
 mandatory-to-implement algorithms already from the start.
 
 Crypto agility in TEEP concerns the use of symmetric as well
-as asymmetric algorithms. Symmetric algorithms are used for
-encryption of content whereas the asymmetric algorithms are
-mostly used for signing messages.
+as asymmetric algorithms. In the context of TEEP symmetric algorithms 
+are used for encryption of TA binaries and personalization data 
+whereas the asymmetric algorithms are mostly used for signing messages.
 
 In addition to the use of cryptographic algorithms in TEEP, there
 is also the need to make use of different attestation technologies.
@@ -1148,7 +1149,7 @@ the attestation result expires.  As such, the TAM's Verifier should
 take into account the acceptable time window when generating attestation
 results. See {{I-D.ietf-rats-architecture}} for further discussion.
 
-## Certificate Renewal
+## Certificate Expiry and Renewal 
 
 TEE device certificates are expected to be long lived, longer
 than the lifetime of a device.  A TAM certificate usually has a
@@ -1157,7 +1158,11 @@ rekeyed certificates.  The root CA certificates for a TAM, which are
 embedded into the Trust Anchor store in a device, should have long
 lifetimes that don't require device Trust Anchor update.  On the
 other hand, it is imperative that OEMs or device providers plan for
-support of Trust Anchor update in their shipped devices.
+support of Trust Anchor update in their shipped devices. 
+
+For those cases where TEE devices are given certificates for which no good
+expiration date can be assigned the recommendations in Section 4.1.2.5 of 
+RFC 5280 {{RFC5280}} are applicable.  
 
 ## Keeping Secrets from the TAM
 
