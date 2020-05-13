@@ -117,7 +117,7 @@ one or more TEEs into their devices depending on market needs.
 To simplify the life of TA developers interacting
 with TAs in a TEE, an interoperable protocol for managing TAs running in
 different TEEs of various devices is needed. This software update protocol 
-needs to make sure that compatible trusted and untrusted components of an 
+needs to make sure that compatible trusted and untrusted components (if any) of an 
 application are installed on the correct device. In this TEE ecosystem,
 there often arises a need for an external trusted party to verify the
 identity, claims, and rights of TA developers, devices, and their TEEs.
