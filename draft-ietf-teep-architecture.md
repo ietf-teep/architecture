@@ -103,7 +103,7 @@ sensitive data. An application component running inside a TEE is referred to as 
 Trusted Application (TA), while an application running outside any TEE
 is referred to as an Untrusted Application. In the example of a banking application, 
 code that relates to the authentication protocol could reside in a TA while the 
-application logic including HTTP protocol parsing would be contained in the 
+application logic including HTTP protocol parsing could be contained in the 
 Untrusted Application. The precise code split is ultimately a decision of the 
 developer based on the asssets he or she tries to protected according to the thread model. 
 
