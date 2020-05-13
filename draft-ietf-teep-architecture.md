@@ -962,13 +962,13 @@ of extended claims.
 
 As of the writing of this specification, device and TEE attestations have not been standardized
 across the market. Different devices, manufacturers, and TEEs support different attestation
-algorithms and mechanisms. In order for TEEP to be inclusive, it is agnostic to the format of evidence,
+protocols. In order for TEEP to be inclusive, it is agnostic to the format of evidence,
 allowing proprietary or standardized formats to be used between a TEE and a verifier (which may or may not
 be colocated in the TAM). However, it should be recognized
 that not all Verifiers may be able to process all proprietary forms of attestation evidence.
 Similarly, the TEEP protocol is agnostic as to the format of attestation results, and the protocol
 (if any) used between the TAM and a verifier, as long as they convey at least the required set of claims
-in some format.
+in some format. Note that the respective attestation algorithms are not defined in the TEEP protocol itself; see {{I-D.ietf-rats-architecture}} and {{I-D.ietf-teep-protocol}} for more discussion. 
 
 There are a number of considerations that need to be considered when appraising
 evidence provided by a TEE, including:
