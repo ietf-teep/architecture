@@ -61,6 +61,16 @@ informative:
     target: https://globalplatform.org/specs-library/tee-system-architecture-v1-1/
     seriesinfo:
       GlobalPlatform: GPD_SPE_009
+  SGX:
+    author:
+      org: Intel
+    title: "Intel(R) Software Guard Extensions (Intel (R) SGX)"
+    target: https://www.intel.com/content/www/us/en/architecture-and-technology/software-guard-extensions.html
+  TrustZone:
+    author:
+      org: Arm
+    title: "Arm TrustZone Technology"
+    target: https://developer.arm.com/ip-products/security-ip/trustzone
 
 --- abstract
 
@@ -423,7 +433,7 @@ all components are further explained in the following paragraphs.
 
   - Certification Authority (CA): A CA is an entity that issues digital 
     certificates (especially X.509 certificates) and vouches for the 
-    binding between the data items in a certificate {{RFC4949}}. 
+    binding between the data items in a certificate {{?RFC4949}}. 
     Certificates are then used for authenticating a device, a TAM and a 
     TA developer. A device embeds a list of root certificates (Trust Anchors), 
     from trusted CAs that a TAM will be validated against.  A TAM will remotely 
@@ -437,7 +447,7 @@ all components are further explained in the following paragraphs.
 Some devices might implement multiple TEEs. 
 In these cases, there might be one shared TEEP Broker 
 that interacts with all the TEEs in the device.
-However, some TEEs (for example, SGX) present themselves as separate containers
+However, some TEEs (for example, SGX {{SGX}}) present themselves as separate containers
 within memory without a controlling manager within the TEE. As such,
 there might be multiple TEEP Brokers in the Rich Execution Environment,
 where each TEEP Broker communicates with one or more TEEs associated with it.
@@ -640,7 +650,7 @@ and does not have direct communication to other SGX enclaves.
 
 ### Example: Application Delivery Mechanisms in Arm TrustZone
 
-In Arm TrustZone for A- and R-class devices, the Untrusted Application and TA may or may not be
+In Arm TrustZone {{TrustZone}} for A- and R-class devices, the Untrusted Application and TA may or may not be
 bundled together. This differs from SGX since in TrustZone the TA lifetime is not inherently tied
 to a specific Untrused Application process lifetime as occurs in SGX.  A TA is loaded by
 a trusted OS running in the TEE, where the trusted OS is separate from the OS in the REE.
