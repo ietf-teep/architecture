@@ -800,8 +800,8 @@ for any other TA, as discussed in {{trust-anchors-in-teep-agent}}.
 The Trust Anchor Store in a TAM consists of a list of Trust Anchors, which
 are certificates that sign various device TEE certificates.  A TAM will accept a
 device for TA management if the TEE in the device uses a TEE certificate
-that is chained to a certificate that the TAM trusts, is contained in a whitelist, 
-is not found on a blacklist and fulfills other policy criteria.
+that is chained to a certificate or raw public key that the TAM trusts, is contained in an allow list, 
+is not found on a block list, and/or fulfills any other policy criteria.
 
 ## Scalability
 
