@@ -787,7 +787,7 @@ the Trust Anchor Store of the TEEP Agent.
 ## Trust Anchors in a TEE {#trust-anchors-in-tee}
 
 A TEE determines whether TA binaries are allowed to execute by 
-verifying whether their signature can be verified by certificate(s)
+verifying whether their signature can be verified using certificate(s) or raw public key(s)
 in the TEE's Trust Anchor Store. The list
 is typically preloaded at manufacturing time, and
 can be updated using the TEEP protocol if the TEE has some form of
