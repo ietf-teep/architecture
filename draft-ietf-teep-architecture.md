@@ -944,7 +944,7 @@ of extended claims.
 
 As of the writing of this specification, device and TEE attestations have not been standardized
 across the market. Different devices, manufacturers, and TEEs support different attestation
-algorithms and mechanisms (for example, ECDSA-based attestation, Direct Anonymous Attestation (DAA), Enhanced Privacy ID (EPID), a Privacy CA). In order for TEEP to be inclusive, it is agnostic to the format of evidence,
+algorithms). In order for TEEP to be inclusive, it is agnostic to the format of evidence,
 allowing proprietary or standardized formats to be used between a TEE and a verifier (which may or may not
 be colocated in the TAM). However, it should be recognized
 that not all Verifiers may be able to process all proprietary forms of attestation evidence.
