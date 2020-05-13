@@ -964,34 +964,29 @@ Similarly, the TEEP protocol is agnostic as to the format of attestation results
 (if any) used between the TAM and a verifier, as long as they convey at least the required set of claims
 in some format.
 
-The assumptions that may apply to an attestation have to do with the quality of the attestation
-and the quality and security provided by the TEE, the device, the manufacturer, or others involved
-in the device or TEE ecosystem.
-Some of the assumptions that might apply to an attestations include (this may not be a comprehensive list):
+There are a number of considerations that need to be considered when appraising
+evidence provided by a TEE, including:
 
-  - Assumptions regarding the security measures a manufacturer takes when provisioning keys into devices/TEEs;
+  - What security measures a manufacturer takes when provisioning keys into devices/TEEs;
 
-  - Assumptions regarding what hardware and software components have access to the attestation keys of the TEE;
+  - What hardware and software components have access to the attestation keys of the TEE;
 
-  - Assumptions related to the source or local verification of claims within an attestation prior to a TEE signing a set of claims;
+  - The source or local verification of claims within an attestation prior to a TEE signing a set of claims;
 
-  - Assumptions regarding the level of protection afforded to attestation keys against exfiltration, modification, and side channel attacks;
+  - The level of protection afforded to attestation keys against exfiltration, modification, and side channel attacks;
 
-  - Assumptions regarding the limitations of use applied to TEE attestation keys;
+  - The limitations of use applied to TEE attestation keys;
 
-  - Assumptions regarding the processes in place to discover or detect TEE breeches; and
+  - The processes in place to discover or detect TEE breeches; and
 
-  - Assumptions regarding the revocation and recovery process of TEE attestation keys.
+  - The revocation and recovery process of TEE attestation keys.
 
-TAMs must be comfortable with the assumptions that are inherently part of any attestation result
-they accept. Alternatively, any TAM may choose not to accept an attestation result generated using evidence from
-a particular manufacturer or device's TEE based on the inherent assumptions. The choice and policy
-decisions are left up to the particular TAM.
-
-Some TAMs may require additional claims in order to properly authorize a device or TEE. These
-additional claims may help clear up any assumptions for which the TAM wants to alleviate. The specific
+Some TAMs may require additional claims in order to properly authorize a device or TEE.  The specific
 format for these additional claims are outside the scope of this specification, but the TEEP protocol
 allows these additional claims to be included in the attestation messages.
+
+For more discussion of the attestation and appraisal process, see
+the RATS Architecture {{I-D.ietf-rats-architecture}}.
 
 ## Information Required in TEEP Claims
 
@@ -1007,7 +1002,7 @@ allows these additional claims to be included in the attestation messages.
     such as the hardware, firmware, and software version of the TEE, as applicable by the
     TEE type. TEE manufacturer information for the TEE is
     required in order to disambiguate the same TEE type created by different manufacturers and
-    resolve potential assumptions around manufacturer provisioning, keying and support for the TEE.
+    address considerations around manufacturer provisioning, keying and support for the TEE.
 
   - Freshness Proof: A claim that includes freshness information must be included, such as a nonce
     or timestamp.
