@@ -1092,10 +1092,15 @@ for protecting the resource usage allocated for TA management.
 
 ## Compromised CA
 
-A root CA for TAM certificates might get compromised.  Some TEE Trust
-Anchor update mechanism is expected from device OEMs.  TEEs are
-responsible for validating certificate revocation about
-a TAM certificate chain.
+A root CA for TAM certificates might get compromised. A Trust Anchor other 
+than a root CA certificate may also be compromised. Some TEE Trust
+Anchor update mechanism is expected from device OEMs. 
+
+TEEs are responsible for validating certificate revocation about
+a TAM certificate chain, including the TAM certificate and the 
+intermediate CA certificates up to the root certificate. This 
+will detect a compromised TAM certificate and also any compromised 
+intermediate CA certificate.
 
 If the root CA of some TEE device certificates is compromised, these
 devices might be rejected by a TAM, which is a decision of the TAM
