@@ -1,7 +1,7 @@
 ---
 title: Trusted Execution Environment Provisioning (TEEP) Architecture
 abbrev: TEEP Architecture
-docname: draft-ietf-teep-architecture-08
+docname: draft-ietf-teep-architecture-09
 category: info
 
 ipr: pre5378Trust200902
@@ -51,7 +51,9 @@ informative:
   I-D.ietf-rats-architecture:
   I-D.ietf-suit-manifest:
   I-D.ietf-teep-otrp-over-http:
+  I-D.ietf-teep-protocol:
   RFC7696:
+  RFC5280: 
   GPTEE:
     author:
       org: GlobalPlatform
@@ -60,6 +62,16 @@ informative:
     target: https://globalplatform.org/specs-library/tee-system-architecture-v1-1/
     seriesinfo:
       GlobalPlatform: GPD_SPE_009
+  SGX:
+    author:
+      org: Intel
+    title: "Intel(R) Software Guard Extensions (Intel (R) SGX)"
+    target: https://www.intel.com/content/www/us/en/architecture-and-technology/software-guard-extensions.html
+  TrustZone:
+    author:
+      org: Arm
+    title: "Arm TrustZone Technology"
+    target: https://developer.arm.com/ip-products/security-ip/trustzone
 
 --- abstract
 
@@ -102,8 +114,14 @@ of a successful attack on application components and the data contained inside t
 TEE. Typically, application components are chosen to execute inside a TEE because
 those application components perform security sensitive operations or operate on
 sensitive data. An application component running inside a TEE is referred to as a
-Trusted Application (TA), while an application running outside any TEE, i.e., in the 
-Rich Execution Environment (REE), is referred to as an Untrusted Application.
+Trusted Application (TA), while an application running outside any TEE, i.e., in the
+Rich Execution Environment (REE),
+is referred to as an Untrusted Application. In the example of a banking application, 
+code that relates to the authentication protocol could reside in a TA while the 
+application logic including HTTP protocol parsing could be contained in the 
+Untrusted Application.  In addition, processing of credit card numbers or account balances could be done in a TA as it is sensitive data.
+The precise code split is ultimately a decision of the 
+developer based on the assets he or she wants to protect according to the threat model. 
 
 TEEs use hardware enforcement combined with software protection to secure TAs and
 its data. TEEs typically offer a more limited set of services to TAs than is 
@@ -118,7 +136,9 @@ one or more TEEs into their devices depending on market needs.
 
 To simplify the life of TA developers interacting
 with TAs in a TEE, an interoperable protocol for managing TAs running in
-different TEEs of various devices is needed. In this TEE ecosystem,
+different TEEs of various devices is needed. This software update protocol 
+needs to make sure that compatible trusted and untrusted components (if any) of an 
+application are installed on the correct device. In this TEE ecosystem,
 there often arises a need for an external trusted party to verify the
 identity, claims, and rights of TA developers, devices, and their TEEs.
 This trusted third party is the Trusted Application Manager (TAM).
@@ -153,20 +173,19 @@ the following problems:
     device's TEE is the most up-to-date version, and if not, update the
     TA in the TEE.
 
-  - A TA developer wants to remove a confidential TA from a device's TEE if
-    the TA developer is no longer offering such TAs or the TAs are
-    being revoked from a particular user (or device).  For example,
-    if a subscription or contract for a particular service has expired,
-    or a payment by the user has not been completed or has been rescinded.
+  - A Device Administrator wants to remove a TA from a device's TEE if
+    the TA developer is no longer maintaining that TA, when the TA has
+    been revoked or is not used for other reasons anymore (e.g., due to an 
+    expired subscription).
 
   - A TA developer wants to define the relationship
     between cooperating TAs under the TA developer's control, and 
     specify whether
     the TAs can communicate, share data, and/or share key material.
 
-Note: The TA developer requires the help of a TAM to provision
-the Trusted Applications to remote devices and the TEEP protocol exchanges
-messages between a TAM and a TEEP Agent via a TEEP Broker. 
+Note: The TA developer requires the help of a TAM and most likely the Device 
+Administrator to provision the Trusted Applications to remote devices and 
+the TEEP protocol exchanges messages between a TAM and a TEEP Agent via a TEEP Broker. 
     
 #  Terminology {#terminology}
 
@@ -238,7 +257,14 @@ The following terms are used:
   - Trusted Application (TA): An application component that runs in a TEE.
 
   - Trusted Application (TA) Developer: An entity that wishes to provide functionality
-    on devices that requires the use of one or more Trusted Applications.
+    on devices that requires the use of one or more Trusted Applications. The TA 
+    developer signs the TA binary (or more precisely the manifest 
+    associated with the TA binary) or uses another entity on his or her behalf to get 
+    the TA binary signed. (A TA binary may also be encrypted by the developer or 
+    by some third party service.) For editorial reasons, we assume that the TA 
+    developer signs the TA binary ignoring the distinction between the binary and the 
+    manifest and by simplifying the case where the TA developer outsources signing 
+    and encryption to a third party entity or service. 
 
   - Trusted Application Manager (TAM): An entity that manages Trusted
     Applications (TAs) running in TEEs of various devices.
@@ -409,20 +435,23 @@ all components are further explained in the following paragraphs.
     corresponding to a TAM request is sent back to the TAM, again typically
     relayed via a TEEP Broker.
 
-  - Certification Authority (CA):  Certificate-based credentials used for
-    authenticating a device, a TAM and a TA developer.  A device embeds a list
-    of root certificates (Trust Anchors), from trusted CAs that a TAM
-    will be validated against.  A TAM will remotely attest a device
-    by checking whether a device comes with a certificate from a CA
-    that the TAM trusts.  The CAs do not need to be the same;
+  - Certification Authority (CA): A CA is an entity that issues digital 
+    certificates (especially X.509 certificates) and vouches for the 
+    binding between the data items in a certificate {{?RFC4949}}. 
+    Certificates are then used for authenticating a device, a TAM and a 
+    TA developer. A device embeds a list of root certificates (Trust Anchors), 
+    from trusted CAs that a TAM will be validated against.  A TAM will remotely 
+    attest a device by checking whether a device comes with a certificate 
+    from a CA that the TAM trusts.  The CAs do not need to be the same;
     different CAs can be chosen by each TAM, and different device CAs
     can be used by different device manufacturers.
 
 ## Multiple TEEs in a Device
+
 Some devices might implement multiple TEEs. 
 In these cases, there might be one shared TEEP Broker 
 that interacts with all the TEEs in the device.
-However, some TEEs (for example, SGX) present themselves as separate containers
+However, some TEEs (for example, SGX {{SGX}}) present themselves as separate containers
 within memory without a controlling manager within the TEE. As such,
 there might be multiple TEEP Brokers in the REE,
 where each TEEP Broker communicates with one or more TEEs associated with it.
@@ -496,8 +525,8 @@ whether that TA is installed (or minimally, is running) in a TEE with
 which the TEEP Agent is associated.
 
 Each TA is digitally signed, protecting its integrity, and linking
-the TA back to the signer. The signer is usually the TA software author, but in
-some cases might be another party that the TA software author trusts, or a party
+the TA back to the signer. The signer is usually the TA developer, but in
+some cases might be another party that the TA developer trusts, or a party
 to whom the code has been licensed (in which case the same code might
 be signed by multiple licensees and distributed as if it were different TAs).
 
@@ -505,7 +534,7 @@ A TA author or signer selects one or more TAMs
 through which to offer their TA(s), and communicates the TA(s) to the TAM.
 In this document, we use the term "TA developer" to refer to the entity that
 selects a TAM and publishes a signed TA to it, independent of whether the
-publishing entity is the TA software author or the signer or both.
+publishing entity is the TA developer or the signer or both.
 
 The TA developer chooses TAMs based upon the markets into which the TAM can provide access. There
 may be TAMs that provide services to specific types of devices, or device
@@ -568,10 +597,12 @@ the device can vary. The variations depend on whether the Untrusted Application 
 together or are provided separately, and this has implications to the management of
 the TAs in a TEE. In addition to the Untrusted Application and TA(s), the TA(s) and/or TEE may require
 some additional data to personalize the TA to the TA developer or the device or a user.
-This personalization data is dependent on the TEE, the TA, and the TA developer; an example of
-personalization data might be a secret symmetric key used by the TA to communicate with the TA developer. Implementations must support encryption of
+This personalization data may dependent on the type of TEE, a particular TEE instance, the TA, the TA developer and even the user of the device; an example of
+personalization data might be a secret symmetric key used by the TA to communicate with some service. Implementations must support encryption of
 personalization data to preserve the confidentiality of potentially
-sensitive data contained within it. Other than this requirement to support confidentiality,
+sensitive data contained within it and support integrity protection
+of the personalization data.
+Other than the requirement to support confidentiality and integrity protection,
 the TEEP architecture places no limitations or requirements on the personalization data.
 
 There are three possible cases for bundling of an Untrusted Application, TA(s), and personalization data:
@@ -594,9 +625,9 @@ for more details). The TEEP Agent is responsible for handling any installation s
 that need to be performed inside the TEE, such as decryption of private TA binaries or
 personalization data.
 
-### Examples of Application Delivery Mechanisms in Existing TEEs
-
 In order to better understand these cases, it is helpful to review actual implementations of TEEs and their application delivery mechanisms.
+
+### Example: Application Delivery Mechanisms in Intel SGX
 
 In Intel Software Guard Extensions (SGX), the Untrusted Application and TA are typically bundled into the
 same package (Case 2). The TA 
@@ -623,7 +654,9 @@ would pass this data to the installed Untrusted Application, which would in turn
 to the SGX enclave (TA). This complexity is due to the fact that each SGX enclave is separate
 and does not have direct communication to other SGX enclaves.
 
-In Arm TrustZone for A- and R-class devices, the Untrusted Application and TA may or may not be
+### Example: Application Delivery Mechanisms in Arm TrustZone
+
+In Arm TrustZone {{TrustZone}} for A-class devices, the Untrusted Application and TA may or may not be
 bundled together. This differs from SGX since in TrustZone the TA lifetime is not inherently tied
 to a specific Untrused Application process lifetime as occurs in SGX.  A TA is loaded by
 a trusted OS running in the TEE, where the trusted OS is separate from the OS in the REE.
@@ -640,7 +673,7 @@ in a device authenticates a TAM. The
 provisioning of Trust Anchors to a device may be different from
 one use case to the other. A Device Administrator may want to
 have the capability to control what TAs are allowed.
-A device manufacturer enables verification of the TAM providers and TA binary signers; 
+A device manufacturer enables verification by one or more TAMs and by TA developers; 
 it may embed a list of default Trust Anchors into the TEEP Agent
 and TEE for TAM trust verification and TA signature verification. 
 
@@ -663,9 +696,9 @@ and TEE for TAM trust verification and TA signature verification.
 ~~~~
 {: #experience title="Developer Experience"}
 
-Note that {{experience}} shows the TA developer as a TA signer.
-The TA signer is either the same as the TA developer, or is a related
-entity trusted to sign the developer's TAs.
+Note that {{experience}} shows the view from a TA developer point of view. 
+The TA developer signs the TA or is a related
+entity trusted to sign the developer-created TAs.
 
 {{experience}} shows an example where the same developer builds
 two applications: 1) an Untrusted Application; 2) a TA
@@ -806,7 +839,7 @@ that is chained to a certificate that the TAM trusts.
 
 This architecture uses a PKI, although self-signed certificates are
 also permitted.  Trust Anchors exist on the devices to
-enable the TEE to authenticate TAMs and TA signers, and TAMs use Trust Anchors to
+enable the TEE to authenticate TAMs and TA developer, and TAMs use Trust Anchors to
 authenticate TEEs.  When a PKI is used, many intermediate CA
 certificates can chain to a root certificate, each of which can issue
 many certificates.  This makes the protocol highly scalable.  New
@@ -946,42 +979,37 @@ of extended claims.
 
 As of the writing of this specification, device and TEE attestations have not been standardized
 across the market. Different devices, manufacturers, and TEEs support different attestation
-algorithms and mechanisms. In order for TEEP to be inclusive, it is agnostic to the format of evidence,
+protocols. In order for TEEP to be inclusive, it is agnostic to the format of evidence,
 allowing proprietary or standardized formats to be used between a TEE and a verifier (which may or may not
 be colocated in the TAM). However, it should be recognized
 that not all Verifiers may be able to process all proprietary forms of attestation evidence.
 Similarly, the TEEP protocol is agnostic as to the format of attestation results, and the protocol
 (if any) used between the TAM and a verifier, as long as they convey at least the required set of claims
-in some format.
+in some format. Note that the respective attestation algorithms are not defined in the TEEP protocol itself; see {{I-D.ietf-rats-architecture}} and {{I-D.ietf-teep-protocol}} for more discussion. 
 
-The assumptions that may apply to an attestation have to do with the quality of the attestation
-and the quality and security provided by the TEE, the device, the manufacturer, or others involved
-in the device or TEE ecosystem.
-Some of the assumptions that might apply to an attestations include (this may not be a comprehensive list):
+There are a number of considerations that need to be considered when appraising
+evidence provided by a TEE, including:
 
-  - Assumptions regarding the security measures a manufacturer takes when provisioning keys into devices/TEEs;
+  - What security measures a manufacturer takes when provisioning keys into devices/TEEs;
 
-  - Assumptions regarding what hardware and software components have access to the attestation keys of the TEE;
+  - What hardware and software components have access to the attestation keys of the TEE;
 
-  - Assumptions related to the source or local verification of claims within an attestation prior to a TEE signing a set of claims;
+  - The source or local verification of claims within an attestation prior to a TEE signing a set of claims;
 
-  - Assumptions regarding the level of protection afforded to attestation keys against exfiltration, modification, and side channel attacks;
+  - The level of protection afforded to attestation keys against exfiltration, modification, and side channel attacks;
 
-  - Assumptions regarding the limitations of use applied to TEE attestation keys;
+  - The limitations of use applied to TEE attestation keys;
 
-  - Assumptions regarding the processes in place to discover or detect TEE breeches; and
+  - The processes in place to discover or detect TEE breeches; and
 
-  - Assumptions regarding the revocation and recovery process of TEE attestation keys.
+  - The revocation and recovery process of TEE attestation keys.
 
-TAMs must be comfortable with the assumptions that are inherently part of any attestation result
-they accept. Alternatively, any TAM may choose not to accept an attestation result generated using evidence from
-a particular manufacturer or device's TEE based on the inherent assumptions. The choice and policy
-decisions are left up to the particular TAM.
-
-Some TAMs may require additional claims in order to properly authorize a device or TEE. These
-additional claims may help clear up any assumptions for which the TAM wants to alleviate. The specific
+Some TAMs may require additional claims in order to properly authorize a device or TEE.  The specific
 format for these additional claims are outside the scope of this specification, but the TEEP protocol
 allows these additional claims to be included in the attestation messages.
+
+For more discussion of the attestation and appraisal process, see
+the RATS Architecture {{I-D.ietf-rats-architecture}}.
 
 ## Information Required in TEEP Claims
 
@@ -997,7 +1025,7 @@ allows these additional claims to be included in the attestation messages.
     such as the hardware, firmware, and software version of the TEE, as applicable by the
     TEE type. TEE manufacturer information for the TEE is
     required in order to disambiguate the same TEE type created by different manufacturers and
-    resolve potential assumptions around manufacturer provisioning, keying and support for the TEE.
+    address considerations around manufacturer provisioning, keying and support for the TEE.
 
   - Freshness Proof: A claim that includes freshness information must be included, such as a nonce
     or timestamp.
@@ -1018,9 +1046,9 @@ higher-end IoT devices, creates the need for different
 mandatory-to-implement algorithms already from the start.
 
 Crypto agility in TEEP concerns the use of symmetric as well
-as asymmetric algorithms. Symmetric algorithms are used for
-encryption of content whereas the asymmetric algorithms are
-mostly used for signing messages.
+as asymmetric algorithms. In the context of TEEP symmetric algorithms 
+are used for encryption of TA binaries and personalization data 
+whereas the asymmetric algorithms are mostly used for signing messages.
 
 In addition to the use of cryptographic algorithms in TEEP, there
 is also the need to make use of different attestation technologies.
@@ -1087,10 +1115,15 @@ for protecting the resource usage allocated for TA management.
 
 ## Compromised CA
 
-A root CA for TAM certificates might get compromised.  Some TEE Trust
-Anchor update mechanism is expected from device OEMs.  TEEs are
-responsible for validating certificate revocation about
-a TAM certificate chain.
+A root CA for TAM certificates might get compromised. A Trust Anchor other 
+than a root CA certificate may also be compromised. Some TEE Trust
+Anchor update mechanism is expected from device OEMs. 
+
+TEEs are responsible for validating certificate revocation about
+a TAM certificate chain, including the TAM certificate and the 
+intermediate CA certificates up to the root certificate. This 
+will detect a compromised TAM certificate and also any compromised 
+intermediate CA certificate.
 
 If the root CA of some TEE device certificates is compromised, these
 devices might be rejected by a TAM, which is a decision of the TAM
@@ -1132,7 +1165,7 @@ the attestation result expires.  As such, the TAM's Verifier should
 take into account the acceptable time window when generating attestation
 results. See {{I-D.ietf-rats-architecture}} for further discussion.
 
-## Certificate Renewal
+## Certificate Expiry and Renewal 
 
 TEE device certificates are expected to be long lived, longer
 than the lifetime of a device.  A TAM certificate usually has a
@@ -1141,7 +1174,11 @@ rekeyed certificates.  The root CA certificates for a TAM, which are
 embedded into the Trust Anchor store in a device, should have long
 lifetimes that don't require device Trust Anchor update.  On the
 other hand, it is imperative that OEMs or device providers plan for
-support of Trust Anchor update in their shipped devices.
+support of Trust Anchor update in their shipped devices. 
+
+For those cases where TEE devices are given certificates for which no good
+expiration date can be assigned the recommendations in Section 4.1.2.5 of 
+RFC 5280 {{RFC5280}} are applicable.  
 
 ## Keeping Secrets from the TAM
 
