@@ -104,15 +104,18 @@ The Trusted Execution Environment (TEE) concept is designed to execute
 applications in a protected environment that enforces that any code 
 within that environment cannot be tampered with, 
 and that any data used by such code 
-cannot be read or tampered with by any code outside that environment,
+cannot be read or tampered with by any code outside that environment, 
 including by a commodity operating system (if present).
+In a system with multiple TEEs, this also means that code in one TEE 
+cannot be read or tampered with by code in the other TEE.
 
 This separation reduces the possibility
 of a successful attack on application components and the data contained inside the
 TEE. Typically, application components are chosen to execute inside a TEE because
 those application components perform security sensitive operations or operate on
 sensitive data. An application component running inside a TEE is referred to as a
-Trusted Application (TA), while an application running outside any TEE
+Trusted Application (TA), while an application running outside any TEE, i.e., in the
+Rich Execution Environment (REE),
 is referred to as an Untrusted Application. In the example of a banking application, 
 code that relates to the authentication protocol could reside in a TA while the 
 application logic including HTTP protocol parsing could be contained in the 
@@ -190,7 +193,7 @@ The following terms are used:
 
   - Device: A physical piece of hardware that hosts one or more TEEs,
     often along with
-    a Rich Execution Environment. A device contains a default list
+    a REE. A device contains a default list
     of Trust Anchors that identify entities (e.g., TAMs) that are
     trusted by the device. This list is normally set by the device
     manufacturer, and may be governed by the device's network carrier
@@ -284,13 +287,13 @@ The following terms are used:
 ## Payment
 
 A payment application in a mobile device requires high security and
-trust about the hosting device. Payments initiated from a mobile
+trust in the hosting device. Payments initiated from a mobile
 device can use a Trusted Application
 to provide strong identification and proof of transaction.
 
 For a mobile payment application, some biometric identification
 information could also be stored in a TEE. The mobile payment
-application can use such information for unlocking the phone and 
+application can use such information for unlocking the device and 
 for local identification of the user.
 
 A trusted user interface (UI) may be used in a mobile device to
@@ -393,7 +396,7 @@ all components are further explained in the following paragraphs.
     an authorized
     Trust Anchor in the device. A TA developer or Device Administrator may run
     their own TAM, but the devices they wish to manage must include
-    this TAM's public key/certificate, or a certificate it chains up to, in the
+    this TAM's public key/certificate {{RFC5280}}, or a certificate it chains up to, in the
     Trust Anchor list.
 
     A TA developer or Device Administrator is free to utilize multiple TAMs. This may
@@ -450,10 +453,10 @@ In these cases, there might be one shared TEEP Broker
 that interacts with all the TEEs in the device.
 However, some TEEs (for example, SGX {{SGX}}) present themselves as separate containers
 within memory without a controlling manager within the TEE. As such,
-there might be multiple TEEP Brokers in the Rich Execution Environment,
+there might be multiple TEEP Brokers in the REE,
 where each TEEP Broker communicates with one or more TEEs associated with it.
 
-It is up to the Rich Execution Environment and the Untrusted Applications
+It is up to the REE and the Untrusted Applications
 how they select the correct TEEP Broker. Verification that the correct TA
 has been reached then becomes a matter of properly verifying TA attestations,
 which are unforgeable. 
@@ -672,7 +675,7 @@ one use case to the other. A Device Administrator may want to
 have the capability to control what TAs are allowed.
 A device manufacturer enables verification by one or more TAMs and by TA developers; 
 it may embed a list of default Trust Anchors into the TEEP Agent
-and TEE for TAM and TA trust verification. 
+and TEE for TAM trust verification and TA signature verification. 
 
 ~~~~
  (App Developers)   (App Store)   (TAM)      (Device with TEE)  (CAs)
@@ -725,7 +728,7 @@ responds to a TAM's message.
 It should be noted that network communication capability is generally
 not available in TAs in today's TEE-powered devices.  Consequently, Trusted
 Applications generally rely on broker in the REE to provide access to
-nnetwork functionality in the REE.  A broker does not need to know the actual
+network functionality in the REE.  A broker does not need to know the actual
 content of messages to facilitate such access.
 
 Similarly, since the TEEP Agent runs inside a TEE, the TEEP Agent generally
@@ -739,7 +742,7 @@ delivering end-to-end security between a TAM and a TEEP Agent.
 
 {{keys}} summarizes the relationships between various keys and where
 they are stored.  Each public/private key identifies a TA developer, TAM, or TEE,
-and gets a certificate that chains up to some CA.  A list of trusted
+and gets a certificate that chains up to some trust anchor.  A list of trusted
 certificates is then used to check a presented certificate against.
 
 Different CAs can be used for different
@@ -761,7 +764,7 @@ Authenticating TAM    1 per TAM    TEEP requests     TEEP Agent
 Code Signing          1 per TA       TA binary          TEE
                       developer
 ~~~~
-{: #keys title="Keys"}
+{: #keys title="Signature Keys"}
 
 Note that personalization data is not included in the table above. 
 The use of personalization data is dependent on how TAs are used 
@@ -948,7 +951,7 @@ can dynamically download and install a Broker on-demand.
 # Attestation
 Attestation is the process through which one entity (an Attester) presents "evidence", in the form
 of a series of claims, to another entity (a Verifier), and provides sufficient proof that the claims
-are true. Different Verifiers may have different standards for attestation proofs
+are true. Different Verifiers may require different degrees of confidence in attestation proofs
 and not all attestations are acceptable to every verifier.  A third entity (a Relying Party)
 can then use "attestation results", in the form of another series of claims, from a Verifier
 to make authorization decisions.  (See {{I-D.ietf-rats-architecture}} for more discussion.)
@@ -1033,7 +1036,7 @@ the RATS Architecture {{I-D.ietf-rats-architecture}}.
 # Algorithm and Attestation Agility
 
 RFC 7696 {{RFC7696}} outlines the requirements to migrate from one
-mandatory-to-implement algorithm suite to another over time.
+mandatory-to-implement cryptographic algorithm suite to another over time.
 This feature is also known as crypto agility. Protocol evolution
 is greatly simplified when crypto agility is considered
 during the design of the protocol. In the case of the TEEP
