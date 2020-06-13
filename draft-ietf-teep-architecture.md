@@ -51,6 +51,7 @@ informative:
   I-D.ietf-rats-architecture:
   I-D.ietf-suit-manifest:
   I-D.ietf-teep-otrp-over-http:
+  I-D.ietf-teep-protocol:
   RFC7696:
   RFC5280: 
   GPTEE:
