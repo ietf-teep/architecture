@@ -102,7 +102,7 @@ of a successful attack on application components and the data contained inside t
 TEE. Typically, application components are chosen to execute inside a TEE because
 those application components perform security sensitive operations or operate on
 sensitive data. An application component running inside a TEE is referred to as a
-Trusted Application (TA), while an application running outside any TEE, i.e. in the 
+Trusted Application (TA), while an application running outside any TEE, i.e., in the 
 Rich Execution Environment (REE), is referred to as an Untrusted Application.
 
 TEEs use hardware enforcement combined with software protection to secure TAs and
