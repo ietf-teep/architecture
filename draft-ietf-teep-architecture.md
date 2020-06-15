@@ -254,7 +254,7 @@ The following terms are used:
     a trust anchor store must resist modification against unauthorized
     insertion, deletion, and modification.
 
-  - Trusted Application (TA): An application component that runs in a TEE.
+  - Trusted Application (TA): An application (or, in some implementations, an application component) that runs in a TEE.
 
   - Trusted Application (TA) Developer: An entity that wishes to provide functionality
     on devices that requires the use of one or more Trusted Applications. The TA 
@@ -279,7 +279,7 @@ The following terms are used:
     that one TA cannot read, modify or delete the data and code of another
     TA.
 
-  - Untrusted Application: An application running in a Rich Execution
+  - Untrusted Application: An application that runs in a Rich Execution
     Environment.
 
 # Use Cases
