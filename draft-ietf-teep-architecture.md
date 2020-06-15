@@ -252,7 +252,7 @@ The following terms are used:
     TA.
 
   - Untrusted Application: An application running in a REE. An Untrusted Application 
-    may be dependent on one or more TAs.
+    might depend on one or more TAs.
   
   
 # Use Cases
