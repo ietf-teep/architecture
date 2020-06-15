@@ -210,6 +210,11 @@ The following terms are used:
     by a human being and hence have no device user. Relates to Device Owner
     and Device Administrator.
 
+  - Raw Public Key (RPK): The RPK only consists of the SubjectPublicKeyInfo
+   structure of a PKIX certificate that carries the parameters necessary
+   to describe the public key. Other serialization formats that do not 
+   rely on ASN.1 may also be used. 
+
   - Rich Execution Environment (REE): An environment that is provided
     and governed by a typical OS (e.g., Linux, Windows, Android, iOS),
     potentially in conjunction with other supporting operating systems
