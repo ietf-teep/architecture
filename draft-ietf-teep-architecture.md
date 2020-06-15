@@ -740,7 +740,8 @@ Note that personalization data is not included in the table above.
 The use of personalization data is dependent on how TAs are used 
 and what their security requirements are. 
 
-TEEP requests from a TAM to a TEEP Agent can be signed with the TAM
+TEEP requests from a TAM to a TEEP Agent can be encrypted with a data key that is wrapped with
+the TEE public key (to provide confidentiality), and are then signed with the TAM
 private key (for authentication and integrity protection).
 Conversely, TEEP responses from a TEEP Agent to a TAM can be 
 signed with the TEE private key. For encryption of the personalization
