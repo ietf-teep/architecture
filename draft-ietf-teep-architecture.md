@@ -202,7 +202,7 @@ The following terms are used:
     removed or disabled.
 
   - Device Administrator:  An entity that is responsible for administration
-    of a device, which could be the device owner. A Device Administrator
+    of a device, which could be the Device Owner. A Device Administrator
     has privileges on the device to install and remove Untrusted Applications and TAs,
     approve or reject Trust Anchors, and approve or reject TA developers,
     among possibly other privileges on the device. A Device Administrator can
@@ -252,7 +252,7 @@ The following terms are used:
     store is a set of one or more trust anchors stored in a device.
     A device may have more than one trust anchor store, each of which
     may be used by one or more applications."  As noted in {{I-D.ietf-suit-manifest}},
-    a trust anchor store must resist modification against unauthorized
+    a Trust Anchor Store must resist modification against unauthorized
     insertion, deletion, and modification.
 
   - Trusted Application (TA): An application (or, in some implementations, an application component) that runs in a TEE.
@@ -262,7 +262,7 @@ The following terms are used:
 
   - Trusted Application (TA) Signer: An entity that signs a TA with
     a key that a TEE will trust.  The signer might or might not be the
-    same entity as the developer of the TA.  For example, a TA might
+    same entity as the TA Developer.  For example, a TA might
     be signed (or re-signed) by a Device Administrator if the TEE will
     only trust the Device Administrator.  A TA might also be encrypted,
     if the code is considered confidential.
@@ -398,21 +398,21 @@ all components are further explained in the following paragraphs.
     Trust Anchor in the device. A TA Signer or Device Administrator may run
     their own TAM, but the devices they wish to manage must include
     this TAM's public key/certificate {{RFC5280}}, or a certificate it chains up to, in the
-    Trust Anchor list.
+    Trust Anchor Store.
 
     A TA Signer or Device Administrator is free to utilize multiple TAMs. This may
     be required for managing TAs on multiple different types of devices
     from different manufacturers, or mobile devices on
     different network carriers, since
-    the Trust Anchor list on these different devices may contain different
+    the Trust Anchor Store on these different devices may contain different
     TAMs. A Device Administrator may be able to add their own TAM's
-    public key or certificate to the Trust Anchor list on all their devices,
+    public key or certificate to the Trust Anchor Store on all their devices,
     overcoming this limitation.
 
     Any entity is free to operate a TAM. For a TAM to be successful, it must
-    have its public key or certificate installed in a device's Trust Anchor list.
+    have its public key or certificate installed in a device's Trust Anchor Store.
     A TAM may set up a relationship with device manufacturers or network carriers
-    to have them install the TAM's keys in their device's Trust Anchor list.
+    to have them install the TAM's keys in their device's Trust Anchor Store.
     Alternatively, a TAM may publish its certificate and allow Device
     Administrators to install the TAM's certificate in their devices as
     an after-market-action.
@@ -1148,7 +1148,7 @@ and delegates the TA authenticity check to the TAMs it trusts.
 It may happen that a TA was previously considered trustworthy but is later
 found to be buggy or compromised.
 In this case, the TAM can initiate the removal of the TA by notifying devices 
-to remove the TA (and potentially the REE or device owner to remove any Untrusted 
+to remove the TA (and potentially the REE or Device Owner to remove any Untrusted 
 Application that depend on the TA).  If the TAM does not currently have a
 connection to the TEEP Agent on a device, such a notification would occur
 the next time connectivity does exist.  That is, to recover, the TEEP Agent
@@ -1173,8 +1173,8 @@ TEE device certificates are expected to be long lived, longer
 than the lifetime of a device.  A TAM certificate usually has a
 moderate lifetime of 2 to 5 years.  A TAM should get renewed or
 rekeyed certificates.  The root CA certificates for a TAM, which are
-embedded into the Trust Anchor store in a device, should have long
-lifetimes that don't require device Trust Anchor update.  On the
+embedded into the Trust Anchor Store in a device, should have long
+lifetimes that don't require device Trust Anchor updates.  On the
 other hand, it is imperative that OEMs or device providers plan for
 support of Trust Anchor update in their shipped devices. 
 
