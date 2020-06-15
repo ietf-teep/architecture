@@ -805,7 +805,7 @@ is not found on a block list, and/or fulfills any other policy criteria.
 
 ## Scalability
 
-This architecture uses a PKI. Trust Anchors exist on the devices to
+This architecture uses a PKI (including self-signed certificates). Trust Anchors exist on the devices to
 enable the TEE to authenticate TAMs and TA signers, and TAMs use Trust Anchors to
 authenticate TEEs.  When a PKI is used, many intermediate CA
 certificates can chain to a root certificate, each of which can issue
