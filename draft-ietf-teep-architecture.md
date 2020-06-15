@@ -251,7 +251,7 @@ The following terms are used:
     that one TA cannot read, modify or delete the data and code of another
     TA.
 
-  - Untrusted Application: An application running in a REE. An Untrusted Application 
+  - Untrusted Application: An application running in an REE. An Untrusted Application 
     might depend on one or more TAs.
   
   
