@@ -25,8 +25,8 @@ author:
  -
        ins: M. Pei
        name: Mingliang Pei
-       organization: Symantec
-       email: mingliang_pei@symantec.com
+       organization: Broadcom
+       email: mingliang.pei@broadcom.com
 
  -
        ins: H. Tschofenig
