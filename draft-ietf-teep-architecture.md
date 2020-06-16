@@ -227,6 +227,11 @@ The following terms are used:
     by a human being and hence have no device user. Relates to Device Owner
     and Device Administrator.
 
+  - Raw Public Key (RPK): The RPK only consists of the SubjectPublicKeyInfo
+   structure of a PKIX certificate that carries the parameters necessary
+   to describe the public key. Other serialization formats that do not 
+   rely on ASN.1 may also be used. 
+
   - Rich Execution Environment (REE): An environment that is provided
     and governed by a typical OS (e.g., Linux, Windows, Android, iOS),
     potentially in conjunction with other supporting operating systems
@@ -764,11 +769,13 @@ Note that personalization data is not included in the table above.
 The use of personalization data is dependent on how TAs are used 
 and what their security requirements are. 
 
-TEEP requests from a TAM to a TEEP Agent can be encrypted with the
-TEE public key (to provide confidentiality), and are then signed with the TAM
-private key (for authentication and integrity protection).
-Conversely, TEEP responses from a TEEP Agent to a TAM can be encrypted
-with the TAM public key, and are then signed with the TEE private key.  
+TEEP requests from a TAM to a TEEP Agent are signed with the TAM
+private key (for authentication and integrity protection). 
+Personalization data and TA binaries can be encrypted with a key 
+that is established with a content encryption key established with 
+the TEE public key (to provide confidentiality). Conversely, 
+TEEP responses from a TEEP Agent to a TAM can be signed with the TEE 
+private key.
 
 The TEE key pair and certificate are thus used for authenticating the TEE
 to a remote TAM, and for sending private data to the TEE.  Often, 
@@ -809,12 +816,13 @@ document.
 
 Before a TAM can begin operation in the marketplace to support a
 device with a particular TEE, it must obtain a TAM
-certificate from a CA that is listed in the Trust Anchor Store of the TEEP Agent.
+certificate from a CA or the raw public key of a TAM that is listed in 
+the Trust Anchor Store of the TEEP Agent.
 
 ## Trust Anchors in a TEE {#trust-anchors-in-tee}
 
 A TEE determines whether TA binaries are allowed to execute by 
-verifying whether the TA's signer chains up to a certificate
+verifying whether their signature can be verified using certificate(s) or raw public key(s)
 in the TEE's Trust Anchor Store. The list
 is typically preloaded at manufacturing time, and
 can be updated using the TEEP protocol if the TEE has some form of
@@ -827,12 +835,12 @@ for any other TA, as discussed in {{trust-anchors-in-teep-agent}}.
 The Trust Anchor Store in a TAM consists of a list of Trust Anchors, which
 are certificates that sign various device TEE certificates.  A TAM will accept a
 device for TA management if the TEE in the device uses a TEE certificate
-that is chained to a certificate that the TAM trusts.
+that is chained to a certificate or raw public key that the TAM trusts, is contained in an allow list, 
+is not found on a block list, and/or fulfills any other policy criteria.
 
 ## Scalability
 
-This architecture uses a PKI, although self-signed certificates are
-also permitted.  Trust Anchors exist on the devices to
+This architecture uses a PKI (including self-signed certificates). Trust Anchors exist on the devices to
 enable the TEE to authenticate TAMs and TA Signers, and TAMs use Trust Anchors to
 authenticate TEEs.  When a PKI is used, many intermediate CA
 certificates can chain to a root certificate, each of which can issue
