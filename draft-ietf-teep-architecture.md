@@ -866,7 +866,7 @@ These messages are signed end-to-end between a TEEP Agent and a TAM, and are typ
 that only the targeted device TEE or TAM is able to decrypt and view
 the actual content.
 
-# TEEP Broker
+# TEEP Broker {#broker}
 
 A TEE and TAs often do not have the capability to directly communicate
 outside of the hosting device.  For example, GlobalPlatform
@@ -1080,10 +1080,20 @@ and checks the signing certificate against its Trust Anchors. To mitigate
 DoS attacks, it might also add some protection
 scheme such as a threshold on repeated requests or number of TAs that can be installed.
 
-## Data Protection at TAM and TEE
+## Data Protection
 
 The TEE implementation provides protection of data on the device.  It
 is the responsibility of the TAM to protect data on its servers.
+
+The protocol between TEEP Agents and TAMs similarly is responsible for
+securely providing integrity and confidentiality protection against
+adversaries between them. Since the transport protocol under the TEEP
+protocol might be implemented outside a TEE, as discussed in {{broker}},
+it cannot be relied upon for sufficient protection.  The TEEP protocol
+provides integrity protection, but confidentiality must be provided by
+payload security, i.e., using encrypted TA binaries and encrypted
+attestation information.  See {{I-D.ietf-teep-protocol}} for more
+discussion.
 
 ## Compromised REE {#compromised-ree}
 
