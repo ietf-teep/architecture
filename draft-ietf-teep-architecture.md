@@ -862,7 +862,10 @@ Messages created by a TAM are used to deliver TA
 management commands to a device, and device attestation and
 messages created by the device TEE to respond to TAM messages.
 
-These messages are signed end-to-end between a TEEP Agent and a TAM, and are typically encrypted such
+These messages are signed end-to-end between a TEEP Agent and a TAM.
+Confidentiality is provided by encrypting sensitive payloads (such as
+personalization data and attestation evidence), rather than encrypting the
+messages themselves.  Using encrypted payloads is important to ensure
 that only the targeted device TEE or TAM is able to decrypt and view
 the actual content.
 
@@ -983,7 +986,10 @@ As of the writing of this specification, device and TEE attestations have not be
 across the market. Different devices, manufacturers, and TEEs support different attestation
 protocols. In order for TEEP to be inclusive, it is agnostic to the format of evidence,
 allowing proprietary or standardized formats to be used between a TEE and a verifier (which may or may not
-be colocated in the TAM). However, it should be recognized
+be colocated in the TAM), as long as the format supports encryption of
+any information that is considered sensitive.
+
+However, it should be recognized
 that not all Verifiers may be able to process all proprietary forms of attestation evidence.
 Similarly, the TEEP protocol is agnostic as to the format of attestation results, and the protocol
 (if any) used between the TAM and a verifier, as long as they convey at least the required set of claims
