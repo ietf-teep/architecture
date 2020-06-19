@@ -862,11 +862,14 @@ Messages created by a TAM are used to deliver TA
 management commands to a device, and device attestation and
 messages created by the device TEE to respond to TAM messages.
 
-These messages are signed end-to-end between a TEEP Agent and a TAM, and are typically encrypted such
+These messages are signed end-to-end between a TEEP Agent and a TAM.
+Confidentiality is provided by encrypting sensitive payloads (such as
+personalization data and attestation evidence), rather than encrypting the
+messages themselves.  Using encrypted payloads is important to ensure
 that only the targeted device TEE or TAM is able to decrypt and view
 the actual content.
 
-# TEEP Broker
+# TEEP Broker {#broker}
 
 A TEE and TAs often do not have the capability to directly communicate
 outside of the hosting device.  For example, GlobalPlatform
@@ -983,7 +986,10 @@ As of the writing of this specification, device and TEE attestations have not be
 across the market. Different devices, manufacturers, and TEEs support different attestation
 protocols. In order for TEEP to be inclusive, it is agnostic to the format of evidence,
 allowing proprietary or standardized formats to be used between a TEE and a verifier (which may or may not
-be colocated in the TAM). However, it should be recognized
+be colocated in the TAM), as long as the format supports encryption of
+any information that is considered sensitive.
+
+However, it should be recognized
 that not all Verifiers may be able to process all proprietary forms of attestation evidence.
 Similarly, the TEEP protocol is agnostic as to the format of attestation results, and the protocol
 (if any) used between the TAM and a verifier, as long as they convey at least the required set of claims
@@ -1080,10 +1086,20 @@ and checks the signing certificate against its Trust Anchors. To mitigate
 DoS attacks, it might also add some protection
 scheme such as a threshold on repeated requests or number of TAs that can be installed.
 
-## Data Protection at TAM and TEE
+## Data Protection
 
 The TEE implementation provides protection of data on the device.  It
 is the responsibility of the TAM to protect data on its servers.
+
+The protocol between TEEP Agents and TAMs similarly is responsible for
+securely providing integrity and confidentiality protection against
+adversaries between them. Since the transport protocol under the TEEP
+protocol might be implemented outside a TEE, as discussed in {{broker}},
+it cannot be relied upon for sufficient protection.  The TEEP protocol
+provides integrity protection, but confidentiality must be provided by
+payload security, i.e., using encrypted TA binaries and encrypted
+attestation information.  See {{I-D.ietf-teep-protocol}} for more
+discussion.
 
 ## Compromised REE {#compromised-ree}
 
