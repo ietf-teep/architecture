@@ -1009,7 +1009,7 @@ evidence provided by a TEE, including:
 
   - The limitations of use applied to TEE attestation keys;
 
-  - The processes in place to discover or detect TEE breeches; and
+  - The processes in place to discover or detect TEE breaches; and
 
   - The revocation and recovery process of TEE attestation keys.
 
@@ -1022,14 +1022,14 @@ the RATS Architecture {{I-D.ietf-rats-architecture}}.
 
 ## Information Required in TEEP Claims
 
-  - Device Identifying Info: TEEP attestations may need to uniquely identify a device to the TAM.
+  - Device Identifying Information: TEEP attestations may need to uniquely identify a device to the TAM.
     Unique device identification allows the TAM to provide services to the device, such as managing installed
     TAs, and providing subscriptions to services, and locating device-specific keying material to
     communicate with or authenticate the device. In some use cases it may be sufficient to identify 
     only the class of the device. The security and privacy requirements regarding device identification 
     will vary with the type of TA provisioned to the TEE. 
 
-  - TEE Identifying info: The type of TEE that generated this attestation must be identified,
+  - TEE Identifying Information: The type of TEE that generated this attestation must be identified,
     including version identification information
     such as the hardware, firmware, and software version of the TEE, as applicable by the
     TEE type. TEE manufacturer information for the TEE is
