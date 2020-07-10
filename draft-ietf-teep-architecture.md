@@ -1,7 +1,7 @@
 ---
 title: Trusted Execution Environment Provisioning (TEEP) Architecture
 abbrev: TEEP Architecture
-docname: draft-ietf-teep-architecture-10
+docname: draft-ietf-teep-architecture-11
 category: info
 
 ipr: pre5378Trust200902
@@ -164,12 +164,11 @@ the following problems:
     that wants to manage a TA in the device is authorized to manage TAs
     in the TEE, and what TAs the entity is permitted to manage.
 
-  - A TAM (e.g., operated by a device administrator)
-    wants to determine if a TA exists (is
+  - A Device Administrator wants to determine if a TA exists (is
     installed) on a device (in the TEE), and if not, install the TA in
     the TEE.
 
-  - A TAM wants to check whether a TA in a
+  - A Device Administrator wants to check whether a TA in a
     device's TEE is the most up-to-date version, and if not, update the
     TA in the TEE.
 
@@ -189,17 +188,7 @@ The following terms are used:
 
   - Device: A physical piece of hardware that hosts one or more TEEs,
     often along with
-    a REE. A device contains a default list
-    of Trust Anchors that identify entities (e.g., TAMs) that are
-    trusted by the device. This list is normally set by the device
-    manufacturer, and may be governed by the device's network carrier
-    when it is a mobile device.
-    The list of Trust Anchors is normally modifiable by the device's
-    owner or Device Administrator. However the device manufacturer
-    or network carrier (in the mobile device case) may restrict some
-    modifications, for example,
-    by not allowing the manufacturer or carrier's Trust Anchor to be
-    removed or disabled.
+    an REE.
 
   - Device Administrator:  An entity that is responsible for administration
     of a device, which could be the Device Owner. A Device Administrator
@@ -227,7 +216,7 @@ The following terms are used:
     by a human being and hence have no device user. Relates to Device Owner
     and Device Administrator.
 
-  - Raw Public Key (RPK): The RPK only consists of the SubjectPublicKeyInfo
+  - Raw Public Key: The raw public key only consists of the SubjectPublicKeyInfo
    structure of a PKIX certificate that carries the parameters necessary
    to describe the public key. Other serialization formats that do not 
    rely on ASN.1 may also be used. 
@@ -369,7 +358,7 @@ all components are further explained in the following paragraphs.
 
   - Trusted Application Manager (TAM):  A TAM is responsible for performing lifecycle
     management activity on TAs on behalf of TA Signers
-    and Device Administrators. This includes creation and
+    and Device Administrators. This includes installation and
     deletion of TAs, and may include, for example, over-the-air
     updates to keep TAs up-to-date and clean up when a version
     should be removed. TAMs may provide services that make it easier for
@@ -586,7 +575,7 @@ account such issues.
 ## Untrusted Apps, Trusted Apps, and Personalization Data
 
 In TEEP, there is an explicit relationship and dependence between an Untrusted Application
-in a REE and one or more TAs in a TEE, as shown in {{notionalarch2}}.
+in an REE and one or more TAs in a TEE, as shown in {{notionalarch2}}.
 For most purposes, an Untrusted Application that uses one or more TAs in a TEE
 appears no different from any other Untrusted Application in the REE. However, the way
 the Untrusted Application and its corresponding TAs are packaged, delivered, and installed on
@@ -695,7 +684,7 @@ and TEE for TAM trust verification and TA signature verification.
 {: #experience title="Example Developer Experience"}
 
 {{experience}} shows an example where the same developer builds and signs
-two applications: 1) an Untrusted Application; 2) a TA
+two applications: (a) an Untrusted Application; (b) a TA
 that provides some security functions to be run inside
 a TEE. 
 
@@ -1055,7 +1044,7 @@ higher-end IoT devices, creates the need for different
 mandatory-to-implement algorithms already from the start.
 
 Crypto agility in TEEP concerns the use of symmetric as well
-as asymmetric algorithms. In the context of TEEP symmetric algorithms 
+as asymmetric algorithms. In the context of TEEP, symmetric algorithms 
 are used for encryption of TA binaries and personalization data 
 whereas the asymmetric algorithms are mostly used for signing messages.
 
@@ -1134,20 +1123,21 @@ for protecting the resource usage allocated for TA management.
 
 ## Compromised CA
 
-A root CA for TAM certificates might get compromised. A Trust Anchor other 
-than a root CA certificate may also be compromised. Some TEE Trust
+TAMs are responsible for validating the TEE certificate chain, including
+the TEE certificate and any intermediate CA certificates up to the root
+certificate. Such validation includes checking for certificate revocation.
+A root CA for TAM certificates might get compromised or its certificate might
+expire. A Trust Anchor other 
+than a root CA certificate may also expire or be compromised. 
+If the Trust Anchor used by a TEE device certificate expires or is revoked, the
+device might be rejected by a TAM, subject to the TAM's policy.
+To address these, some TEE Trust
 Anchor update mechanism is expected from device OEMs. 
 
-TEEs are responsible for validating certificate revocation about
-a TAM certificate chain, including the TAM certificate and the 
-intermediate CA certificates up to the root certificate. This 
-will detect a compromised TAM certificate and also any compromised 
+TEEs are similarly responsible for validating the entire TAM certificate chain,
+including checking for certificate revocation.
+This will detect a compromised TAM certificate and also any compromised 
 intermediate CA certificate.
-
-If the root CA of some TEE device certificates is compromised, these
-devices might be rejected by a TAM, which is a decision of the TAM
-implementation and policy choice.  TAMs are responsible for validating
-any intermediate CA for TEE device certificates.
 
 ## Compromised TAM
 
@@ -1197,7 +1187,7 @@ support of Trust Anchor update in their shipped devices.
 
 For those cases where TEE devices are given certificates for which no good
 expiration date can be assigned the recommendations in Section 4.1.2.5 of 
-RFC 5280 {{RFC5280}} are applicable.  
+{{RFC5280}} are applicable.  
 
 ## Keeping Secrets from the TAM
 
