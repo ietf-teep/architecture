@@ -690,11 +690,9 @@ and TEE for TAM trust verification and TA signature verification.
 1. Build two apps:          |       |                |            |
                             |       |                |            |
    (a) Untrusted            |       |                |            |
-       App - 2a. Supply --->|<---------- 3. Get App -|            |
-                            |----------------------->|            |
+       App - 2a. Supply --->|--------- 3. Get App -->|            |
                             |       |                |            |
-   (b) TA -- 2b. Supply ----------->|<-- 4. Get TA --|            |
-                            |       |--------------->|            |
+   (b) TA -- 2b. Supply ----------->|- 4. Get TA --->|            |
                             |       |                |            |
 ~~~~
 {: #experience title="Example Developer Experience"}
@@ -717,7 +715,7 @@ to a TAM that will be managing the TA in various devices.
 
 At step 3, a user
 will go to an Application Store to download the Untrusted
-Application. 
+Application (where the arrow indicates the direction of data transfer).
 
 At step 4, since the Untrusted Application depends on the TA,
 installing the Untrusted Application will trigger TA installation
