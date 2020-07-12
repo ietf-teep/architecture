@@ -701,7 +701,7 @@ and TEE for TAM trust verification and TA signature verification.
 two applications: 1) an Untrusted Application; 2) a TA
 that provides some security functions to be run inside
 a TEE.  This example assumes that the developer, the TEE, and the TAM have
-previously been provisioned with certificatates.  
+previously been provisioned with certificates.  
 
 At step 1, the developer authors the two applications.
 
@@ -1171,7 +1171,7 @@ to determine that the TAM is trustworthy.
 
 It is possible that a rogue developer distributes a malicious Untrusted 
 Application and intends to get a malicious TA installed. Such a TA
-might be able to hide from malware detection the REE, or access trusted
+might be able to escape from malware detection by the REE, or access trusted
 resources within the TEE (but could not access other TEEs, or access other
 TA's if the TEE provides isolation between TAs).
 
