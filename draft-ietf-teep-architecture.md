@@ -690,7 +690,7 @@ and TEE for TAM trust verification and TA signature verification.
 1. Build two apps:          |       |                |            |
                             |       |                |            |
    (a) Untrusted            |       |                |            |
-       App - 2a. Supply --->|--------- 3. Get App -->|            |
+       App - 2a. Supply --> | --- 3. Install ------> |            |
                             |       |                |            |
    (b) TA -- 2b. Supply ----------->|- 4. Get TA --->|            |
                             |       |                |            |
