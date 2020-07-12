@@ -1123,21 +1123,27 @@ for protecting the resource usage allocated for TA management.
 
 ## Compromised CA
 
-TAMs are responsible for validating the TEE certificate chain, including
-the TEE certificate and any intermediate CA certificates up to the root
-certificate. Such validation includes checking for certificate revocation.
 A root CA for TAM certificates might get compromised or its certificate might
-expire. A Trust Anchor other 
-than a root CA certificate may also expire or be compromised. 
-If the Trust Anchor used by a TEE device certificate expires or is revoked, the
-device might be rejected by a TAM, subject to the TAM's policy.
-To address these, some TEE Trust
-Anchor update mechanism is expected from device OEMs. 
+expire, or a Trust Anchor other than a root CA certificate may also expire or
+be compromised.
+TEEs are responsible for validating the entire TAM certificate chain,
+including the TAM certificate and any intermediate certificates up to
+the root certificate.  Such validation includes checking for certificate
+revocation.
 
-TEEs are similarly responsible for validating the entire TAM certificate chain,
-including checking for certificate revocation.
-This will detect a compromised TAM certificate and also any compromised 
-intermediate CA certificate.
+Similarly, 
+a root CA for TEE certificates might get compromised or its certificate might
+expire, or a Trust Anchor other than a root CA certificate may also expire or
+be compromised.
+TAMs are responsible for validating the entire TEE certificate chain,
+including the TEE certificate and any intermediate certificates up to
+the root certificate.  Such validation includes checking for certificate
+revocation.
+
+If certificate chain validation fails, the TEE
+ might be rejected by a TAM, subject to the TAM's policy.
+To address this, some TEE Trust
+Anchor update mechanism is expected from device OEMs. 
 
 ## Compromised TAM
 
