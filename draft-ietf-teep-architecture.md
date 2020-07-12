@@ -692,7 +692,7 @@ and TEE for TAM trust verification and TA signature verification.
    (a) Untrusted            |       |                |            |
        App - 2a. Supply --> | --- 3. Install ------> |            |
                             |       |                |            |
-   (b) TA -- 2b. Supply ----------->|- 4. Get TA --->|            |
+   (b) TA -- 2b. Supply ----------> | 4. Messaging-->|            |
                             |       |                |            |
 ~~~~
 {: #experience title="Example Developer Experience"}
