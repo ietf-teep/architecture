@@ -1131,6 +1131,15 @@ including the TAM certificate and any intermediate certificates up to
 the root certificate.  Such validation includes checking for certificate
 revocation.
 
+If a TAM certificate chain validation fails, the TAM
+might be rejected by a TEEP Agent.
+To address this, some certificate chain update mechanism
+is expected from TAM operators, so that the TAM can get
+a new certificate chain that can be validated by a TEEP Agent.
+In addition, the Trust Anchor in the TEEP Agent's Trust Anchor Store
+may need to be updated.  To address this, some TEE Trust Anchor update 
+mechanism is expected from device OEMs.
+
 Similarly, 
 a root CA for TEE certificates might get compromised or its certificate might
 expire, or a Trust Anchor other than a root CA certificate may also expire or
@@ -1140,10 +1149,13 @@ including the TEE certificate and any intermediate certificates up to
 the root certificate.  Such validation includes checking for certificate
 revocation.
 
-If certificate chain validation fails, the TEE
- might be rejected by a TAM, subject to the TAM's policy.
-To address this, some TEE Trust
-Anchor update mechanism is expected from device OEMs. 
+If a TEE certificate chain validation fails, the TEE
+might be rejected by a TAM, subject to the TAM's policy.
+To address this, some certificate chain update mechanism
+is expected from device OEMs, so that the TEE can get
+a new certificate chain that can be validated by a TAM.
+In addition, the Trust Anchor in the TAM's Trust Anchor Store
+may need to be updated.
 
 ## Compromised TAM
 
