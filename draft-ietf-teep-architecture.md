@@ -1,7 +1,7 @@
 ---
 title: Trusted Execution Environment Provisioning (TEEP) Architecture
 abbrev: TEEP Architecture
-docname: draft-ietf-teep-architecture-11
+docname: draft-ietf-teep-architecture-12
 category: info
 
 ipr: pre5378Trust200902
@@ -289,7 +289,8 @@ for local identification of the user.
 A trusted user interface (UI) may be used in a mobile device to
 prevent malicious software from stealing sensitive user input data.
 Such an implementation often relies on a TEE for providing access 
-to peripherals, such as PIN input. 
+to peripherals, such as PIN input or a trusted display, so that
+the REE cannot observe or tamper with the user input or output.
 
 ## Authentication
 
@@ -367,7 +368,10 @@ all components are further explained in the following paragraphs.
 
     The TAM performs its management of TAs on the device through
     interactions with a device's TEEP Broker, which relays
-    messages between a TAM and a TEEP Agent running inside the TEE. As shown in
+    messages between a TAM and a TEEP Agent running inside the TEE. 
+    TEEP authentication is performed between a TAM and a TEEP Agent.
+
+    As shown in
     {{notionalarch}}, the TAM cannot directly contact a TEEP Agent, but must
     wait for the TEEP Broker to contact
     the TAM requesting a particular service. This architecture is
@@ -428,11 +432,8 @@ all components are further explained in the following paragraphs.
   - Certification Authority (CA): A CA is an entity that issues digital 
     certificates (especially X.509 certificates) and vouches for the 
     binding between the data items in a certificate {{?RFC4949}}. 
-    Certificates are then used for authenticating a device, a TAM and a 
-    TA Signer. A device embeds a list of root certificates (Trust Anchors), 
-    from trusted CAs that a TAM will be validated against.  A TAM will remotely 
-    attest a device by checking whether a device comes with a certificate 
-    from a CA that the TAM trusts.  The CAs do not need to be the same;
+    Certificates are then used for authenticating a device, a TAM, or a 
+    TA Signer, as discussed in {{trustanchors}}.  The CAs do not need to be the same;
     different CAs can be chosen by each TAM, and different device CAs
     can be used by different device manufacturers.
 
@@ -540,10 +541,10 @@ device and another servicing a different manufacturer, etc. Because different de
 and different manufacturers trust different TAMs, the manifest can include multiple
 TAMs that support the required TA.
 
-When a TEEP Broker receives a request from an Untrusted Application to install a TA,
+When a TEEP Broker receives a request (see the RequestTA API in {{apis}}) from an Untrusted Application to install a TA,
 a list of TAM URIs may be provided for that TA, and the request is passed to the TEEP Agent.
 If the TEEP Agent decides that the TA needs to be installed, the TEEP Agent selects a single TAM URI
-that is consistent with the list of trusted TAMs provisioned on the device, invokes the
+that is consistent with the list of trusted TAMs provisioned in the TEEP Agent, invokes the
 HTTP transport for TEEP to connect to the TAM URI, and begins a TEEP protocol exchange.  When the TEEP Agent
 subsequently receives the TA to install and the TA's manifest indicates dependencies
 on any other trusted components, each dependency can include a list of TAM URIs for the
@@ -594,7 +595,9 @@ the TEEP architecture places no limitations or requirements on the personalizati
 There are three possible cases for bundling of an Untrusted Application, TA(s), and personalization data:
 
   1. The Untrusted Application, TA(s), and personalization data are all bundled together in a single
-     package by a TA Signer and provided to the TEEP Broker through the TAM.
+     package by a TA Signer and either provided to the TEEP Broker through the TAM, or provided separately (with encrypted personalization data), with
+     key material needed to decrypt and install the personalization
+     data and TA provided by a TAM.
 
   2. The Untrusted Application and the TA(s) are bundled together in a single package, which a TAM or
      a publicly accessible app store maintains, and the personalization data
@@ -686,7 +689,10 @@ and TEE for TAM trust verification and TA signature verification.
 {{experience}} shows an example where the same developer builds and signs
 two applications: (a) an Untrusted Application; (b) a TA
 that provides some security functions to be run inside
-a TEE. 
+a TEE.  This example assumes that the developer, the TEE, and the TAM have
+previously been provisioned with certificates.  
+
+At step 1, the developer authors the two applications.
 
 At step 2, the developer uploads the
 Untrusted Application (2a) to an Application Store. 
@@ -698,9 +704,11 @@ to a TAM that will be managing the TA in various devices.
 
 At step 3, a user
 will go to an Application Store to download the Untrusted
-Application. Since the Untrusted Application depends on the TA,
+Application (where the arrow indicates the direction of data transfer).
+
+At step 4, since the Untrusted Application depends on the TA,
 installing the Untrusted Application will trigger TA installation
-by initiating communication with a TAM. This is step 4. The TEEP Agent
+by initiating communication with a TAM. The TEEP Agent
 will interact with TAM via a TEEP Broker that faciliates communications between a TAM
 and the TEEP Agent in TEE.
 
@@ -724,7 +732,7 @@ Similarly, since the TEEP Agent runs inside a TEE, the TEEP Agent generally
 relies on a TEEP Broker in the REE to provide network access, and relay
 TAM requests to the TEEP Agent and relay the responses back to the TAM.
 
-# Keys and Certificate Types
+# Keys and Certificate Types {#trustanchors}
 
 This architecture leverages the following credentials, which allow
 delivering end-to-end security between a TAM and a TEEP Agent.
@@ -887,7 +895,7 @@ The input data is originated from a TAM or the first initialization
 call to trigger a TA installation.
 
 The Broker doesn't need to parse a message content received from a TAM
-that should be processed by a TEE.
+that should be processed by a TEE (see the ProcessTeepMessage API in {{apis}}).
 When a device has more than one TEE, one TEEP Broker per TEE could
 be present in the REE. A TEEP Broker interacts with a TEEP Agent inside
 a TEE.
@@ -1078,8 +1086,13 @@ scheme such as a threshold on repeated requests or number of TAs that can be ins
 
 ## Data Protection
 
-The TEE implementation provides protection of data on the device.  It
-is the responsibility of the TAM to protect data on its servers.
+It is the responsibility of the TAM to protect data on its servers.
+Similarly, it is the responsibility of the TEE implementation to provides protection of
+data against integrity and confidentiality attacks from outside the TEE.
+TEEs that provide isolation among TAs within the TEE are likewise
+responsible for protecting TA data against the REE and other TAs.
+For example, this can be used to protect one user's or tenant's data
+from compromise by another user/tenant, even if the attacker has TAs.
 
 The protocol between TEEP Agents and TAMs similarly is responsible for
 securely providing integrity and confidentiality protection against
@@ -1165,8 +1178,13 @@ to determine that the TAM is trustworthy.
 ## Malicious TA Removal
 
 It is possible that a rogue developer distributes a malicious Untrusted 
-Application and intends to get a malicious TA installed. It's the responsibility
-of the TAM to not install malicious trusted apps in the first place. The TEEP
+Application and intends to get a malicious TA installed. Such a TA
+might be able to escape from malware detection by the REE, or access trusted
+resources within the TEE (but could not access other TEEs, or access other
+TA's if the TEE provides isolation between TAs).
+
+It is the responsibility
+of the TAM to not install malicious TAs in the first place. The TEEP
 architecture allows a TEEP Agent to decide which TAMs it trusts via Trust Anchors, 
 and delegates the TA authenticity check to the TAMs it trusts.
 
