@@ -1038,6 +1038,9 @@ the RATS Architecture {{I-D.ietf-rats-architecture}}.
 
   - Requested Components: A list of zero or more components (TAs or other dependencies needed by a TEE)
     that are requested by some depending app, but which are not currently installed in the TEE.
+    The claims also need to specify for each component, whether the TA binary
+    is needed, or whether the TA binary is already available and only
+    permission to install is needed.
 
 # Algorithm and Attestation Agility
 
