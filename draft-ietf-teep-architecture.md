@@ -1042,6 +1042,11 @@ the RATS Architecture {{I-D.ietf-rats-architecture}}.
     is needed, or whether the TA binary is already available and only
     permission to install is needed.
 
+  - Unneeded Components: A list of zero or more components (TAs or other dependencies needed by a TEE)
+    that are no longer needed by any depending app, but which are currently
+    installed in the TEE, so that the TAM can choose to remove from the TEE
+    if desired.
+
 # Algorithm and Attestation Agility
 
 RFC 7696 {{RFC7696}} outlines the requirements to migrate from one
