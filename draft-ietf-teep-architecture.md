@@ -1043,7 +1043,7 @@ the RATS Architecture {{I-D.ietf-rats-architecture}}.
     permission to install is needed.
 
   - Unneeded Components: A list of zero or more components (TAs or other dependencies needed by a TEE)
-    that are no longer needed by any depending app, but which are currently
+    that are no longer needed by any depending application, but which are currently
     installed in the TEE, so that the TAM can choose to remove from the TEE
     if desired.
 
