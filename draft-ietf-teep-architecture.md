@@ -312,7 +312,8 @@ security functions.
 
 ## Confidential Cloud Computing
 
-A tenant can store sensitive data in a TEE in a cloud computing
+A tenant can store sensitive data, such as customer details or credit
+card numbers, in a TEE in a cloud computing
 server such that only the tenant can access the data, preventing
 the cloud hosting provider from accessing the data. A tenant can
 run TAs inside a server TEE for secure operation and enhanced
@@ -1149,8 +1150,14 @@ discussion.
 
 ## Compromised REE {#compromised-ree}
 
-It is possible that the REE of a device is compromised. If the REE is
-compromised, several DoS attacks may be launched. The compromised REE
+It is possible that the REE of a device is compromised. 
+We have already seen examples of attacks on the public Internet of billions
+of compromised devices being used to mount DDoS attacks.  A compromised
+REE can be used for such an attack but it cannot tamper with the TEE's
+code or data in doing so.  A compromised REE can, however, launch DoS attacks
+against the TEE. 
+
+The compromised REE
 may terminate the TEEP Broker such that TEEP transactions cannot reach the TEE,
 or might drop or delay messages between a TAM and a TEEP Agent.
 However, while a DoS attack cannot be prevented, the REE cannot access
