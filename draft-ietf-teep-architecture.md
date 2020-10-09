@@ -952,7 +952,6 @@ An implementation is free to choose any of these models.
 
    TEEP Broker implementers should consider methods of distribution, scope and
    concurrency on devices and runtime options.
-   Several non-exhaustive options are discussed below. 
 
 ### TEEP Broker APIs {#apis}
 
