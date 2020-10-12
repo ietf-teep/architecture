@@ -1094,10 +1094,11 @@ updates for smart phones and tablets to updates of code on
 higher-end IoT devices, creates the need for different
 mandatory-to-implement algorithms already from the start.
 
-Crypto agility in TEEP concerns the use of symmetric as well
-as asymmetric algorithms. In the context of TEEP, symmetric algorithms 
-are used for encryption of TA binaries and personalization data 
-whereas the asymmetric algorithms are mostly used for signing messages.
+Crypto agility in TEEP concerns the use of symmetric as well as asymmetric 
+algorithms. In the context of TEEP, symmetric algorithms are used for 
+encryption and integrity protection of TA binaries and personalization data 
+whereas the asymmetric algorithms are used for signing messages and managing 
+symmetric keys.
 
 In addition to the use of cryptographic algorithms in TEEP, there
 is also the need to make use of different attestation technologies.
