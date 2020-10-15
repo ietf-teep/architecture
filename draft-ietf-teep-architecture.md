@@ -1184,7 +1184,7 @@ request. A TEEP Agent implementation is responsible for ensuring that it
 can recognize and decline such repeated requests. It is also responsible
 for protecting the resource usage allocated for TA management.
 
-## Compromised or Expired CA
+## CA Compromise or Expiry of CA Certificate
 
 A root CA for TAM certificates might get compromised or its certificate might
 expire, or a Trust Anchor other than a root CA certificate may also expire or
