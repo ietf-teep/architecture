@@ -217,7 +217,7 @@ The following terms are used:
     and Device Administrator.
 
   - Raw Public Key: The raw public key only consists of the SubjectPublicKeyInfo
-   structure of a PKIX certificate that carries the parameters necessary
+   structure of a PKIX certificate {{RFC5280}} that carries the parameters necessary
    to describe the public key. Other serialization formats that do not 
    rely on ASN.1 may also be used. 
 
@@ -312,7 +312,8 @@ security functions.
 
 ## Confidential Cloud Computing
 
-A tenant can store sensitive data in a TEE in a cloud computing
+A tenant can store sensitive data, such as customer details or credit
+card numbers, in a TEE in a cloud computing
 server such that only the tenant can access the data, preventing
 the cloud hosting provider from accessing the data. A tenant can
 run TAs inside a server TEE for secure operation and enhanced
@@ -390,7 +391,7 @@ all components are further explained in the following paragraphs.
     an authorized
     Trust Anchor in the device. A TA Signer or Device Administrator may run
     their own TAM, but the devices they wish to manage must include
-    this TAM's public key/certificate {{RFC5280}}, or a certificate it chains up to, in the
+    this TAM's public key or certificate, or a certificate it chains up to, in the
     Trust Anchor Store.
 
     A TA Signer or Device Administrator is free to utilize multiple TAMs. This may
@@ -770,7 +771,7 @@ and what their security requirements are.
 TEEP requests from a TAM to a TEEP Agent are signed with the TAM
 private key (for authentication and integrity protection). 
 Personalization data and TA binaries can be encrypted with a key 
-that is established with a content encryption key established with 
+that is established with a content-encryption key established with 
 the TEE public key (to provide confidentiality). Conversely, 
 TEEP responses from a TEEP Agent to a TAM can be signed with the TEE 
 private key.
@@ -1130,12 +1131,12 @@ scheme such as a threshold on repeated requests or number of TAs that can be ins
 ## Data Protection
 
 It is the responsibility of the TAM to protect data on its servers.
-Similarly, it is the responsibility of the TEE implementation to provides protection of
+Similarly, it is the responsibility of the TEE implementation to provide protection of
 data against integrity and confidentiality attacks from outside the TEE.
 TEEs that provide isolation among TAs within the TEE are likewise
 responsible for protecting TA data against the REE and other TAs.
 For example, this can be used to protect one user's or tenant's data
-from compromise by another user/tenant, even if the attacker has TAs.
+from compromise by another user or tenant, even if the attacker has TAs.
 
 The protocol between TEEP Agents and TAMs similarly is responsible for
 securely providing integrity and confidentiality protection against
@@ -1143,14 +1144,20 @@ adversaries between them. Since the transport protocol under the TEEP
 protocol might be implemented outside a TEE, as discussed in {{broker}},
 it cannot be relied upon for sufficient protection.  The TEEP protocol
 provides integrity protection, but confidentiality must be provided by
-payload security, i.e., using encrypted TA binaries and encrypted
+payload encryption, i.e., using encrypted TA binaries and encrypted
 attestation information.  See {{I-D.ietf-teep-protocol}} for more
 discussion.
 
 ## Compromised REE {#compromised-ree}
 
-It is possible that the REE of a device is compromised. If the REE is
-compromised, several DoS attacks may be launched. The compromised REE
+It is possible that the REE of a device is compromised. 
+We have already seen examples of attacks on the public Internet of billions
+of compromised devices being used to mount DDoS attacks.  A compromised
+REE can be used for such an attack but it cannot tamper with the TEE's
+code or data in doing so.  A compromised REE can, however, launch DoS attacks
+against the TEE. 
+
+The compromised REE
 may terminate the TEEP Broker such that TEEP transactions cannot reach the TEE,
 or might drop or delay messages between a TAM and a TEEP Agent.
 However, while a DoS attack cannot be prevented, the REE cannot access
@@ -1177,7 +1184,7 @@ request. A TEEP Agent implementation is responsible for ensuring that it
 can recognize and decline such repeated requests. It is also responsible
 for protecting the resource usage allocated for TA management.
 
-## Compromised CA
+## CA Compromise or Expiry of CA Certificate
 
 A root CA for TAM certificates might get compromised or its certificate might
 expire, or a Trust Anchor other than a root CA certificate may also expire or
