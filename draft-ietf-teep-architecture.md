@@ -973,14 +973,20 @@ The following conceptual APIs exist from a TEEP Broker to a TEEP Agent:
    or an Untrusted Application) that it depends on a given Trusted Component, which may or may not
    already be installed in the TEE.
 
-2. ProcessTeepMessage: A message arriving from the network, to be delivered
+2. UnrequestTA: A notification from an REE application (e.g., an installer,
+   or an Untrusted Application) that it no longer depends on a given
+   Trusted Component, which may or may not already be installed in the TEE. 
+   For example, if the Untrusted Application is uninstalled, the uninstaller
+   might invoke this conceptual API.
+
+3. ProcessTeepMessage: A message arriving from the network, to be delivered
    to the TEEP Agent for processing.
 
-3. RequestPolicyCheck: A hint (e.g., based on a timer) that the TEEP Agent
+4. RequestPolicyCheck: A hint (e.g., based on a timer) that the TEEP Agent
    may wish to contact the TAM for any changes, without the device itself
    needing any particular change.
 
-4. ProcessError: A notification that the TEEP Broker could not deliver an outbound
+5. ProcessError: A notification that the TEEP Broker could not deliver an outbound
    TEEP message to a TAM.
 
 For comparison, similar APIs may exist on the TAM side, where a Broker may or may not
