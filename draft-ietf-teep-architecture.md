@@ -62,6 +62,20 @@ informative:
     target: https://globalplatform.org/specs-library/tee-system-architecture-v1-1/
     seriesinfo:
       GlobalPlatform: GPD_SPE_009
+  GSMA:
+    author:
+      org: GSM Association
+    title: "GP.22 RSP Technical Specification, Version 2.2.2"
+    date: 2020-06
+    target: https://www.gsma.com/esim/wp-content/uploads/2020/06/SGP.22-v2.2.2.pdf
+  OTRP:
+    author:
+      org: GlobalPlatform
+    title: "Open Trust Protocol (OTrP) Profile v1.1"
+    date: 2020-07
+    target: https://globalplatform.org/specs-library/tee-management-framework-open-trust-protocol/
+    seriesinfo:
+      GlobalPlatform: GPD_SPE_123
   SGX:
     author:
       org: Intel
@@ -176,6 +190,14 @@ the following problems:
     the TA developer is no longer maintaining that TA, when the TA has
     been revoked or is not used for other reasons anymore (e.g., due to an 
     expired subscription).
+
+For TEEs that simply verify and load signed TA's from an untrusted
+filesystem, classic application distribution protocols can be used
+without modification.  The problems in the bullets above, on the other hand,
+require a new protocol, i.e.,
+the TEEP protocol, for TEEs that can install and enumerate TAs in a
+TEE-secured location and where another domain-specific protocol standard
+(e.g., {{GSMA}}, {{OTRP}}) that meets the needs is not already in use.
 
 #  Terminology {#terminology}
 
@@ -649,6 +671,13 @@ would pass this data to the installed Untrusted Application, which would in turn
 to the SGX enclave (TA). This complexity is due to the fact that each SGX enclave is separate
 and does not have direct communication to other SGX enclaves.
 
+As long as signed files (TAs and/or Personalization Data) are installed into
+an untrusted filesystem and trust is verified by the TEE at load time, classic
+distribution mechanisms can be used.  Some uses of SGX, however, allow a model
+where a TA can be dynamically installed into an SGX enclave that
+provides a runtime platform.  The TEEP protocol can be used in
+such cases, where the runtime platform could include a TEEP Agent.
+
 ### Example: Application Delivery Mechanisms in Arm TrustZone
 
 In Arm TrustZone {{TrustZone}} for A-class devices, the Untrusted Application and TA may or may not be
@@ -660,6 +689,12 @@ Thus Cases 2 and 3 are equally applicable.  In addition, it is possible for TAs 
 with each other without involving any Untrusted Application, and so the complexity of Case 1
 is lower than in the SGX example.  Thus, Case 1 is possible as well, though still more
 complex than Cases 2 and 3.
+
+TEE OS's (e.g., OP-TEE) that support loading and verifying signed TAs from
+an untrusted filesystem can, like SGX, use classic file distribution
+mechanisms.  If secure TA storage is used (e.g., a Replay-Protected
+Memory Block device) on the other hand, the TEEP protocol can be used
+to manage such storage.
 
 ## Entity Relations
 
