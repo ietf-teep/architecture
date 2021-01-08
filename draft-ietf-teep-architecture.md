@@ -177,11 +177,6 @@ the following problems:
     been revoked or is not used for other reasons anymore (e.g., due to an 
     expired subscription).
 
-  - A TA developer wants to define the relationship
-    between cooperating TAs under the TA developer's control, and 
-    specify whether
-    the TAs can communicate, share data, and/or share key material.
-
 #  Terminology {#terminology}
 
 The following terms are used:
