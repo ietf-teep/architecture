@@ -43,8 +43,8 @@ author:
  -
        ins: D. Wheeler
        name: David Wheeler
-       organization: Intel
-       email: david.m.wheeler@intel.com
+       organization: Amazon
+       email: davewhee@amazon.com
 
 informative:
   RFC6024:
