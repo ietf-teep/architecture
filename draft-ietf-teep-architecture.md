@@ -690,7 +690,7 @@ with each other without involving any Untrusted Application, and so the complexi
 is lower than in the SGX example.  Thus, Case 1 is possible as well, though still more
 complex than Cases 2 and 3.
 
-TEE OS's (e.g., OP-TEE) that support loading and verifying signed TAs from
+A trusted OS running in the TEE (e.g., OP-TEE) that supports loading and verifying signed TAs from
 an untrusted filesystem can, like SGX, use classic file distribution
 mechanisms.  If secure TA storage is used (e.g., a Replay-Protected
 Memory Block device) on the other hand, the TEEP protocol can be used
