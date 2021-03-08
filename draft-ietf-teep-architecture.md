@@ -269,25 +269,25 @@ The following terms are used:
 
   - Trusted Application (TA): An application (or, in some implementations, an application component) that runs in a TEE.
 
-  - Trusted Application (TA) Developer: An entity that develops one or
-    more TAs.
-
-  - Trusted Component (TA) Signer: An entity that signs a Trusted Component with
-    a key that a TEE will trust.  The signer might or might not be the
-    same entity as the TA Developer.  For example, a TA might
-    be signed (or re-signed) by a Device Administrator if the TEE will
-    only trust the Device Administrator.  A TA might also be encrypted,
-    if the code is considered confidential.
-    
   - Trusted Application Manager (TAM): An entity that manages Trusted
-    Components running in TEEs of various devices.
+    Applications and other Trusted Components running in TEEs of various devices.
 
   - Trusted Component: A set of code and/or data in a TEE managed as a unit
-   by a Trusted Application Manager.  Trusted Applications and
-   Personalization Data are thus managed by being included in
-   Trusted Components.  Trusted OS code or trusted firmware can also be
-   expressed as Trusted Components that a TA depends on.
+    by a Trusted Application Manager.  Trusted Applications and
+    Personalization Data are thus managed by being included in
+    Trusted Components.  Trusted OS code or trusted firmware can also be
+    expressed as Trusted Components that a Trusted Component depends on.
 
+  - Trusted Component Developer: An entity that develops one or
+    more Trusted Components.
+
+  - Trusted Component Signer: An entity that signs a Trusted Component with
+    a key that a TEE will trust. The signer might or might not be the
+    same entity as the Trusted Component Developer. For example, a Trusted Component might
+    be signed (or re-signed) by a Device Administrator if the TEE will
+    only trust the Device Administrator. A Trusted Component might also be encrypted,
+    if the code is considered confidential.
+    
   - Trusted Execution Environment (TEE): An execution environment that enforces that
     only authorized code can execute within the TEE, and data used by that
     code cannot be read or tampered with by code outside the TEE.
@@ -546,7 +546,7 @@ whether that Trusted Component is installed (or minimally, is running) in a TEE 
 which the TEEP Agent is associated.
 
 Each Trusted Component is digitally signed, protecting its integrity, and linking
-the Trusted Component back to the Trusted Component Signer. The Trusted Component Signer is often the TA Developer, but in
+the Trusted Component back to the Trusted Component Signer. The Trusted Component Signer is often the Trusted Component Developer, but in
 some cases might be another party such as a Device Administrator
 or other party
 to whom the code has been licensed (in which case the same code might
