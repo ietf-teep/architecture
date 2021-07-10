@@ -977,7 +977,7 @@ the TEE, whereas the TEEP/HTTP implementation is in the TEEP Broker outside the 
      +----------------+           |      v      |
               |                   |             |
      +----------------+           |      ^      |
-     |      HTTP      |           |      |      |
+     |     HTTP(S)    |           |      |      |
      | implementation |           |      |      |
      +----------------+           |      |      v
               |                   |      |
