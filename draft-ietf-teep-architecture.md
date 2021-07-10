@@ -795,7 +795,8 @@ RATS Architecture {{I-D.ietf-rats-architecture}} for more discussion.
                      Location of    Private Key     Trust Anchor
 Purpose              Private Key       Signs           Store
 ------------------   -----------   -------------    -------------
-Authenticating TEE    1 per TEE    TEEP responses       TAM
+Authenticating        1 per TEE    TEEP responses       TAM
+TEEP Agent
 
 Authenticating TAM    1 per TAM    TEEP requests     TEEP Agent
 
