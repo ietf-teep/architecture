@@ -299,7 +299,7 @@ The following terms are used:
     that one TA cannot read, modify or delete the data and code of another
     TA.
 
-  - Software Update: When we use this term we refer to installing, and updating code, configuration 
+  - Software Update: When we use this term we refer to installing and updating code, configuration 
     and credentials. In some cases it may be appropriate to invalidate, or delete unused code, 
     configuration and credentials. Software, when conveyed in the TEEP protocol is also referred as 
     "payload" in {{I-D.ietf-suit-information-model}} because it is often in an intermediate state, such as being encrypted, 
