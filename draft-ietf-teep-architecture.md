@@ -1177,13 +1177,16 @@ from compromise by another user or tenant, even if the attacker has TAs.
 
 The protocol between TEEP Agents and TAMs similarly is responsible for
 securely providing integrity and confidentiality protection against
-adversaries between them. Since the transport protocol under the TEEP
-protocol might be implemented outside a TEE, as discussed in {{broker}},
-it cannot be relied upon for sufficient protection.  The TEEP protocol
-provides integrity protection, but confidentiality must be provided by
-payload encryption, i.e., using encrypted TA binaries and encrypted
-attestation information.  See {{I-D.ietf-teep-protocol}} for more
-discussion.
+adversaries between them. It is a design choice at what layers to best 
+provide protection against network adversaries. As discussed in {{broker}}, 
+the transport protocol and the Transport Layer Security protocol under 
+the TEEP protocol may terminate outside a TEE. If it does, the TEEP protocol 
+itself must provide integrity protection and confidentiality protection to 
+secure data end-to-end. For example, confidentiality protection for 
+payloads may be provided by utilizing encrypted TA binaries and encrypted
+attestation information. See {{I-D.ietf-teep-protocol}} for how a specific 
+solution addresses the design question of how to provide integrity and 
+confidentiality protection.
 
 ## Compromised REE {#compromised-ree}
 
