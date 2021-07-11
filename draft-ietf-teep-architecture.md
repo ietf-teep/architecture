@@ -300,7 +300,7 @@ The following terms are used:
     TA.
 
   - Software Update: When we use this term we refer to installing and updating code, configuration 
-    and credentials. In some cases it may be appropriate to invalidate, or delete unused code, 
+    and/or credentials. In some cases it may be appropriate to invalidate, or delete unused code, 
     configuration and credentials. Software, when conveyed in the TEEP protocol is also referred as 
     "payload" in {{I-D.ietf-suit-information-model}} because it is often in an intermediate state, such as being encrypted, 
     compressed and/or encoded as a differential update. 
