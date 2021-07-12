@@ -1179,7 +1179,7 @@ The protocol between TEEP Agents and TAMs similarly is responsible for
 securely providing integrity and confidentiality protection against
 adversaries between them. It is a design choice at what layers to best 
 provide protection against network adversaries. As discussed in {{broker}}, 
-the transport protocol and the Transport Layer Security protocol under 
+the transport protocol and any security mechanism associated with it (e.g., the Transport Layer Security protocol) under 
 the TEEP protocol may terminate outside a TEE. If it does, the TEEP protocol 
 itself must provide integrity protection and confidentiality protection to 
 secure data end-to-end. For example, confidentiality protection for 
