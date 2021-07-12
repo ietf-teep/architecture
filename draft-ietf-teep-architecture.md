@@ -4,7 +4,7 @@ abbrev: TEEP Architecture
 docname: draft-ietf-teep-architecture-14
 category: info
 
-ipr: pre5378Trust200902
+ipr: trust200902
 area: Security
 workgroup: TEEP
 keyword: Internet-Draft
