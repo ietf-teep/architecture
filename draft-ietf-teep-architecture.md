@@ -49,6 +49,7 @@ author:
 informative:
   RFC6024:
   I-D.ietf-rats-architecture:
+  I-D.ietf-suit-architecture:
   I-D.ietf-suit-manifest:
   I-D.ietf-teep-otrp-over-http:
   I-D.ietf-teep-protocol:
@@ -114,14 +115,14 @@ As an example, exposure of emails from a mail client is likely to be of
 concern to its owner, but a compromise of a banking application raises
 even greater concerns.
 
-The Trusted Execution Environment (TEE) concept is designed to execute
-applications in a protected environment that enforces that any code 
+The Trusted Execution Environment (TEE) concept is designed to let
+applications execute in a protected environment that enforces that any code 
 within that environment cannot be tampered with, 
 and that any data used by such code 
 cannot be read or tampered with by any code outside that environment, 
 including by a commodity operating system (if present).
 In a system with multiple TEEs, this also means that code in one TEE 
-cannot be read or tampered with by code in the other TEE.
+cannot be read or tampered with by code in another TEE.
 
 This separation reduces the possibility
 of a successful attack on application components and the data contained inside the
@@ -188,7 +189,7 @@ the following problems:
 
   - A Device Administrator wants to remove a TA from a device's TEE if
     the TA developer is no longer maintaining that TA, when the TA has
-    been revoked or is not used for other reasons anymore (e.g., due to an 
+    been revoked, or is not used for other reasons anymore (e.g., due to an 
     expired subscription).
 
 For TEEs that simply verify and load signed TA's from an untrusted
@@ -228,7 +229,7 @@ The following terms are used:
 
   - Device User: A human being that uses a device. Many devices have
     a single device user. Some devices have a primary device user with
-    other human beings as secondary device users (e.g., parent allowing
+    other human beings as secondary device users (e.g., a parent allowing
     children to use their tablet or laptop). Other devices are not used
     by a human being and hence have no device user. Relates to Device Owner
     and Device Administrator.
@@ -239,10 +240,10 @@ The following terms are used:
    an example of Personalization Data might be a secret symmetric key used
    by a TA to communicate with some service.
 
-  - Raw Public Key: The raw public key only consists of the SubjectPublicKeyInfo
-   structure of a PKIX certificate {{RFC5280}} that carries the parameters necessary
-   to describe the public key. Other serialization formats that do not 
-   rely on ASN.1 may also be used. 
+  - Raw Public Key: A raw public key consists of only the algorithm identifier
+    (type) of the key and the cryptographic public key material, such as the
+    SubjectPublicKeyInfo structure of a PKIX certificate {{RFC5280}} Other
+    serialization formats that do not rely on ASN.1 may also be used. 
 
   - Rich Execution Environment (REE): An environment that is provided
     and governed by a typical OS (e.g., Linux, Windows, Android, iOS),
@@ -251,7 +252,7 @@ The following terms are used:
     applications running on it are considered untrusted (or more precisely,
     less trusted than a TEE).
 
-  - Trust Anchor: As defined in {{RFC6024}} and {{I-D.ietf-suit-manifest}},
+  - Trust Anchor: As defined in {{RFC6024}} and {{I-D.ietf-suit-architecture}},
     "A trust anchor represents an authoritative entity via a public
     key and associated data.  The public key is used to verify digital
     signatures, and the associated data is used to constrain the types
@@ -261,9 +262,9 @@ The following terms are used:
     algorithm and parameters.
 
   - Trust Anchor Store: As defined in {{RFC6024}}, "A trust anchor
-    store is a set of one or more trust anchors stored in a device.
+    store is a set of one or more trust anchors stored in a device...
     A device may have more than one trust anchor store, each of which
-    may be used by one or more applications."  As noted in {{I-D.ietf-suit-manifest}},
+    may be used by one or more applications."  As noted in {{I-D.ietf-suit-architecture}},
     a Trust Anchor Store must resist modification against unauthorized
     insertion, deletion, and modification.
 
@@ -330,8 +331,8 @@ reducing access to keying material.
 
 ## Internet of Things
 
-The Internet of Things (IoT) has been posing threats to 
-critical infrastructure because of weak security in devices.
+Weak security in Internet of Things (IoT) devices has been posing threats to 
+critical infrastructure that relies upon such devices.
 It is desirable that IoT devices can prevent malware from
 manipulating actuators (e.g., unlocking a door), or
 stealing or modifying sensitive data, such as authentication credentials
@@ -354,7 +355,8 @@ liability and increased cloud adoption.
 
 ## System Components
 
-{{notionalarch}} shows the main components in a typical device with an REE. Full descriptions of
+{{notionalarch}} shows the main components in a typical device with REE and
+TEE. Full descriptions of
 components not previously defined are provided below. Interactions of
 all components are further explained in the following paragraphs.
 
@@ -391,7 +393,7 @@ all components are further explained in the following paragraphs.
     management activity on Trusted Components on behalf of Trusted Component Signers
     and Device Administrators. This includes installation and
     deletion of Trusted Components, and may include, for example, over-the-air
-    updates to keep Trusted Components up-to-date and clean up when one
+    updates to keep Trusted Components up-to-date and clean up when Trusted Components
     should be removed. TAMs may provide services that make it easier for
     Trusted Component Signers or Device Administators to use the TAM's service to manage multiple devices,
     although that is not required of a TAM.
@@ -427,7 +429,8 @@ all components are further explained in the following paragraphs.
     be required for managing Trusted Components on multiple different types of devices
     from different manufacturers, or mobile devices on
     different network carriers, since
-    the Trust Anchor Store on these different devices may contain different
+    the Trust Anchor Store on these different devices may contain keys
+    for different
     TAMs. A Device Administrator may be able to add their own TAM's
     public key or certificate to the Trust Anchor Store on all their devices,
     overcoming this limitation.
@@ -438,7 +441,7 @@ all components are further explained in the following paragraphs.
     to have them install the TAM's keys in their device's Trust Anchor Store.
     Alternatively, a TAM may publish its certificate and allow Device
     Administrators to install the TAM's certificate in their devices as
-    an after-market-action.
+    an after-market action.
 
   - TEEP Broker: A TEEP Broker is an application component running in a Rich
     Execution Environment (REE) that enables the message protocol exchange between
@@ -550,7 +553,7 @@ the Trusted Component back to the Trusted Component Signer. The Trusted Componen
 some cases might be another party such as a Device Administrator
 or other party
 to whom the code has been licensed (in which case the same code might
-be signed by multiple licensees and distributed as if it were different TAs).
+be signed by multiple licensees and distributed as if it was different TAs).
 
 A Trusted Component Signer selects one or more TAMs and communicates the Trusted Component(s) to the TAM.
 For example, the Trusted Component Signer might choose TAMs based upon the markets into which the TAM can provide access. There
@@ -588,7 +591,7 @@ Separate from the Untrusted Application's manifest, this framework relies on the
 format in {{I-D.ietf-suit-manifest}} for expressing how to install a Trusted Component, as well as any
 dependencies on other TEE components and versions.
 That is, dependencies from Trusted Components on other Trusted Components can be expressed in a SUIT manifest,
-including dependencies on any other TAs, or trusted OS code (if any), or trusted firmware.
+including dependencies on any other TAs, trusted OS code (if any), or trusted firmware.
 Installation steps can also be expressed in a SUIT manifest.
 
 For example, TEEs compliant
@@ -615,7 +618,7 @@ together or are provided separately, and this has implications to the management
 the TAs in a TEE. In addition to the Untrusted Application and TA(s), the TA(s) and/or TEE may also require additional data to personalize the TA to the device or a user.
 Implementations must support encryption of such
 Personalization Data to preserve the confidentiality of potentially
-sensitive data contained within it and support integrity protection
+sensitive data contained within it, and must support integrity protection
 of the Personalization Data.
 Other than the requirement to support confidentiality and integrity protection,
 the TEEP architecture places no limitations or requirements on the Personalization Data.
@@ -758,14 +761,15 @@ implementations,
 a Device Administrator might choose what Untrusted Applications and related Trusted Components to
 be installed. A user consent flow is out of scope of the TEEP architecture.
 
-The main components consist of a set of standard messages created by
+The main components of the TEEP protocol
+consist of a set of standard messages created by
 a TAM to deliver Trusted Component management commands to a device,
 and device attestation and response messages created by a TEE that
 responds to a TAM's message.
 
 It should be noted that network communication capability is generally
 not available in TAs in today's TEE-powered devices.  Consequently, Trusted
-Applications generally rely on broker in the REE to provide access to
+Applications generally rely on a broker in the REE to provide access to
 network functionality in the REE.  A broker does not need to know the actual
 content of messages to facilitate such access.
 
@@ -776,18 +780,18 @@ TAM requests to the TEEP Agent and relay the responses back to the TAM.
 # Keys and Certificate Types {#trustanchors}
 
 This architecture leverages the following credentials, which allow
-delivering end-to-end security between a TAM and a TEEP Agent.
+achieving end-to-end security between a TAM and a TEEP Agent.
 
 {{keys}} summarizes the relationships between various keys and where
 they are stored.  Each public/private key identifies a Trusted Component Signer, TAM, or TEE,
 and gets a certificate that chains up to some trust anchor.  A list of trusted
-certificates is then used to check a presented certificate against.
+certificates is used to check a presented certificate against.
 
 Different CAs can be used for different
 types of certificates.  TEEP messages are always signed, where the signer
 key is the message originator's private key, such as that of a TAM
 or a TEE.  In addition to the keys shown in {{keys}},
-there may be additional keys used for attestation.  Refer to the 
+there may be additional keys used for attestation or encryption.  Refer to the 
 RATS Architecture {{I-D.ietf-rats-architecture}} for more discussion.
 
 ~~~~
@@ -842,11 +846,11 @@ that it will execute.  This is discussed further in
 ## Trust Anchors in a TEEP Agent {#trust-anchors-in-teep-agent}
 
 A TEEP Agent's Trust Anchor Store contains a list of Trust Anchors, which
-are CA certificates that sign various TAM certificates.  The list
+are typically CA certificates that sign various TAM certificates.  The list
 is typically preloaded at manufacturing time, and
 can be updated using the TEEP protocol if the TEE has some form of
 "Trust Anchor Manager TA" that has Trust Anchors in its configuration data.
-Thus, Trust Anchors can be updated similar to updating the Personalization Data
+Thus, Trust Anchors can be updated similarly to the Personalization Data
 for any other TA.
 
 When Trust Anchor update is carried out, it is imperative that any update
@@ -863,12 +867,12 @@ the Trust Anchor Store of the TEEP Agent.
 ## Trust Anchors in a TEE {#trust-anchors-in-tee}
 
 A TEE determines whether TA binaries are allowed to execute by 
-verifying whether their signature can be verified using certificate(s) or raw public key(s)
+checking if their signatures can be verified using certificate(s) or raw public key(s)
 in the TEE's Trust Anchor Store. The list
 is typically preloaded at manufacturing time, and
 can be updated using the TEEP protocol if the TEE has some form of
 "Trust Anchor Manager TA" that has Trust Anchors in its configuration data.
-Thus, Trust Anchors can be updated similar to updating the Personalization Data
+Thus, Trust Anchors can be updated similarly to the Personalization Data
 for any other TA, as discussed in {{trust-anchors-in-teep-agent}}.
 
 ## Trust Anchors in a TAM {#trust-anchors-in-tam}
@@ -882,8 +886,9 @@ is not found on a block list, and/or fulfills any other policy criteria.
 ## Scalability
 
 This architecture uses a PKI (including self-signed certificates). Trust Anchors exist on the devices to
-enable the TEE to authenticate TAMs and Trusted Component Signers, and TAMs use Trust Anchors to
-authenticate TEEs.  When a PKI is used, many intermediate CA
+enable the TEEP Agent to authenticate TAMs and the TEE to authenticate
+Trusted Component Signers, and TAMs use Trust Anchors to
+authenticate TEEP Agents.  When a PKI is used, many intermediate CA
 certificates can chain to a root certificate, each of which can issue
 many certificates.  This makes the protocol highly scalable.  New
 factories that produce TEEs can join the ecosystem.  In this case,
@@ -901,7 +906,7 @@ all Trusted Component Signers that exist.
 
 Messages created by a TAM are used to deliver Trusted Component
 management commands to a device, and device attestation and
-messages created by the device TEE to respond to TAM messages.
+messages are created by the device TEE to respond to TAM messages.
 
 These messages are signed end-to-end between a TEEP Agent and a TAM.
 Confidentiality is provided by encrypting sensitive payloads (such as
@@ -1191,7 +1196,7 @@ confidentiality protection.
 ## Compromised REE {#compromised-ree}
 
 It is possible that the REE of a device is compromised. 
-We have already seen examples of attacks on the public Internet of billions
+We have already seen examples of attacks on the public Internet with billions
 of compromised devices being used to mount DDoS attacks.  A compromised
 REE can be used for such an attack but it cannot tamper with the TEE's
 code or data in doing so.  A compromised REE can, however, launch DoS attacks
@@ -1201,7 +1206,7 @@ The compromised REE
 may terminate the TEEP Broker such that TEEP transactions cannot reach the TEE,
 or might drop or delay messages between a TAM and a TEEP Agent.
 However, while a DoS attack cannot be prevented, the REE cannot access
-anything in the TEE if it is implemented correctly.
+anything in the TEE if the TEE is implemented correctly.
 Some TEEs may have some watchdog scheme to observe REE state and mitigate DoS
 attacks against it but most TEEs don't have such a capability.
 
