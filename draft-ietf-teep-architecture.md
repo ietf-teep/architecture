@@ -55,6 +55,18 @@ informative:
   I-D.ietf-teep-protocol:
   RFC7696:
   RFC5280: 
+  CC-Overview:
+    author:
+      org: Confidential Computing Consortium
+    title: "Confidential Computing: Hardware-Based Trusted Execution for Applications and Data"
+    date: 2021-01
+    target: https://confidentialcomputing.io/wp-content/uploads/sites/85/2021/03/confidentialcomputing_outreach_whitepaper-8-5x11-1.pdf
+  CC-Technical-Analysis:
+    author:
+      org: Confidential Computing Consortium
+    title: "A Technical Analysis of Confidential Computing, v1.2"
+    date: 2021-10
+    target: https://confidentialcomputing.io/wp-content/uploads/sites/85/2022/01/CCC-A-Technical-Analysis-of-Confidential-Computing-v1.2.pdf
   GPTEE:
     author:
       org: GlobalPlatform
@@ -138,6 +150,18 @@ Untrusted Application.  In addition, processing of credit card numbers or accoun
 The precise code split is ultimately a decision of the 
 developer based on the assets he or she wants to protect according to the threat model. 
 
+TEEs are typically used in cases where a software or data asset needs to be protected
+from unauthorized entities that may include the owner (or pwner) or possesser of a device.  This
+situation arises for example in gaming consoles where anti-cheat protection is a concern,
+devices such as ATMs or IoT devices placed in locations where attackers might have physical
+access, cell phones or other devices used for mobile payments, and hosted cloud environments.  Such environments
+can be thought of as hybrid devices where one user or administrator controls the REE and a
+different (remote) user or administrator controls a TEE in the same physical device.  
+It may also be the case in some constrained devices that there is no REE (only a TEE) and there
+may be no local "user" per se, only a remote TEE administrator.
+For further discussion of such confidential computing use cases and threat model, see
+{{CC-Overview}} and {{CC-Technical-Analysis}}.
+
 TEEs use hardware enforcement combined with software protection to secure TAs and
 its data. TEEs typically offer a more limited set of services to TAs than is 
 normally available to Untrusted Applications.
@@ -156,7 +180,7 @@ needs to make sure that compatible trusted and untrusted components (if any) of 
 application are installed on the correct device. In this TEE ecosystem,
 there often arises a need for an external trusted party to verify the
 identity, claims, and rights of TA developers, devices, and their TEEs.
-This trusted third party is the Trusted Application Manager (TAM).
+This external trusted party is the Trusted Application Manager (TAM).
 
 The Trusted Execution Environment Provisioning (TEEP) protocol addresses
 the following problems:
@@ -1370,6 +1394,23 @@ dependency in the manifest of the encrypted TA.  Thus, the TEEP Agent would
 look at the Trusted Component manifest, determine there is a dependency with a TAM URI of the
 Trusted Component Signer's TAM. The Agent would then install the dependency, and then continue with
 the Trusted Component installation steps, including decrypting the TA binary with the relevant key.
+
+## REE Privacy
+
+The TEEP architecture is applicable to cases where devices have a TEE that protects data
+and code from the REE administrator.  In such cases, the TAM administrator, not the REE administrator,
+controls the TEE in the devices.  As some examples:
+
+* a cloud hoster may be the REE administrator where a customer administrator controls the TEE hosted in the cloud.
+* a device manufacturer might control the TEE in a device purchased by a customer
+
+The privacy risk is that data in the REE might be susceptible to disclosure to the TEE administrator.
+This risk is not introduced by the TEEP architecture, but is inherent in most uses of TEEs.
+This risk can be mitigated by making sure the REE administrator is aware of and explicitly chooses
+to have a TEE that is managed by another party.  In the cloud hoster example, this choice is made
+by explicitly offering a service to customers to provide TEEs for them to administer.  In the device
+manufacturer example, this choice is made by the customer choosing to buy a device made by a given
+manufacturer.
 
 #  IANA Considerations
 
