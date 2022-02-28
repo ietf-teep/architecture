@@ -1,7 +1,7 @@
 ---
 title: Trusted Execution Environment Provisioning (TEEP) Architecture
 abbrev: TEEP Architecture
-docname: draft-ietf-teep-architecture-15
+docname: draft-ietf-teep-architecture-16
 category: info
 
 ipr: trust200902
@@ -248,7 +248,7 @@ The following terms are used:
   - Rich Execution Environment (REE): An environment that is provided
     and governed by a typical OS (e.g., Linux, Windows, Android, iOS),
     potentially in conjunction with other supporting operating systems
-    and hypervisors; it is outside of any TEE. This environment and
+    and hypervisors; it is outside of the TEE(s) managed by the TEEP protocol. This environment and
     applications running on it are considered untrusted (or more precisely,
     less trusted than a TEE).
 
@@ -257,9 +257,7 @@ The following terms are used:
     key and associated data.  The public key is used to verify digital
     signatures, and the associated data is used to constrain the types
     of information for which the trust anchor is authoritative."
-    The Trust Anchor may be a certificate or it may be a raw public key
-    along with additional data if necessary such as its public key
-    algorithm and parameters.
+    The Trust Anchor may be a certificate or it may be a raw public key.
 
   - Trust Anchor Store: As defined in {{RFC6024}}, "A trust anchor
     store is a set of one or more trust anchors stored in a device...
@@ -413,7 +411,7 @@ all components are further explained in the following paragraphs.
 
     A TAM may be publicly available for use by many Trusted Component Signers, or a TAM
     may be private, and accessible by only one or a limited number of
-    Trusted Component Signers. It is expected that many manufacturers and network carriers
+    Trusted Component Signers. It is expected that many enterprises, manufacturers, and network carriers
     will run their own private TAM.
 
     A Trusted Component Signer or Device Administrator chooses a particular TAM based on
@@ -432,7 +430,7 @@ all components are further explained in the following paragraphs.
     the Trust Anchor Store on these different devices may contain keys
     for different
     TAMs. A Device Administrator may be able to add their own TAM's
-    public key or certificate to the Trust Anchor Store on all their devices,
+    public key or certificate, or a certificate it chains up to, to the Trust Anchor Store on all their devices,
     overcoming this limitation.
 
     Any entity is free to operate a TAM. For a TAM to be successful, it must
@@ -540,7 +538,7 @@ need for TEEP Brokers to share information on installed Trusted Components or re
 
 As shown in {{notionalarch2}}, a TEEP Broker provides communication between 
 one or more TEEP Agents and
-one or more TAMs. The selection of which TAM to communicate with might be
+one or more TAMs. The selection of which TAM to interact with might be
 made with or without input from an Untrusted Application, but is ultimately
 the decision of a TEEP Agent.
 
@@ -595,7 +593,7 @@ including dependencies on any other TAs, trusted OS code (if any), or trusted fi
 Installation steps can also be expressed in a SUIT manifest.
 
 For example, TEEs compliant
-with GlobalPlatform may have a notion of a "security domain" (which is a grouping of
+with GlobalPlatform {{GPTEE}} may have a notion of a "security domain" (which is a grouping of
 one or more TAs installed on a device, that can share information within such a group)
 that must be created and into which one or more TAs can then be installed. It is thus up
 to the SUIT manifest to express a dependency on having such a security domain existing
@@ -623,7 +621,8 @@ of the Personalization Data.
 Other than the requirement to support confidentiality and integrity protection,
 the TEEP architecture places no limitations or requirements on the Personalization Data.
 
-There are three possible cases for bundling of an Untrusted Application, TA(s), and Personalization Data:
+There are multiple possible cases for bundling of an Untrusted Application, TA(s), and Personalization Data.
+Such cases include (possibly among others):
 
   1. The Untrusted Application, TA(s), and Personalization Data are all bundled together in a single
      package by a Trusted Component Signer and either provided to the TEEP Broker through the TAM, or provided separately (with encrypted Personalization Data), with
@@ -632,11 +631,19 @@ There are three possible cases for bundling of an Untrusted Application, TA(s), 
 
   2. The Untrusted Application and the TA(s) are bundled together in a single package, which a TAM or
      a publicly accessible app store maintains, and the Personalization Data
-     is separately provided by the Trusted Component Signer's TAM.
+     is separately provided by the Personalization Data provider's TAM.
 
-  3. All components are independent. The Untrusted Application is installed through some
-     independent or device-specific mechanism, and the TAM provides the TA and Personalization
-     Data from the Trusted Component Signer. Delivery of the TA and Personalization Data may be combined or separate.
+  3. All components are independent packages. The Untrusted Application is installed through some
+     independent or device-specific mechanism, and one or more TAMs provide (directly or indirectly by reference)
+     the TA(s) and Personalization Data.
+
+  4. The TA(s) and Personalization Data are bundled together into a package provided by a TAM,
+     while the Untrusted Application is installed through some independent
+     or device-specific mechanism such as an app store.
+
+  5. Encrypted Personalization Data is bundled into a package distributed with the Untrusted
+     Application, while the TA(s) and key material needed to decrypt and install the Personalization Data
+     are in a separate package provided by a TAM.
 
 The TEEP protocol can treat each TA, any dependencies the TA has, and Personalization Data as
 separate Trusted Components with separate installation steps that are expressed in SUIT manifests,
@@ -655,20 +662,22 @@ exists in the package as a shared library (.so or .dll). The Untrusted Applicati
 an SGX enclave when the Untrusted Application needs the TA. This organization makes it easy to maintain
 compatibility between the Untrusted Application and the TA, since they are updated together. It is
 entirely possible to create an Untrusted Application that loads an external TA into an SGX enclave, and
-use that TA (Case 3). In this case, the Untrusted Application would require a reference to an external
+use that TA (Cases 3-5). In this case, the Untrusted Application would require a reference to an external
 file or download such a file dynamically, place the contents of the file into memory, and
 load that as a TA. Obviously, such file or downloaded content must be properly formatted
-and signed for it to be accepted by the SGX TEE. In SGX, for Case 2 and Case 3, the
+and signed for it to be accepted by the SGX TEE.
+
+In SGX, any
 Personalization Data is normally loaded into the SGX enclave (the TA) after the TA has
-started. Although Case 1 is possible with SGX, there are no instances of this known to
+started. Although it is possible with SGX to include the Untrusted Application in an encrypted
+package along with Personalization Data (Cases 1 and 5), there are no instances of this known to
 be in use at this time, since such a construction would require a special installation
-program and SGX TA to receive the encrypted binary, decrypt it, separate it into the
-three different elements, and then install all three. This installation is complex
+program and SGX TA (which might or might not be the TEEP Agent itself based on the implementation)
+to receive the encrypted package, decrypt it, separate it into the
+different elements, and then install each one. This installation is complex
 because the Untrusted Application decrypted inside the TEE must be passed out of the TEE to an
-installer in the REE which would install the Untrusted Application; this assumes that the Untrusted
-Application package includes the TA code also, since otherwise there is a significant problem in getting
-the SGX enclave code (the TA) from the TEE, through the installer, and into the Untrusted Application
-in a trusted fashion. Finally, the Personalization Data would need to be sent out of the
+installer in the REE which would install the Untrusted Application.
+Finally, the Personalization Data would need to be sent out of the
 TEE (encrypted in an SGX enclave-to-enclave manner) to the REE's installation app, which
 would pass this data to the installed Untrusted Application, which would in turn send this data
 to the SGX enclave (TA). This complexity is due to the fact that each SGX enclave is separate
@@ -686,12 +695,12 @@ such cases, where the runtime platform could include a TEEP Agent.
 In Arm TrustZone {{TrustZone}} for A-class devices, the Untrusted Application and TA may or may not be
 bundled together. This differs from SGX since in TrustZone the TA lifetime is not inherently tied
 to a specific Untrused Application process lifetime as occurs in SGX.  A TA is loaded by
-a trusted OS running in the TEE such as a GlobalPlatform compliant TEE, where the trusted OS is 
+a trusted OS running in the TEE such as a GlobalPlatform {{GPTEE}} compliant TEE, where the trusted OS is 
 separate from the OS in the REE.
-Thus Cases 2 and 3 are equally applicable.  In addition, it is possible for TAs to communicate
-with each other without involving any Untrusted Application, and so the complexity of Case 1
-is lower than in the SGX example.  Thus, Case 1 is possible as well, though still more
-complex than Cases 2 and 3.
+Thus Cases 2-4 are equally applicable.  In addition, it is possible for TAs to communicate
+with each other without involving any Untrusted Application, and so the complexity of Cases 1 and 5
+are lower than in the SGX example, though still more
+complex than Cases 2-4.
 
 A trusted OS running in the TEE (e.g., OP-TEE) that supports loading and verifying signed TAs from
 an untrusted filesystem can, like SGX, use classic file distribution
@@ -752,9 +761,9 @@ Application (where the arrow indicates the direction of data transfer).
 
 At step 4, since the Untrusted Application depends on the TA,
 installing the Untrusted Application will trigger TA installation
-by initiating communication with a TAM. The TEEP Agent
-will interact with TAM via a TEEP Broker that faciliates communications between a TAM
-and the TEEP Agent in TEE.
+via communication with a TAM. The TEEP Agent
+will interact with the TAM via a TEEP Broker that faciliates communications between the TAM
+and the TEEP Agent.
 
 Some Trusted Component installation implementations might ask for a user's consent. In other
 implementations,
@@ -823,16 +832,21 @@ TEEP responses from a TEEP Agent to a TAM can be signed with the TEE
 private key.
 
 The TEE key pair and certificate are thus used for authenticating the TEE
-to a remote TAM, and for sending private data to the TEE.  Often, 
+to a remote TAM, and for sending private data to the TEE.   Often, 
 the key pair is burned into the TEE by the
 TEE manufacturer and the key pair and its certificate are valid for
 the expected lifetime of the TEE.  A TAM provider is responsible
 for configuring the TAM's Trust Anchor Store with the manufacturer certificates or CAs
 that are used to sign TEE keys. This is discussed further in
-{{trust-anchors-in-tam}} below.
+{{trust-anchors-in-tam}} below.  Typically
+the same key TEE pair is used for both signing and encryption, though separate
+key pairs might also be used in the future, as the joint security of
+encryption and signature with a single key remains to some extent an open
+question in academic cryptography.
 
 The TAM key pair and certificate are used for authenticating a TAM
-to a remote TEE, and for sending private data to the TAM.  A TAM provider
+to a remote TEE, and for sending private data to the TAM (separate key 
+pairs for authentication vs. encryption could also be used in the future).  A TAM provider
 is responsible for acquiring a
 certificate from a CA that is trusted by the TEEs it manages. This
 is discussed further in {{trust-anchors-in-teep-agent}} below.
@@ -860,15 +874,15 @@ are out of scope of the architecture and can be addressed in a protocol
 document.
 
 Before a TAM can begin operation in the marketplace to support a
-device with a particular TEE, it must obtain a TAM
-certificate from a CA or the raw public key of a TAM that is listed in 
+device with a particular TEE, it must be able to get its raw public
+key, or its certificate, or a certificate it chains up to, listed in
 the Trust Anchor Store of the TEEP Agent.
 
 ## Trust Anchors in a TEE {#trust-anchors-in-tee}
 
-A TEE determines whether TA binaries are allowed to execute by 
-checking if their signatures can be verified using certificate(s) or raw public key(s)
-in the TEE's Trust Anchor Store. The list
+The Trust Anchor Store in a TEE contains a list of Trust Anchors (raw public keys
+or certificates) that are used to determine whether TA binaries are allowed to execute by 
+checking if their signatures can be verified.  The list
 is typically preloaded at manufacturing time, and
 can be updated using the TEEP protocol if the TEE has some form of
 "Trust Anchor Manager TA" that has Trust Anchors in its configuration data.
@@ -942,22 +956,19 @@ A TEEP Broker abstracts the message exchanges with a TEE in a device.
 The input data is originated from a TAM or the first initialization
 call to trigger a Trusted Component installation.
 
-The Broker doesn't need to parse a message content received from a TAM
+The Broker doesn't need to parse TEEP message content received from a TAM
 that should be processed by a TEE (see the ProcessTeepMessage API in {{apis}}).
 When a device has more than one TEE, one TEEP Broker per TEE could
-be present in the REE. A TEEP Broker interacts with a TEEP Agent inside
-a TEE.
+be present in the REE or a common TEEP Broker could be used by multiple TEEs
+where the transport protocol (e.g., {{I-D.ietf-teep-otrp-over-http}}) allows
+the TEEP Broker to distinguish which TEE is relevant for each message from a TAM.
 
-A TAM message may indicate the target TEE where a Trusted Component should be installed.
-A compliant TEEP protocol should include a target TEE identifier for a
-TEEP Broker when multiple TEEs are present.
+The TEEP Broker interacts with a TEEP Agent inside a TEE, and
+relays the response messages generated from the TEEP Agent back to the TAM.
 
-The Broker relays the response messages generated from a TEEP Agent in a TEE
-to the TAM.
-
-The Broker only needs to return a (transport) error message if the TEE is
+The Broker only needs to return a (transport) error message to the TAM if the TEE is
 not reachable for some reason.  Other errors are represented as
-response messages returned from the TEE which will then be passed to
+TEEP response messages returned from the TEE which will then be passed to
 the TAM.
 
 ## TEEP Broker Implementation Consideration
@@ -1028,9 +1039,9 @@ The following conceptual APIs exist from a TEEP Broker to a TEEP Agent:
 For comparison, similar APIs may exist on the TAM side, where a Broker may or may not
 exist, depending on whether the TAM uses a TEE or not:
 
-1. ProcessConnect: A notification that an incoming TEEP session is being requested by a TEEP Agent.
+1. ProcessConnect: A notification that a new TEEP session is being requested by a TEEP Agent.
 
-2. ProcessTeepMessage: A message arriving from the network, to be delivered
+2. ProcessTeepMessage: A message arriving on an existing TEEP session, to be delivered
    to the TAM for processing.
 
 For further discussion on these APIs, see {{I-D.ietf-teep-otrp-over-http}}.
@@ -1236,17 +1247,18 @@ expire, or a Trust Anchor other than a root CA certificate may also expire or
 be compromised.
 TEEs are responsible for validating the entire TAM certificate path,
 including the TAM certificate and any intermediate certificates up to
-the root certificate.  Such validation includes checking for certificate
-revocation. See Section 6 of {{RFC5280}} for details.
+the root certificate.  See Section 6 of {{RFC5280}} for details.
+Such validation generally includes checking for certificate
+revocation, but certificate status check protocols may
+not scale down to constrained devices that use TEEP.
 
-If a TAM certificate path validation fails, the TAM
-might be rejected by a TEEP Agent.
-To address this, some certificate path update mechanism
+To address the above issues, a certificate path update mechanism
 is expected from TAM operators, so that the TAM can get
 a new certificate path that can be validated by a TEEP Agent.
 In addition, the Trust Anchor in the TEEP Agent's Trust Anchor Store
 may need to be updated.  To address this, some TEE Trust Anchor update 
-mechanism is expected from device OEMs.
+mechanism is expected from device OEMs, such as using the TEEP protocol
+to distribute new Trust Anchors.
 
 Similarly, 
 a root CA for TEE certificates might get compromised or its certificate might
@@ -1327,7 +1339,11 @@ from being disclosed to the TAM that distributes them.  In such a scenario,
 the files can be encrypted end-to-end between a Trusted Component Signer and a TEE.  However, there
 must be some means of provisioning the decryption key into the TEE and/or some
 means of the Trusted Component Signer securely learning a public key of the TEE that it can use to
-encrypt.  One way to do this is for the Trusted Component Signer to run its own TAM so that it can
+encrypt.  The Trusted Component Signer cannot necessarily even trust the
+TAM to report the correct public key of a TEE for use with encryption, since the TAM might instead
+provide the public key of a TEE that it controls.
+
+One way to solve this is for the Trusted Component Signer to run its own TAM that is only used to
 distribute the decryption key via the TEEP protocol, and the key file can be a
 dependency in the manifest of the encrypted TA.  Thus, the TEEP Agent would
 look at the Trusted Component manifest, determine there is a dependency with a TAM URI of the
