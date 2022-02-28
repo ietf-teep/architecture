@@ -242,7 +242,7 @@ The following terms are used:
 
   - Raw Public Key: A raw public key consists of only the algorithm identifier
     (type) of the key and the cryptographic public key material, such as the
-    SubjectPublicKeyInfo structure of a PKIX certificate {{RFC5280}} Other
+    SubjectPublicKeyInfo structure of a PKIX certificate {{RFC5280}}. Other
     serialization formats that do not rely on ASN.1 may also be used. 
 
   - Rich Execution Environment (REE): An environment that is provided
@@ -355,7 +355,7 @@ liability and increased cloud adoption.
 
 ## System Components
 
-{{notionalarch}} shows the main components in a typical device with REE and
+{{notionalarch}} shows the main components in a typical device with an REE and a
 TEE. Full descriptions of
 components not previously defined are provided below. Interactions of
 all components are further explained in the following paragraphs.
@@ -553,7 +553,7 @@ the Trusted Component back to the Trusted Component Signer. The Trusted Componen
 some cases might be another party such as a Device Administrator
 or other party
 to whom the code has been licensed (in which case the same code might
-be signed by multiple licensees and distributed as if it was different TAs).
+be signed by multiple licensees and distributed as if it were different TAs).
 
 A Trusted Component Signer selects one or more TAMs and communicates the Trusted Component(s) to the TAM.
 For example, the Trusted Component Signer might choose TAMs based upon the markets into which the TAM can provide access. There
