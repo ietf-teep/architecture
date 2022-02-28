@@ -1360,7 +1360,7 @@ from being disclosed to the TAM that distributes them.  In such a scenario,
 the files can be encrypted end-to-end between a Trusted Component Signer and a TEE.  However, there
 must be some means of provisioning the decryption key into the TEE and/or some
 means of the Trusted Component Signer securely learning a public key of the TEE that it can use to
-encrypt.  The Trusted Component Signer cannot necessarily even trust the
+encrypt. The Trusted Component Signer cannot necessarily even trust the
 TAM to report the correct public key of a TEE for use with encryption, since the TAM might instead
 provide the public key of a TEE that it controls.
 
