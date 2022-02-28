@@ -1176,10 +1176,31 @@ A TEEP Agent in a TEE is responsible for protecting against potential attacks
 from a compromised 
 TEEP Broker or rogue malware in the REE. A rogue TEEP Broker
 might send corrupted data to the TEEP Agent, or launch a DoS attack by sending a flood
-of TEEP protocol requests. The TEEP Agent validates the signature of each TEEP protocol request
+of TEEP protocol requests, or simply drop or delay notifications to a TEE. The TEEP Agent validates the signature of each TEEP protocol request
 and checks the signing certificate against its Trust Anchors. To mitigate
 DoS attacks, it might also add some protection
 scheme such as a threshold on repeated requests or number of TAs that can be installed.
+
+Some implementations might rely on (due to lack of any available alternative) the use of 
+an untrusted timer or other event to call the RequestPolicyCheck API ({{apis}}), which
+means that a compromised REE can cause a TEE to not receive policy changes and thus be out of date
+with respect to policy.  The same can potentially be done by any other man-in-the-middle
+simply by blocking communication with a TAM.  Ultimately such outdated compliance
+could be addressed by using attestation in secure communication, where the attestation
+evidence reveals what state the TEE is in, so that communication (other than remediation
+such as via TEEP) from an out-of-compliance TEE can be rejected.
+
+Similarly, in most implementations the REE is involved in the mechanics of installing new TAs.
+However, the authority for what TAs are running in a given TEE is between the TEEP Agent and the TAM.
+While a TEEP Broker broker can in effect make suggestions, it cannot decide or enforce what runs where.
+The TEEP Broker can also control which TEE a given installation request is directed at, but a TEEP
+Agent will only accept TAs that are actually applicable to it and where installation instructions
+are received by a TAM that it trusts.
+
+The authorization model for the UnrequestTA operation is, however, weaker in that it
+expresses the removal of a dependency from an application that was untrusted to begin with.
+This means that a compromised REE could remove a valid dependency from an Untrusted Application
+on a TA.  Normal REE security mechanisms should be used to protect the REE and Untrusted Applications.
 
 ## Data Protection
 
