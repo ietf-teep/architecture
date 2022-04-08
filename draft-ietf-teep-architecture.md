@@ -219,10 +219,10 @@ the following problems:
 For TEEs that simply verify and load signed TA's from an untrusted
 filesystem, classic application distribution protocols can be used
 without modification.  The problems in the bullets above, on the other hand,
-require a new protocol, i.e.,
-the TEEP protocol, for TEEs that can install and enumerate TAs in a
-TEE-secured location and where another domain-specific protocol standard
-(e.g., {{GSMA}}, {{OTRP}}) that meets the needs is not already in use.
+require a new protocol, i.e., the TEEP protocol. The TEEP protocol is 
+a solution for TEEs that can install and enumerate TAs in a TEE-secured
+location where another domain-specific protocol standard (e.g., {{GSMA}},
+{{OTRP}}) that meets the needs is not already in use.
 
 #  Terminology {#terminology}
 
@@ -354,9 +354,9 @@ reducing access to keying material.
 ## Internet of Things
 
 Weak security in Internet of Things (IoT) devices has been posing threats to 
-critical infrastructure that relies upon such devices.
-It is desirable that IoT devices can prevent malware from
-manipulating actuators (e.g., unlocking a door), or
+critical infrastructure, i.e. assets that are essential for the functioning
+of a society and economy. It is desirable that IoT devices can prevent malware
+from manipulating actuators (e.g., unlocking a door), or
 stealing or modifying sensitive data, such as authentication credentials
 in the device. A TEE can be the best way to implement such IoT
 security functions.
@@ -639,9 +639,8 @@ the device can vary. The variations depend on whether the Untrusted Application 
 together or are provided separately, and this has implications to the management of
 the TAs in a TEE. In addition to the Untrusted Application and TA(s), the TA(s) and/or TEE may also require additional data to personalize the TA to the device or a user.
 Implementations must support encryption of such
-Personalization Data to preserve the confidentiality of potentially
-sensitive data contained within it, and must support integrity protection
-of the Personalization Data.
+Personalization Data to preserve the confidentiality and integrity protection of potentially
+sensitive data contained within it.
 Other than the requirement to support confidentiality and integrity protection,
 the TEEP architecture places no limitations or requirements on the Personalization Data.
 
@@ -1260,7 +1259,7 @@ against the TEE.
 
 The compromised REE
 may terminate the TEEP Broker such that TEEP transactions cannot reach the TEE,
-or might drop or delay messages between a TAM and a TEEP Agent.
+or might drop, replay or delay messages between a TAM and a TEEP Agent.
 However, while a DoS attack cannot be prevented, the REE cannot access
 anything in the TEE if the TEE is implemented correctly.
 Some TEEs may have some watchdog scheme to observe REE state and mitigate DoS
@@ -1288,8 +1287,7 @@ for protecting the resource usage allocated for Trusted Component management.
 ## CA Compromise or Expiry of CA Certificate
 
 A root CA for TAM certificates might get compromised or its certificate might
-expire, or a Trust Anchor other than a root CA certificate may also expire or
-be compromised.
+expire.
 TEEs are responsible for validating the entire TAM certificate path,
 including the TAM certificate and any intermediate certificates up to
 the root certificate.  See Section 6 of {{RFC5280}} for details.
@@ -1362,7 +1360,7 @@ the attestation result expires.  As such, the TAM's Verifier should
 take into account the acceptable time window when generating attestation
 results. See {{I-D.ietf-rats-architecture}} for further discussion.
 
-## Certificate Expiry and Renewal 
+## TEE Certificate Expiry and Renewal 
 
 TEE device certificates are expected to be long lived, longer
 than the lifetime of a device.  A TAM certificate usually has a
