@@ -1289,7 +1289,7 @@ for protecting the resource usage allocated for Trusted Component management.
 ## CA Compromise or Expiry of CA Certificate
 
 A root CA for TAM certificates might get compromised or its certificate might
-expire, a Trust Anchor other than a root CA certificate may also expire or
+expire, or a Trust Anchor other than a root CA certificate may also expire or
 be compromised.
 TEEs are responsible for validating the entire TAM certificate path,
 including the TAM certificate and any intermediate certificates up to
