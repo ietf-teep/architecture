@@ -228,7 +228,7 @@ location where another domain-specific protocol standard (e.g., {{GSMA}},
 
 The following terms are used:
 
-  - App Store: an online location from which Untrusted Applications can be downloaded.
+  - App Store: An online location from which Untrusted Applications can be downloaded.
 
   - Device: A physical piece of hardware that hosts one or more TEEs,
     often along with
