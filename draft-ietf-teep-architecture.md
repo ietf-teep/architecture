@@ -1308,7 +1308,8 @@ to distribute new Trust Anchors.
 
 Similarly, 
 a root CA for TEE certificates might get compromised or its certificate might
-expire.
+expire, or a Trust Anchor other than a root CA certificate may also expire or
+be compromised.
 TAMs are responsible for validating the entire TEE certificate path,
 including the TEE certificate and any intermediate certificates up to
 the root certificate.  Such validation includes checking for certificate
