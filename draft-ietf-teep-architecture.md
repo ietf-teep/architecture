@@ -283,8 +283,8 @@ The following terms are used:
     key and associated data.  The public key is used to verify digital
     signatures, and the associated data is used to constrain the types
     of information for which the trust anchor is authoritative."
-    The Trust Anchor may be a certificate or it may be a raw public key. 
-    It can be a non-root certificate when it is a certificate.
+    The Trust Anchor may be a certificate, a raw public key or other structure,
+    as appropriate. It can be a non-root certificate when it is a certificate.
 
   - Trust Anchor Store: As defined in {{RFC6024}}, "A trust anchor
     store is a set of one or more trust anchors stored in a device...
