@@ -228,6 +228,8 @@ location where another domain-specific protocol standard (e.g., {{GSMA}},
 
 The following terms are used:
 
+  - App Store: An online location from which Untrusted Applications can be downloaded.
+
   - Device: A physical piece of hardware that hosts one or more TEEs,
     often along with
     an REE.
@@ -281,7 +283,8 @@ The following terms are used:
     key and associated data.  The public key is used to verify digital
     signatures, and the associated data is used to constrain the types
     of information for which the trust anchor is authoritative."
-    The Trust Anchor may be a certificate or it may be a raw public key.
+    The Trust Anchor may be a certificate, a raw public key or other structure,
+    as appropriate. It can be a non-root certificate when it is a certificate.
 
   - Trust Anchor Store: As defined in {{RFC6024}}, "A trust anchor
     store is a set of one or more trust anchors stored in a device...
@@ -638,9 +641,8 @@ the Untrusted Application and its corresponding TAs are packaged, delivered, and
 the device can vary. The variations depend on whether the Untrusted Application and TA are bundled
 together or are provided separately, and this has implications to the management of
 the TAs in a TEE. In addition to the Untrusted Application and TA(s), the TA(s) and/or TEE may also require additional data to personalize the TA to the device or a user.
-Implementations must support encryption of such
-Personalization Data to preserve the confidentiality and integrity protection of potentially
-sensitive data contained within it.
+Implementations must support encryption to preserve the confidentiality and integrity protection of such Personalized Data,
+which may potentially contain sensitive data.
 Other than the requirement to support confidentiality and integrity protection,
 the TEEP architecture places no limitations or requirements on the Personalization Data.
 
@@ -1287,7 +1289,8 @@ for protecting the resource usage allocated for Trusted Component management.
 ## CA Compromise or Expiry of CA Certificate
 
 A root CA for TAM certificates might get compromised or its certificate might
-expire.
+expire, or a Trust Anchor other than a root CA certificate may also expire or
+be compromised.
 TEEs are responsible for validating the entire TAM certificate path,
 including the TAM certificate and any intermediate certificates up to
 the root certificate.  See Section 6 of {{RFC5280}} for details.
