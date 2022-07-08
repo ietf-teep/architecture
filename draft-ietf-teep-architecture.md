@@ -641,8 +641,8 @@ the Untrusted Application and its corresponding TAs are packaged, delivered, and
 the device can vary. The variations depend on whether the Untrusted Application and TA are bundled
 together or are provided separately, and this has implications to the management of
 the TAs in a TEE. In addition to the Untrusted Application and TA(s), the TA(s) and/or TEE may also require additional data to personalize the TA to the device or a user.
-Implementations must support encryption to preserve the confidentiality and integrity of such Personalized Data,
-which may potentially contain sensitive data.
+Implementations must support encryption to preserve confidentiality of such Personalization Data,
+which may potentially contain sensitive data. Implementations must also support mechanisms for integrity protection of such Personalization Data.
 Other than the requirement to support confidentiality and integrity protection,
 the TEEP architecture places no limitations or requirements on the Personalization Data.
 
