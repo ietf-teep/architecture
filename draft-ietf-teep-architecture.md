@@ -49,7 +49,7 @@ author:
 informative:
   RFC6024:
   I-D.ietf-rats-architecture:
-  I-D.ietf-suit-architecture:
+  RFC9019:
   I-D.ietf-suit-manifest:
   I-D.ietf-teep-otrp-over-http:
   I-D.ietf-teep-protocol:
@@ -278,7 +278,7 @@ The following terms are used:
     applications running on it are considered untrusted (or more precisely,
     less trusted than a TEE).
 
-  - Trust Anchor: As defined in {{RFC6024}} and {{I-D.ietf-suit-architecture}},
+  - Trust Anchor: As defined in {{RFC6024}} and {{RFC9019}},
     "A trust anchor represents an authoritative entity via a public
     key and associated data.  The public key is used to verify digital
     signatures, and the associated data is used to constrain the types
@@ -289,7 +289,7 @@ The following terms are used:
   - Trust Anchor Store: As defined in {{RFC6024}}, "A trust anchor
     store is a set of one or more trust anchors stored in a device...
     A device may have more than one trust anchor store, each of which
-    may be used by one or more applications."  As noted in {{I-D.ietf-suit-architecture}},
+    may be used by one or more applications."  As noted in {{RFC9019}},
     a Trust Anchor Store must resist modification against unauthorized
     insertion, deletion, and modification.
 
