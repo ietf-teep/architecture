@@ -150,8 +150,8 @@ Untrusted Application.  In addition, processing of credit card numbers or accoun
 The precise code split is ultimately a decision of the 
 developer based on the assets he or she wants to protect according to the threat model. 
 
-TEEs are typically used in cases where a software or data asset needs to be protected
-from unauthorized entities that may include the owner (or pwner) or possesser of a device.  This
+TEEs are typically used in cases where software or data assets need to be protected from unauthorised access
+where threat actors may have physical or administrative access to a device.  This
 situation arises for example in gaming consoles where anti-cheat protection is a concern,
 devices such as ATMs or IoT devices placed in locations where attackers might have physical
 access, cell phones or other devices used for mobile payments, and hosted cloud environments.  Such environments
