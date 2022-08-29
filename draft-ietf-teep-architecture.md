@@ -443,8 +443,8 @@ all components are further explained in the following paragraphs.
     A Trusted Component Signer or Device Administrator chooses a particular TAM based on
     whether the TAM is trusted by a device or set of devices. The
     TAM is trusted by a device if the TAM's public key is, or chains up to,
-    an authorized
-    Trust Anchor in the device. A Trusted Component Signer or Device Administrator may run
+    an authorized Trust Anchor in the device, and conforms with all constraints defined in 
+    the Trust Anchor. A Trusted Component Signer or Device Administrator may run
     their own TAM, but the devices they wish to manage must include
     this TAM's public key or certificate, or a certificate it chains up to, in the
     Trust Anchor Store.
