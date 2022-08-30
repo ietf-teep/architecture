@@ -143,7 +143,7 @@ those application components perform security sensitive operations or operate on
 sensitive data. An application component running inside a TEE is referred to as a
 Trusted Application (TA), while an application running outside any TEE, i.e., in the
 Rich Execution Environment (REE),
-is referred to as an Untrusted Application. In the example of a banking application, 
+is referred to as an Untrusted Application (UA). In the example of a banking application, 
 code that relates to the authentication protocol could reside in a TA while the 
 application logic including HTTP protocol parsing could be contained in the 
 Untrusted Application.  In addition, processing of credit card numbers or account balances could be done in a TA as it is sensitive data.
@@ -323,7 +323,7 @@ The following terms are used:
     that one TA cannot read, modify or delete the data and code of another
     TA.
 
-  - Untrusted Application: An application running in an REE. An Untrusted Application 
+  - Untrusted Application (UA): An application running in an REE. An Untrusted Application 
     might depend on one or more TAs.
 
 # Use Cases
