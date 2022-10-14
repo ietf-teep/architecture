@@ -143,7 +143,7 @@ those application components perform security sensitive operations or operate on
 sensitive data. An application component running inside a TEE is referred to as a
 Trusted Application (TA), while an application running outside any TEE, i.e., in the
 Rich Execution Environment (REE),
-is referred to as an Untrusted Application. In the example of a banking application, 
+is referred to as an Untrusted Application (UA). In the example of a banking application, 
 code that relates to the authentication protocol could reside in a TA while the 
 application logic including HTTP protocol parsing could be contained in the 
 Untrusted Application.  In addition, processing of credit card numbers or account balances could be done in a TA as it is sensitive data.
@@ -257,8 +257,7 @@ The following terms are used:
     a single device user. Some devices have a primary device user with
     other human beings as secondary device users (e.g., a parent allowing
     children to use their tablet or laptop). Other devices are not used
-    by a human being and hence have no device user. Relates to Device Owner
-    and Device Administrator.
+    by a human being and hence have no device user.
 
   - Personalization Data: A set of configuration data that is specific to
    the device or user. The Personalization Data may depend on the type of
@@ -324,7 +323,7 @@ The following terms are used:
     that one TA cannot read, modify or delete the data and code of another
     TA.
 
-  - Untrusted Application: An application running in an REE. An Untrusted Application 
+  - Untrusted Application (UA): An application running in an REE. An Untrusted Application 
     might depend on one or more TAs.
 
 # Use Cases
@@ -386,26 +385,26 @@ components not previously defined are provided below. Interactions of
 all components are further explained in the following paragraphs.
 
 ~~~~
-   +-------------------------------------------+
-   | Device                                    |    Trusted Component
-   |                          +--------+       |              Signer
-   |    +-------------+       |        |-----------+              |
-   |    | TEE-1       |       | TEEP   |---------+ |              |
-   |    | +--------+  |  +----| Broker |       | | |  +--------+  |
-   |    | | TEEP   |  |  |    |        |<---+  | | +->|        |<-+
-   |    | | Agent  |<----+    |        |    |  | |  +-|  TAM-1 |
-   |    | +--------+  |       |        |<-+ |  | +->| |        |<-+
-   |    |             |       +--------+  | |  |    | +--------+  |
-   |    | +---+ +---+ |                   | |  |    | TAM-2  |    |
-   |  +-->|TA1| |TA2| |        +-------+  | |  |    +--------+    |
-   |  | | |   | |   |<---------| App-2 |--+ |  |                  |
-   |  | | +---+ +---+ |    +-------+   |    |  |    Device Administrator
-   |  | +-------------+    | App-1 |   |    |  |
-   |  |                    |       |   |    |  |
-   |  +--------------------|       |---+    |  |
-   |                       |       |--------+  |
-   |                       +-------+           |
-   +-------------------------------------------+
+   +---------------------------------------------+
+   | Device                                      |      Trusted Component
+   |                          +--------+         |                Signer
+   |    +---------------+     |        |--------------+               |
+   |    | TEE-1         |     | TEEP   |-----------+  |               |
+   |    | +--------+    |  +--| Broker |         | |  |   +--------+  |
+   |    | | TEEP   |    |  |  |        |<-----+  | |  +-->|        |<-+
+   |    | | Agent  |<------+  |        |      |  | |    +-|  TAM-1 |
+   |    | +--------+    |     |        |<---+ |  | +--->| |        |<-+
+   |    |               |     +--------+    | |  |      | +--------+  |
+   |    | +----+ +----+ |                   | |  |      | TAM-2  |    |
+   |  +-->|TA-1| |TA-2| |        +-------+  | |  |      +--------+    |
+   |  | | |    | |    |<---------| UA-2  |--+ |  |                    |
+   |  | | +----+ +----+ |  +-------+     |    |  |    Device Administrator
+   |  | +---------------+  | UA-1  |     |    |  |
+   |  |                    |       |     |    |  |
+   |  +--------------------|       |-----+    |  |
+   |                       |       |----------+  |
+   |                       +-------+             |
+   +---------------------------------------------+
 ~~~~
 {: #notionalarch title="Notional Architecture of TEEP"}
 
@@ -444,8 +443,8 @@ all components are further explained in the following paragraphs.
     A Trusted Component Signer or Device Administrator chooses a particular TAM based on
     whether the TAM is trusted by a device or set of devices. The
     TAM is trusted by a device if the TAM's public key is, or chains up to,
-    an authorized
-    Trust Anchor in the device. A Trusted Component Signer or Device Administrator may run
+    an authorized Trust Anchor in the device, and conforms with all constraints defined in 
+    the Trust Anchor. A Trusted Component Signer or Device Administrator may run
     their own TAM, but the devices they wish to manage must include
     this TAM's public key or certificate, or a certificate it chains up to, in the
     Trust Anchor Store.
@@ -518,37 +517,37 @@ no such limitations are intended to be implied in the architecture.
    +-------------------------------------------+            Trusted
    | Device                                    |          Component
    |                                           |             Signer
-   |    +-------------+                        |                  |
-   |    | TEE-1       |                        |                  |
-   |    | +-------+   |       +--------+       |      +--------+  |
-   |    | | TEEP  |   |       | TEEP   |------------->|        |<-+
+   |    +---------------+                      |                  |
+   |    | TEE-1         |                      |                  |
+   |    | +-------+     |     +--------+       |      +--------+  |
+   |    | | TEEP  |     |     | TEEP   |------------->|        |<-+
    |    | | Agent |<----------| Broker |       |      |        | TA 
-   |    | | 1     |   |       | 1      |---------+    |        |
-   |    | +-------+   |       |        |       | |    |        |
-   |    |             |       |        |<---+  | |    |        |
-   |    | +---+ +---+ |       |        |    |  | |  +-|  TAM-1 |Policy
-   |    | |TA1| |TA2| |       |        |<-+ |  | +->| |        |<-+
-   |  +-->|   | |   |<---+    +--------+  | |  |    | +--------+  |
-   |  | | +---+ +---+ |  |                | |  |    | TAM-2  |    |
-   |  | |             |  |     +-------+  | |  |    +--------+    |
-   |  | +-------------+  +-----| App-2 |--+ |  |       ^          |
+   |    | | 1     |     |     | 1      |---------+    |        |
+   |    | +-------+     |     |        |       | |    |        |
+   |    |               |     |        |<---+  | |    |        |
+   |    | +----+ +----+ |     |        |    |  | |  +-|  TAM-1 |Policy
+   |    | |TA-1| |TA-2| |     |        |<-+ |  | +->| |        |<-+
+   |  +-->|    | |    |<---+  +--------+  | |  |    | +--------+  |
+   |  | | +----+ +----+ |  |              | |  |    | TAM-2  |    |
+   |  | |               |  |   +-------+  | |  |    +--------+    |
+   |  | +---------------+  +---| UA-2  |--+ |  |       ^          |
    |  |                    +-------+   |    |  |       |       Device
-   |  +--------------------| App-1 |   |    |  |       |   Administrator
+   |  +--------------------| UA-1  |   |    |  |       |   Administrator
    |                +------|       |   |    |  |       |
-   |    +-----------|-+    |       |---+    |  |       |
-   |    | TEE-2     | |    |       |--------+  |       |
-   |    | +------+  | |    |       |------+    |       |
-   |    | | TEEP |  | |    +-------+      |    |       |
-   |    | | Agent|<-----+                 |    |       |
-   |    | | 2    |  | | |                 |    |       |
-   |    | +------+  | | |                 |    |       |
-   |    |           | | |                 |    |       |
-   |    | +---+     | | |                 |    |       |
-   |    | |TA3|<----+ | |  +----------+   |    |       |
-   |    | |   |       | |  | TEEP     |<--+    |       |
-   |    | +---+       | +--| Broker   |        |       |
-   |    |             |    | 2        |----------------+
-   |    +-------------+    +----------+        |
+   |    +-----------|---+  |       |---+    |  |       |
+   |    | TEE-2     |   |  |       |--------+  |       |
+   |    | +------+  |   |  |       |-------+   |       |
+   |    | | TEEP |  |   |  +-------+       |   |       |
+   |    | | Agent|<-------+                |   |       |
+   |    | | 2    |  |   | |                |   |       |
+   |    | +------+  |   | |                |   |       |
+   |    |           |   | |                |   |       |
+   |    | +----+    |   | |                |   |       |
+   |    | |TA-3|<---+   | |   +---------+  |   |       |
+   |    | |    |        | |   | TEEP    |<-+   |       |
+   |    | +----+        | +---| Broker  |      |       |
+   |    |               |     | 2       |--------------+
+   |    +---------------+     +---------+      |
    |                                           |
    +-------------------------------------------+
 ~~~~
