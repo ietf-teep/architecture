@@ -427,13 +427,13 @@ all components are further explained in the following paragraphs.
     messages between a TAM and a TEEP Agent running inside the TEE. 
     TEEP authentication is performed between a TAM and a TEEP Agent.
 
-    As shown in
-    {{notionalarch}}, the TAM cannot directly contact a TEEP Agent, but must
-    wait for the TEEP Broker to contact
-    the TAM requesting a particular service. This architecture is
-    intentional in order to accommodate network and application firewalls
-    that normally protect user and enterprise devices from arbitrary
-    connections from external network entities.
+    When the TEEP Agent runs in a user or enterprise device, network and application firewalls
+    normally protect user and enterprise devices from arbitrary connections from external network
+    entities. In such a deployment, a TAM outside that network might not be able to directly
+    contact a TEEP Agent, but needs to wait for the TEEP Broker to contact it.
+    The architecture in {{notionalarch}} accommodates this case as well as other less restrictive cases
+    by leaving such details to an appropriate TEEP transport protocol (e.g., {{I-D.ietf-teep-otrp-over-http}},
+    though other transport protocols can be defined under the TEEP protocol for other cases).
 
     A TAM may be publicly available for use by many Trusted Component Signers, or a TAM
     may be private, and accessible by only one or a limited number of
