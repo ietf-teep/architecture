@@ -1213,7 +1213,7 @@ scheme such as a threshold on repeated requests or number of TAs that can be ins
 Some implementations might rely on (due to lack of any available alternative) the use of 
 an untrusted timer or other event to call the RequestPolicyCheck API ({{apis}}), which
 means that a compromised REE can cause a TEE to not receive policy changes and thus be out of date
-with respect to policy.  The same can potentially be done by any other man-in-the-middle
+with respect to policy.  The same can potentially be done by any other manipulator-in-the-middle
 simply by blocking communication with a TAM.  Ultimately such outdated compliance
 could be addressed by using attestation in secure communication, where the attestation
 evidence reveals what state the TEE is in, so that communication (other than remediation
