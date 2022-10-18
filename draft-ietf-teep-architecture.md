@@ -148,7 +148,7 @@ code that relates to the authentication protocol could reside in a TA while the
 application logic including HTTP protocol parsing could be contained in the 
 Untrusted Application.  In addition, processing of credit card numbers or account balances could be done in a TA as it is sensitive data.
 The precise code split is ultimately a decision of the 
-developer based on the assets he or she wants to protect according to the threat model. 
+developer based on the assets the person wants to protect according to the threat model. 
 
 TEEs are typically used in cases where software or data assets need to be protected from unauthorized access
 where threat actors may have physical or administrative access to a device.  This
