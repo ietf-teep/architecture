@@ -163,7 +163,7 @@ For further discussion of such confidential computing use cases and threat model
 {{CC-Overview}} and {{CC-Technical-Analysis}}.
 
 TEEs use hardware enforcement combined with software protection to secure TAs and
-its data. TEEs typically offer a more limited set of services to TAs than is 
+their data. TEEs typically offer a more limited set of services to TAs than is 
 normally available to Untrusted Applications.
 
 Not all TEEs are the same, however, and different vendors may have different
@@ -756,10 +756,13 @@ and TEE for TAM trust verification and TA signature verification.
 1. Build two apps:          |       |                |            |
                             |       |                |            |
    (a) Untrusted            |       |                |            |
-       App - 2a. Supply --> | --- 3. Install ------> |            |
+       App - 2a. Supply --> |       |                |            |
                             |       |                |            |
-   (b) TA -- 2b. Supply ----------> | 4. Messaging-->|            |
+   (b) TA -- 2b. Supply ----------> |                |            |
                             |       |                |            |
+                            | --- 3. Install ------> |            |
+                            |       |                |            |
+                            |       | 4. Messaging-->|            |
 ~~~~
 {: #experience title="Example Developer Experience"}
 
