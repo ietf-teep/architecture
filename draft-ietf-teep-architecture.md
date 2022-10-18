@@ -121,7 +121,7 @@ with the number of other applications on the device, with such other
 applications coming from potentially untrustworthy sources. The
 potential for attacks further increases with the complexity of features
 and applications on devices, and the unintended interactions among those
-features and applications. The danger of attacks on a system increases
+features and applications. The risk of attacks on a system increases
 as the sensitivity of the applications or data on the device increases.
 As an example, exposure of emails from a mail client is likely to be of
 concern to its owner, but a compromise of a banking application raises
@@ -360,7 +360,7 @@ critical infrastructure, i.e., assets that are essential for the functioning
 of a society and economy. It is desirable that IoT devices can prevent malware
 from manipulating actuators (e.g., unlocking a door), or
 stealing or modifying sensitive data, such as authentication credentials
-in the device. A TEE can be the best way to implement such IoT
+in the device. A TEE can be one of the best ways to implement such IoT
 security functions.
 
 
@@ -410,7 +410,7 @@ all components are further explained in the following paragraphs.
 
   - Trusted Component Signers and Device Administrators utilize the services
     of a TAM to manage TAs on devices. Trusted Component Signers do not directly interact
-    with devices. Device Administators may elect to use a TAM for remote administration
+    with devices. Device Administrators may elect to use a TAM for remote administration
     of TAs instead of managing each device directly.
 
   - Trusted Application Manager (TAM):  A TAM is responsible for performing lifecycle
@@ -419,7 +419,7 @@ all components are further explained in the following paragraphs.
     deletion of Trusted Components, and may include, for example, over-the-air
     updates to keep Trusted Components up-to-date and clean up when Trusted Components
     should be removed. TAMs may provide services that make it easier for
-    Trusted Component Signers or Device Administators to use the TAM's service to manage multiple devices,
+    Trusted Component Signers or Device Administrators to use the TAM's service to manage multiple devices,
     although that is not required of a TAM.
 
     The TAM performs its management of Trusted Components on the device through
@@ -1082,7 +1082,7 @@ can dynamically download and install a Broker on-demand.
 Attestation is the process through which one entity (an Attester) presents "evidence", in the form
 of a series of claims, to another entity (a Verifier), and provides sufficient proof that the claims
 are true. Different Verifiers may require different degrees of confidence in attestation proofs
-and not all attestations are acceptable to every verifier.  A third entity (a Relying Party)
+and not all attestations are acceptable to every Verifier.  A third entity (a Relying Party)
 can then use "attestation results", in the form of another series of claims, from a Verifier
 to make authorization decisions.  (See {{I-D.ietf-rats-architecture}} for more discussion.)
 
@@ -1110,15 +1110,16 @@ of extended claims.
 As of the writing of this specification, device and TEE attestations have not been standardized
 across the market. Different devices, manufacturers, and TEEs support different attestation
 protocols. In order for TEEP to be inclusive, it is agnostic to the format of evidence,
-allowing proprietary or standardized formats to be used between a TEE and a verifier (which may or may not
+allowing proprietary or standardized formats to be used between a TEE and a Verifier (which may or may not
 be colocated in the TAM), as long as the format supports encryption of
 any information that is considered sensitive.
 
 However, it should be recognized
 that not all Verifiers may be able to process all proprietary forms of attestation evidence.
 Similarly, the TEEP protocol is agnostic as to the format of attestation results, and the protocol
-(if any) used between the TAM and a verifier, as long as they convey at least the required set of claims
-in some format. Note that the respective attestation algorithms are not defined in the TEEP protocol itself; see {{I-D.ietf-rats-architecture}} and {{I-D.ietf-teep-protocol}} for more discussion. 
+(if any) used between the TAM and a Verifier, as long as they convey at least the required set of claims
+in some format. Note that the respective attestation algorithms are not defined in the TEEP protocol itself;
+see {{I-D.ietf-rats-architecture}} and {{I-D.ietf-teep-protocol}} for more discussion. 
 
 There are a number of considerations that need to be considered when appraising
 evidence provided by a TEE, including:
@@ -1203,7 +1204,8 @@ A TEEP Agent in a TEE is responsible for protecting against potential attacks
 from a compromised 
 TEEP Broker or rogue malware in the REE. A rogue TEEP Broker
 might send corrupted data to the TEEP Agent, or launch a DoS attack by sending a flood
-of TEEP protocol requests, or simply drop or delay notifications to a TEE. The TEEP Agent validates the signature of each TEEP protocol request
+of TEEP protocol requests, or simply drop or delay notifications to a TEE. The TEEP Agent
+validates the signature of each TEEP protocol request
 and checks the signing certificate against its Trust Anchors. To mitigate
 DoS attacks, it might also add some protection
 scheme such as a threshold on repeated requests or number of TAs that can be installed.
@@ -1219,7 +1221,7 @@ such as via TEEP) from an out-of-compliance TEE can be rejected.
 
 Similarly, in most implementations the REE is involved in the mechanics of installing new TAs.
 However, the authority for what TAs are running in a given TEE is between the TEEP Agent and the TAM.
-While a TEEP Broker broker can in effect make suggestions, it cannot decide or enforce what runs where.
+While a TEEP Broker can in effect make suggestions, it cannot decide or enforce what runs where.
 The TEEP Broker can also control which TEE a given installation request is directed at, but a TEEP
 Agent will only accept TAs that are actually applicable to it and where installation instructions
 are received by a TAM that it trusts.
@@ -1369,7 +1371,7 @@ results. See {{I-D.ietf-rats-architecture}} for further discussion.
 
 TEE device certificates are expected to be long lived, longer
 than the lifetime of a device.  A TAM certificate usually has a
-moderate lifetime of 2 to 5 years.  A TAM should get renewed or
+moderate lifetime of 1 to 5 years.  A TAM should get renewed or
 rekeyed certificates.  The root CA certificates for a TAM, which are
 embedded into the Trust Anchor Store in a device, should have long
 lifetimes that don't require device Trust Anchor updates.  On the
