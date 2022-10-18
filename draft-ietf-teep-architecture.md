@@ -789,7 +789,7 @@ Application (where the arrow indicates the direction of data transfer).
 At step 4, since the Untrusted Application depends on the TA,
 installing the Untrusted Application will trigger TA installation
 via communication with a TAM. The TEEP Agent
-will interact with the TAM via a TEEP Broker that faciliatates communications between the TAM
+will interact with the TAM via a TEEP Broker that facilitates communications between the TAM
 and the TEEP Agent.
 
 Some Trusted Component installation implementations might ask for a user's consent. In other
