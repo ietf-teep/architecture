@@ -148,9 +148,9 @@ code that relates to the authentication protocol could reside in a TA while the
 application logic including HTTP protocol parsing could be contained in the 
 Untrusted Application.  In addition, processing of credit card numbers or account balances could be done in a TA as it is sensitive data.
 The precise code split is ultimately a decision of the 
-developer based on the assets he or she wants to protect according to the threat model. 
+developer based on the assets the person wants to protect according to the threat model. 
 
-TEEs are typically used in cases where software or data assets need to be protected from unauthorised access
+TEEs are typically used in cases where software or data assets need to be protected from unauthorized access
 where threat actors may have physical or administrative access to a device.  This
 situation arises for example in gaming consoles where anti-cheat protection is a concern,
 devices such as ATMs or IoT devices placed in locations where attackers might have physical
@@ -718,7 +718,7 @@ such cases, where the runtime platform could include a TEEP Agent.
 
 In Arm TrustZone {{TrustZone}} for A-class devices, the Untrusted Application and TA may or may not be
 bundled together. This differs from SGX since in TrustZone the TA lifetime is not inherently tied
-to a specific Untrused Application process lifetime as occurs in SGX.  A TA is loaded by
+to a specific Untrusted Application process lifetime as occurs in SGX.  A TA is loaded by
 a trusted OS running in the TEE such as a GlobalPlatform {{GPTEE}} compliant TEE, where the trusted OS is 
 separate from the OS in the REE.
 Thus Cases 2-4 are equally applicable.  In addition, it is possible for TAs to communicate
@@ -789,7 +789,7 @@ Application (where the arrow indicates the direction of data transfer).
 At step 4, since the Untrusted Application depends on the TA,
 installing the Untrusted Application will trigger TA installation
 via communication with a TAM. The TEEP Agent
-will interact with the TAM via a TEEP Broker that faciliates communications between the TAM
+will interact with the TAM via a TEEP Broker that facilitates communications between the TAM
 and the TEEP Agent.
 
 Some Trusted Component installation implementations might ask for a user's consent. In other
@@ -865,7 +865,7 @@ TEE manufacturer and the key pair and its certificate are valid for
 the expected lifetime of the TEE.  A TAM provider is responsible
 for configuring the TAM's Trust Anchor Store with the manufacturer certificates or CAs
 that are used to sign TEE keys. This is discussed further in
-{{trust-anchors-in-tam}} below.  Typically
+{{trust-anchors-in-tam}} below.  Typically,
 the same key TEE pair is used for both signing and encryption, though separate
 key pairs might also be used in the future, as the joint security of
 encryption and signature with a single key remains to some extent an open
@@ -1068,7 +1068,7 @@ exist, depending on whether the TAM uses a TEE or not:
 
 1. ProcessConnect: A notification that a new TEEP session is being requested by a TEEP Agent.
 
-2. ProcessTeepMessage: A message arriving on an existing TEEP session, to be delivered
+2. ProcessTeepMessage: A message arriving at an existing TEEP session, to be delivered
    to the TAM for processing.
 
 For further discussion on these APIs, see {{I-D.ietf-teep-otrp-over-http}}.
@@ -1170,7 +1170,7 @@ This feature is also known as crypto agility. Protocol evolution
 is greatly simplified when crypto agility is considered
 during the design of the protocol. In the case of the TEEP
 protocol the diverse range of use cases, from trusted app
-updates for smart phones and tablets to updates of code on
+updates for smartphones and tablets to updates of code on
 higher-end IoT devices, creates the need for different
 mandatory-to-implement algorithms already from the start.
 
@@ -1290,7 +1290,7 @@ for protecting the resource usage allocated for Trusted Component management.
 
 ## CA Compromise or Expiry of CA Certificate
 
-A root CA for TAM certificates might get compromised or its certificate might
+A root CA for TAM certificates might get compromised, or its certificate might
 expire, or a Trust Anchor other than a root CA certificate may also expire or
 be compromised.
 TEEs are responsible for validating the entire TAM certificate path,
@@ -1308,8 +1308,7 @@ may need to be updated.  To address this, some TEE Trust Anchor update
 mechanism is expected from device OEMs, such as using the TEEP protocol
 to distribute new Trust Anchors.
 
-Similarly, 
-a root CA for TEE certificates might get compromised or its certificate might
+Similarly, a root CA for TEE certificates might get compromised, or its certificate might
 expire, or a Trust Anchor other than a root CA certificate may also expire or
 be compromised.
 TAMs are responsible for validating the entire TEE certificate path,
@@ -1353,7 +1352,7 @@ the next time connectivity does exist.  That is, to recover, the TEEP Agent
 must be able to reach out to the TAM, for example whenever the 
 RequestPolicyCheck API ({{apis}}) is invoked by a timer or other event.
 
-Furthermore the policy in the Verifier in an attestation process can be
+Furthermore, the policy in the Verifier in an attestation process can be
 updated so that any evidence that includes the malicious TA would result
 in an attestation failure.  There is, however, a time window during which
 a malicious TA might be able to operate successfully, which is the
@@ -1367,7 +1366,7 @@ results. See {{I-D.ietf-rats-architecture}} for further discussion.
 
 ## TEE Certificate Expiry and Renewal 
 
-TEE device certificates are expected to be long lived, longer
+TEE device certificates are expected to be long-lived, longer
 than the lifetime of a device.  A TAM certificate usually has a
 moderate lifetime of 2 to 5 years.  A TAM should get renewed or
 rekeyed certificates.  The root CA certificates for a TAM, which are
