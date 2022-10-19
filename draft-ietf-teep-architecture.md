@@ -1352,10 +1352,9 @@ expectation of Device Administrators, for example, pushing out TAs that contain
 some data collection or use users' device resources for distributed jobs for a TAM. 
 The mitigation methods for a compromised TAM case above can also apply to these threats.
 
-A Device Administrator may need to be notified when such an incident takes place.
-An Untrusted Application or some software component in the REE may monitor detection
-output from the device's TEEs, and notify the Device Administrator for additional 
-remediations.
+The device manufacturer may want to include a notification support that can allow
+Device Administrators be notified for incidents in devices from the threats above
+along with some adopted mitigation methods as suggested above from TEEs.
 
 ## Malicious TA Removal
 
