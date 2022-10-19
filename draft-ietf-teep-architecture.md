@@ -187,7 +187,7 @@ the following problems:
 
   - An installer of an Untrusted Application that depends on a given TA
     wants to request installation of that TA in the device's TEE
-    so that the Untrusted Application can fully function, but the TEE
+    so that the installation of Untrusted Application can complete, but the TEE
     needs to verify whether such a TA is actually authorized to
     run in the TEE and consume potentially scarce TEE resources.
 
