@@ -1348,7 +1348,7 @@ any TA it wants; for example, a known-compromised TA or an explicitly
 malicious TA.
 
 There are also threats of hostile or abusive TAMs where a TAM turns to act out of 
-expectation of device administrators, for example, pushing out TAs that contain 
+expectation of Device Administrators, for example, pushing out TAs that contain 
 some data collection or use users' device resources for distributed jobs for a TAM. 
 The mitigation methods for a compromised TAM case above can also apply to these threats.
 
