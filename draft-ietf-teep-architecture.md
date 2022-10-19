@@ -49,6 +49,7 @@ author:
 informative:
   RFC6024:
   I-D.ietf-rats-architecture:
+  I-D.ietf-rats-daa:
   RFC9019:
   I-D.ietf-suit-manifest:
   I-D.ietf-teep-otrp-over-http:
@@ -1150,7 +1151,8 @@ The following information is required for TEEP attestation:
     Unique device identification allows the TAM to provide services to the device, such as managing installed
     TAs, and providing subscriptions to services, and locating device-specific keying material to
     communicate with or authenticate the device. In some use cases it may be sufficient to identify 
-    only the class of the device. The security and privacy requirements regarding device identification 
+    only the class of the device, for example, a DAA Issuer's group public key ID when the attestation uses DAA, 
+    see {{I-D.ietf-rats-daa}}. The security and privacy requirements regarding device identification 
     will vary with the type of TA provisioned to the TEE. 
 
   - TEE Identifying Information: The type of TEE that generated this attestation must be identified.
