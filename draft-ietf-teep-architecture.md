@@ -1153,8 +1153,8 @@ The following information is required for TEEP attestation:
     TAs, and providing subscriptions to services, and locating device-specific keying material to
     communicate with or authenticate the device. In some use cases it may be sufficient to identify 
     only the model or class of the device, for example, a DAA Issuer's group public key ID when the 
-    attestation uses DAA, see {{I-D.ietf-rats-daa}}. Another example of models is the Hardware Model as 
-    defined in the Section 4.2.4 of {{I-D.ietf-rats-eat}}. The security and privacy requirements regarding device identification 
+    attestation uses DAA, see {{I-D.ietf-rats-daa}}. Another example of models is the hwmodel (Hardware Model) as 
+    defined in {{I-D.ietf-rats-eat}}. The security and privacy requirements regarding device identification 
     will vary with the type of TA provisioned to the TEE. 
 
   - TEE Identifying Information: The type of TEE that generated this attestation must be identified.
