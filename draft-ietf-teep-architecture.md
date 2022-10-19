@@ -979,19 +979,16 @@ Application without requiring the Untrusted Application to run first.
 
 ## Role of the TEEP Broker
 
-A TEEP Broker abstracts the message exchanges with a TEE in a device.
-The input data is originated from a TAM or the first initialization
-call to trigger a Trusted Component installation.
+A TEEP Broker interacts with a TEEP Agent inside a TEE,
+relaying messages between the TEEP Agent and the TAM, and may also interact with
+one or more Untrusted Applications (see {{apis}}).
+The Broker cannot parse encrypted TEEP messages between a TAM and a TEEP agent
+but merely relays them.
 
-The Broker doesn't need to parse TEEP message content received from a TAM
-that should be processed by a TEE (see the ProcessTeepMessage API in {{apis}}).
 When a device has more than one TEE, one TEEP Broker per TEE could
 be present in the REE or a common TEEP Broker could be used by multiple TEEs
 where the transport protocol (e.g., {{I-D.ietf-teep-otrp-over-http}}) allows
 the TEEP Broker to distinguish which TEE is relevant for each message from a TAM.
-
-The TEEP Broker interacts with a TEEP Agent inside a TEE, and
-relays the response messages generated from the TEEP Agent back to the TAM.
 
 The Broker only needs to return a (transport) error message to the TAM if the TEE is
 not reachable for some reason.  Other errors are represented as
