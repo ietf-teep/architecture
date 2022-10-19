@@ -311,7 +311,7 @@ The following terms are used:
     same entity as the Trusted Component Developer. For example, a Trusted Component might
     be signed (or re-signed) by a Device Administrator if the TEE will
     only trust the Device Administrator. A Trusted Component might also be encrypted,
-    if the code is considered confidential, for example, when a developer who wants to 
+    if the code is considered confidential, for example, when a developer wants to 
     provide a TA without revealing its code to others.
     
   - Trusted Execution Environment (TEE): An execution environment that enforces that
