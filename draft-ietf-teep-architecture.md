@@ -1328,7 +1328,23 @@ may need to be updated.
 ## Compromised TAM
 
 Device TEEs are responsible for validating the supplied TAM certificates
-to determine that the TAM is trustworthy.
+to determine that the TAM is trustworthy. A compromised TAM can install
+arbitrary TAs to, potentially, many devices, which makes TAMs high value
+targets. An advanced, persistent threat actor could potentially compromise
+a TAM without impacting its certificate or raising concern from the TAM's
+operator. To mitigate this threat, a TEEs have several options for 
+detecting and mitigating a compromised TAM:
+
+1. Apply an ACL to the TAM, indicating which TAs it is permitted to install
+2. Use a transparency log to expose a TA compromise: TAMs publish an 
+out-of-band record of TA releases, allowing a TEE to cross-check the TAs
+delivered against the TA releases in order to detect a TAM compromise.
+3. Use remote attestation of the TAM to prove trustworthiness
+
+While TAs are signed by the creator and delivered by the TAM, there is
+still a threat present in allowing a potentially compromised TAM to install
+any TA it wants; for example, a known-compromised TA or an explicitly
+malicious TA.
 
 ## Malicious TA Removal
 
