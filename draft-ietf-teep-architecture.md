@@ -1347,6 +1347,16 @@ still a threat present in allowing a potentially compromised TAM to install
 any TA it wants; for example, a known-compromised TA or an explicitly
 malicious TA.
 
+There are also threats of hostile or abusive TAMs where a TAM turns to act out of 
+expectation of device administrators, for example, pushing out TAs that contain 
+some data collection or use users' device resources for distributed jobs for a TAM. 
+The mitigation methods for a compromised TAM case above can also apply to these threats.
+
+A Device Administrator may need to be notified when such an incident takes place.
+An Untrusted Application or some software component in the REE may monitor detection
+output from the device's TEEs, and notify the Device Administrator for additional 
+remediations.
+
 ## Malicious TA Removal
 
 It is possible that a rogue developer distributes a malicious Untrusted 
