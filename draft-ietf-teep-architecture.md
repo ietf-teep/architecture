@@ -1256,7 +1256,7 @@ confidentiality protection.
 ## Compromised REE {#compromised-ree}
 
 It is possible that the REE of a device is compromised. 
-We have already seen examples of attacks on the public Internet with billions
+We have already seen examples of attacks on the public Internet with a large number
 of compromised devices being used to mount DDoS attacks.  A compromised
 REE can be used for such an attack but it cannot tamper with the TEE's
 code or data in doing so.  A compromised REE can, however, launch DoS attacks
