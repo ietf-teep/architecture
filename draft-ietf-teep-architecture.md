@@ -179,7 +179,7 @@ different TEEs of various devices is needed. This software update protocol
 needs to make sure that compatible trusted and untrusted components (if any) of an 
 application are installed on the correct device. In this TEE ecosystem,
 there often arises a need for an external trusted party to verify the
-identity, claims, and rights of TA developers, devices, and their TEEs.
+identity, claims, and permissions of TA developers, devices, and their TEEs.
 This external trusted party is the Trusted Application Manager (TAM).
 
 The Trusted Execution Environment Provisioning (TEEP) protocol addresses
@@ -187,7 +187,7 @@ the following problems:
 
   - An installer of an Untrusted Application that depends on a given TA
     wants to request installation of that TA in the device's TEE
-    so that the Untrusted Application can complete, but the TEE
+    so that the installation of Untrusted Application can complete, but the TEE
     needs to verify whether such a TA is actually authorized to
     run in the TEE and consume potentially scarce TEE resources.
 
@@ -199,7 +199,7 @@ the following problems:
     the type of TEE included in a device and that it is capable of 
     providing the security protections required.
 
-  - A TEE in a device wants to determine whether an entity
+  - A TEE in a device needs to determine whether an entity
     that wants to manage a TA in the device is authorized to manage TAs
     in the TEE, and what TAs the entity is permitted to manage.
 
@@ -248,8 +248,8 @@ The following terms are used:
   - Device Owner: A device is always owned by someone. In some cases, it is common for
     the (primary) device user to also own the device, making the device
     user/owner also the Device Administrator. In enterprise environments
-    it is more common for the enterprise to own the device, and any device
-    user has no or limited administration rights. In this case, the
+    it is more common for the enterprise to own the device, and for any device
+    user to have no or limited administration rights. In this case, the
     enterprise appoints a Device Administrator that is not the device
     owner.
 
@@ -311,7 +311,8 @@ The following terms are used:
     same entity as the Trusted Component Developer. For example, a Trusted Component might
     be signed (or re-signed) by a Device Administrator if the TEE will
     only trust the Device Administrator. A Trusted Component might also be encrypted,
-    if the code is considered confidential.
+    if the code is considered confidential, for example, when a developer wants to 
+    provide a TA without revealing its code to others.
     
   - Trusted Execution Environment (TEE): An execution environment that enforces that
     only authorized code can execute within the TEE, and data used by that
@@ -340,7 +341,7 @@ information could also be stored in a TEE. The mobile payment
 application can use such information for unlocking the device and 
 for local identification of the user.
 
-A trusted user interface (UI) may be used in a mobile device to
+A trusted user interface (UI) may be used in a mobile device or point-of-sale device to
 prevent malicious software from stealing sensitive user input data.
 Such an implementation often relies on a TEE for providing access 
 to peripherals, such as PIN input or a trusted display, so that
@@ -641,7 +642,7 @@ the device can vary. The variations depend on whether the Untrusted Application 
 together or are provided separately, and this has implications to the management of
 the TAs in a TEE. In addition to the Untrusted Application and TA(s), the TA(s) and/or TEE may 
 also require additional data to personalize the TA to the device or a user.
-Implementations must support encryption to preserve the confidentiality of such Personalization Data,
+Implementations of the TEEP protocol must support encryption to preserve the confidentiality of such Personalization Data,
 which may potentially contain sensitive data. The encryption is used to ensure that no personalization data 
 is sent in the clear. Implementations must also support mechanisms for integrity protection of such Personalization Data.
 Other than the requirement to support confidentiality and integrity protection,
@@ -1164,7 +1165,7 @@ The following information is required for TEEP attestation:
 
 # Algorithm and Attestation Agility
 
-RFC 7696 {{RFC7696}} outlines the requirements to migrate from one
+{{RFC7696}} outlines the requirements to migrate from one
 mandatory-to-implement cryptographic algorithm suite to another over time.
 This feature is also known as crypto agility. Protocol evolution
 is greatly simplified when crypto agility is considered
