@@ -341,7 +341,7 @@ information could also be stored in a TEE. The mobile payment
 application can use such information for unlocking the device and 
 for local identification of the user.
 
-A trusted user interface (UI) may be used in a mobile device to
+A trusted user interface (UI) may be used in a mobile device or point-of-sale device to
 prevent malicious software from stealing sensitive user input data.
 Such an implementation often relies on a TEE for providing access 
 to peripherals, such as PIN input or a trusted display, so that
