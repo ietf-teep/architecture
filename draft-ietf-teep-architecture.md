@@ -642,7 +642,7 @@ the device can vary. The variations depend on whether the Untrusted Application 
 together or are provided separately, and this has implications to the management of
 the TAs in a TEE. In addition to the Untrusted Application and TA(s), the TA(s) and/or TEE may 
 also require additional data to personalize the TA to the device or a user.
-Implementations of TEEP protocol must support encryption to preserve the confidentiality of such Personalization Data,
+Implementations of the TEEP protocol must support encryption to preserve the confidentiality of such Personalization Data,
 which may potentially contain sensitive data. The encryption is used to ensure that no personalization data 
 is sent in the clear. Implementations must also support mechanisms for integrity protection of such Personalization Data.
 Other than the requirement to support confidentiality and integrity protection,
