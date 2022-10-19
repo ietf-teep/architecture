@@ -1220,7 +1220,7 @@ such as via TEEP) from an out-of-compliance TEE can be rejected.
 
 Similarly, in most implementations the REE is involved in the mechanics of installing new TAs.
 However, the authority for what TAs are running in a given TEE is between the TEEP Agent and the TAM.
-While a TEEP Broker can in effect make suggestions, it cannot decide or enforce what runs where.
+While a TEEP Broker can in effect make suggestions as discussed in Section {{apis}}, it cannot decide or enforce what runs where.
 The TEEP Broker can also control which TEE a given installation request is directed at, but a TEEP
 Agent will only accept TAs that are actually applicable to it and where installation instructions
 are received by a TAM that it trusts.
