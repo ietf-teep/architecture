@@ -731,7 +731,7 @@ with each other without involving any Untrusted Application, and so the complexi
 are lower than in the SGX example, though still more
 complex than Cases 2-4.
 
-A trusted OS running in the TEE (e.g., OP-TEE) that supports loading and verifying signed TAs from
+A trusted OS running in the TEE (e.g., OP-TEE, an open source TEE) that supports loading and verifying signed TAs from
 an untrusted filesystem can, like SGX, use classic file distribution
 mechanisms.  If secure TA storage is used (e.g., a Replay-Protected
 Memory Block device) on the other hand, the TEEP protocol can be used
@@ -942,7 +942,7 @@ such a factory can get an intermediate CA certificate from one of the
 existing roots without requiring that TAMs are updated with
 information about the new device factory.  Likewise, new TAMs can
 join the ecosystem, providing they are issued a TAM certificate that
-chains to an existing root whereby existing TEEs will be allowed to
+chains to an existing root whereby existing TAs in the TEE will be allowed to
 be personalized by the TAM without requiring changes to the TEE
 itself.  This enables the ecosystem to scale, and avoids the need for
 centralized databases of all TEEs produced or all TAMs that exist or
@@ -1077,8 +1077,8 @@ For further discussion on these APIs, see {{I-D.ietf-teep-otrp-over-http}}.
 
 ### TEEP Broker Distribution
 
-The Broker installation is commonly carried out at OEM time. A user
-can dynamically download and install a Broker on-demand.
+The Broker installation is commonly carried out at device manufacturing time. A user
+may also dynamically download and install a Broker on-demand.
 
 # Attestation
 Attestation is the process through which one entity (an Attester) presents "evidence", in the form
