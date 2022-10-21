@@ -1347,13 +1347,6 @@ still a threat present in allowing a potentially compromised TAM to install
 any TA it wants; for example, a known-compromised TA or an explicitly
 malicious TA.
 
-The devices may want to include a notification support in devices 
-with a TEE that can be queried for its detected incidents, and thus allow
-Device Administrators be notified with an application in REE or some other
-mechanisms. There could be other notification mechanisms such as a 
-Device Administrator watches incident notifications or disclosures from the 
-TAMs.
-
 ## Hostile TAM
 
 There are also threats of hostile or abusive TAMs where a TAM is compromised and thus turns to act out of 
@@ -1370,9 +1363,6 @@ requested to revoke the TAM's certificate. TEEP Agents that support a certificat
 status check will be able to stop the TAM, and further decide to remove those hostile TAs from that TAM.
 3. TA removal by the Device Administrator upon detection of a hostile TAM and any abusive TA.
 The detection can be the result of 1) above, and some other out-of-band detection technique.
-
-The devices may include a notification support that can allow Device Administrators be 
-notified when a hostile TAM is detected.
 
 ## Malicious TA Removal
 
