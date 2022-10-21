@@ -1368,7 +1368,7 @@ to stop the TAM from installing TAs to the TEE.
 requested to revoke the TAM's certificate. TEEP Agents that support a certificate revocation 
 status check will be able to stop the TAM, and further decide to remove those hostile TAs from that TAM.
 4. TA removal by the Device Administrator upon detection of a hostile TAM and any abusive TA.
-The detection cab be the result of 1) above, and some other out-of-band detection technique.
+The detection can be the result of 1) above, and some other out-of-band detection technique.
 
 The device manufacturer may want to include a notification support that can allow
 Device Administrators be notified for incidents upon detection with some mitigation 
