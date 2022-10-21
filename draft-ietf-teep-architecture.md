@@ -72,9 +72,9 @@ informative:
   GPTEE:
     author:
       org: GlobalPlatform
-    title: "GlobalPlatform Device Technology: TEE System Architecture, v1.1"
-    date: 2017-01
-    target: https://globalplatform.org/specs-library/tee-system-architecture-v1-1/
+    title: "GlobalPlatform Device Technology: TEE System Architecture, v1.3"
+    date: 2022-05
+    target: https://globalplatform.org/specs-library/tee-system-architecture/
     seriesinfo:
       GlobalPlatform: GPD_SPE_009
   GSMA:
@@ -83,6 +83,12 @@ informative:
     title: "GP.22 RSP Technical Specification, Version 2.2.2"
     date: 2020-06
     target: https://www.gsma.com/esim/wp-content/uploads/2020/06/SGP.22-v2.2.2.pdf
+  OP-TEE:
+    author:
+      org: TrustedFirmware.org
+    title: "OP-TEE Documentation"
+    date: 2022
+    target: https://optee.readthedocs.io/en/latest/
   OTRP:
     author:
       org: GlobalPlatform
@@ -142,7 +148,8 @@ This separation reduces the possibility
 of a successful attack on application components and the data contained inside the
 TEE. Typically, application components are chosen to execute inside a TEE because
 those application components perform security sensitive operations or operate on
-sensitive data. An application component running inside a TEE is referred to as a
+sensitive data. An application component running inside a TEE is commonly referred to
+(e.g., in {{GPTEE}}, {{OP-TEE}}, etc.) as a
 Trusted Application (TA), while an application running outside any TEE, i.e., in the
 Rich Execution Environment (REE),
 is referred to as an Untrusted Application (UA). In the example of a banking application, 
@@ -731,7 +738,7 @@ with each other without involving any Untrusted Application, and so the complexi
 are lower than in the SGX example, though still more
 complex than Cases 2-4.
 
-A trusted OS running in the TEE (e.g., OP-TEE, an open source TEE) that supports loading and verifying signed TAs from
+A trusted OS running in the TEE (e.g., OP-TEE {{OP-TEE}}) that supports loading and verifying signed TAs from
 an untrusted filesystem can, like SGX, use classic file distribution
 mechanisms.  If secure TA storage is used (e.g., a Replay-Protected
 Memory Block device) on the other hand, the TEEP protocol can be used
