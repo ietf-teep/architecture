@@ -1365,7 +1365,7 @@ This limits the scope of a hostile TAM's impact.
 the hostile TAM, a Trust Anchor update process may be used to remove the Trust Anchor as a way 
 to stop the TAM from installing TAs to the TEE.
 3. TAM certificate revocation: the certificate issuing authority of the TAM certificate is 
-requested to revoke the TAM's certificate. The TEEP Agents that supports certificate revocation 
+requested to revoke the TAM's certificate. TEEP Agents that support a certificate revocation 
 status check will be able to stop the TAM, and further decide to remove those hostile TAs from that TAM.
 4. TA removal by the Device Administrator upon detection of a hostile TAM and any abusive TA.
 The detection cab be the result of 1) above, and some other out-of-band detection technique.
