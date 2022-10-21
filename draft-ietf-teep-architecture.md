@@ -1363,7 +1363,7 @@ detecting and mitigating a hostile TAM:
 This limits the scope of a hostile TAM's impact.
 2. Trust Anchor update: when a Trust Anchor entry in the TEE Trust Anchor list is specific to 
 the hostile TAM, a Trust Anchor update process may be used to remove the Trust Anchor as a way 
-to stop the TAM for installing TAs to the TEE.
+to stop the TAM from installing TAs to the TEE.
 3. TAM certificate revocation: the certificate issuing authority of the TAM certificate is 
 requested to revoke the TAM's certificate. The TEEP Agents that supports certificate revocation 
 status check will be able to stop the TAM, and further decide to remove those hostile TAs from that TAM.
