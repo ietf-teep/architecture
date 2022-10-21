@@ -1353,7 +1353,7 @@ methods as suggested above.
 
 ## Hostile TAM
 
-There are also threats of hostile or abusive TAMs where a TAM turns to act out of 
+There are also threats of hostile or abusive TAMs where a TAM is compromised and thus turns to act out of 
 expectation of Device Administrators, for example, pushing out TAs that contain 
 some data collection or use users' device resources for distributed jobs for a TAM. 
 To mitigate this threat, TEEs and Device Administrators have several options for 
