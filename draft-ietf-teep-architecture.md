@@ -1347,9 +1347,12 @@ still a threat present in allowing a potentially compromised TAM to install
 any TA it wants; for example, a known-compromised TA or an explicitly
 malicious TA.
 
-The device manufacturer may want to include a notification support that can allow
-Device Administrators be notified for incidents upon detection with some mitigation 
-methods as suggested above.
+The devices may want to include a notification support in devices 
+with a TEE that can be queried for its detected incidents, and thus allow
+Device Administrators be notified with an application in REE or some other
+mechanisms. There could be other notification mechanisms such as a 
+Device Administrator watches incident notifications or disclosures from the 
+TAMs.
 
 ## Hostile TAM
 
@@ -1359,20 +1362,17 @@ some data collection or use users' device resources for distributed jobs for a T
 To mitigate this threat, TEEs and Device Administrators have several options for 
 detecting and mitigating a hostile TAM:
 
-1. ACLs: Apply an ACL to TAMs, making explicit which TAs the TAM is permitted to install. 
-This limits the scope of a hostile TAM's impact.
-2. Trust Anchor update: when a Trust Anchor entry in the TEE Trust Anchor list is specific to 
+1. Trust Anchor update: when a Trust Anchor entry in the TEE Trust Anchor list is specific to 
 the hostile TAM, a Trust Anchor update process may be used to remove the Trust Anchor as a way 
 to stop the TAM from installing TAs to the TEE.
-3. TAM certificate revocation: the certificate issuing authority of the TAM certificate is 
+2. TAM certificate revocation: the certificate issuing authority of the TAM certificate is 
 requested to revoke the TAM's certificate. TEEP Agents that support a certificate revocation 
 status check will be able to stop the TAM, and further decide to remove those hostile TAs from that TAM.
-4. TA removal by the Device Administrator upon detection of a hostile TAM and any abusive TA.
+3. TA removal by the Device Administrator upon detection of a hostile TAM and any abusive TA.
 The detection can be the result of 1) above, and some other out-of-band detection technique.
 
-The device manufacturer may want to include a notification support that can allow
-Device Administrators be notified for incidents upon detection with some mitigation 
-methods as suggested above.
+The devices may include a notification support that can allow Device Administrators be 
+notified when a hostile TAM is detected.
 
 ## Malicious TA Removal
 
