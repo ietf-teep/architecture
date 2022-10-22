@@ -1345,9 +1345,9 @@ raising concern from the TAM's operator.
 To mitigate this threat, TEEP Agents and Device Owners have several options, including but potentially not limited to those listed below, for detecting and mitigating a compromised TAM:
 
 1. Apply an ACL to the TAM, indicating which TAs it is permitted to install.
-2. Use a transparency log to expose a TA compromise: TAMs publish an 
-out-of-band record of TA releases, allowing a TEE to cross-check the TAs
-delivered against the TA releases in order to detect a TAM compromise.
+2. Use a transparency log to expose a TAM compromise: TAMs publish an 
+out-of-band record of Trusted Component releases, allowing a TEE to cross-check the Trusted Components
+delivered against the Trusted Component installs in order to detect a TAM compromise.
 3. Use remote attestation of the TAM to prove trustworthiness.
 
 ## Hostile TAM
