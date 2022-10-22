@@ -1357,7 +1357,7 @@ There are also threats of hostile or abusive TAMs that act out of expectation
 of Device Administrators, for example, pushing out TAs that contain 
 some data collection or use device resources for distributed jobs for 
 a TAM. All the potential damanges that a compromised TAM can make can be done by a
-hostile TAM. A hostile TAM differs in knowingly launch some abusive behavior.
+hostile TAM. A hostile TAM differs in intentionally conducting some abusive behavior.
 
 A Device Administrator may find out that the TAM it previously trusted turns out
 to be not trustworthy anymore. In this case, the Device Administrator can remove
