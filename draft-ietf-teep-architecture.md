@@ -1355,7 +1355,7 @@ delivered against the TA releases in order to detect a TAM compromise.
 
 There are also threats of hostile or abusive TAMs that act out of expectation 
 of Device Administrators, for example, pushing out TAs that contain 
-some data collection or use users' device resources for distributed jobs for 
+some data collection or use device resources for distributed jobs for 
 a TAM. All the potential damanges that a compromised TAM can make can be done by a
 hostile TAM. A hostile TAM differs in knowingly launch some abusive behavior.
 
