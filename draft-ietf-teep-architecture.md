@@ -1342,8 +1342,7 @@ This makes TAMs high value targets. An advanced persistent threat actor
 could potentially compromise a TAM without impacting its certificate or 
 raising concern from the TAM's operator.
 
-To mitigate this threat, TEE Agents have several options as listed below but 
-not limit to these for detecting and mitigating a compromised TAM:
+To mitigate this threat, TEEP Agents and Device Owners have several options, including but potentially not limited to those listed below, for detecting and mitigating a compromised TAM:
 
 1. Apply an ACL to the TAM, indicating which TAs it is permitted to install.
 2. Use a transparency log to expose a TA compromise: TAMs publish an 
