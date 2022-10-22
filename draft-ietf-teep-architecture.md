@@ -1338,7 +1338,7 @@ for example, by filling up a device's TEE resources reserved for TAs such that
 other TAs may not get resources to be installed or properly function. It may
 also install malicious TAs to, potentially, many devices, if it can also 
 get or access a Trusted Component signer key that is trusted by the TEEs. 
-This makes TAMs high value targets. An advanced, persistent threat actor 
+This makes TAMs high value targets. An advanced persistent threat actor 
 could potentially compromise a TAM without impacting its certificate or 
 raising concern from the TAM's operator.
 
