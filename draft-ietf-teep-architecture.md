@@ -1335,7 +1335,7 @@ Information on devices that the TAM manages
 may be leaked to a bad actor.
 A compromised TAM can also install many TAs to launch a DoS attack on devices,
 for example, by filling up a device's TEE resources reserved for TAs such that 
-other TAs may not get resource to be installed or properly function. It may
+other TAs may not get resources to be installed or properly function. It may
 also install malicious TAs to, potentially, many devices, if it can also 
 get or access a Trusted Component signer key that is trusted by the TEEs. 
 This makes TAMs high value targets. An advanced, persistent threat actor 
