@@ -1290,7 +1290,7 @@ request. A TEEP Agent implementation is responsible for ensuring that it
 can recognize and decline such repeated requests. It is also responsible
 for protecting the resource usage allocated for Trusted Component management.
 
-## CA Compromise or Expiry of CA Certificate
+## CA Compromise or Expiry of CA Certificate {#trust-anchor-compromise}
 
 A root CA for TAM certificates might get compromised, or its certificate might
 expire, or a Trust Anchor other than a root CA certificate may also expire or
@@ -1331,18 +1331,17 @@ may need to be updated.
 Device TEEs are responsible for validating the supplied TAM certificates
 to determine that the TAM is trustworthy. A compromised TAM may bring multiple threats 
 and damage to user devices that it can manage and thus to the Device Owners. 
-Information on devices that the TAM manages 
-may be leaked to a bad actor.
+Information on devices that the TAM manages may be leaked to a bad actor.
 A compromised TAM can also install many TAs to launch a DoS attack on devices,
 for example, by filling up a device's TEE resources reserved for TAs such that 
 other TAs may not get resources to be installed or properly function. It may
 also install malicious TAs to, potentially, many devices, if it can also 
 get or access a Trusted Component signer key that is trusted by the TEEs. 
-This makes TAMs high value targets. An advanced persistent threat actor 
-could potentially compromise a TAM without impacting its certificate or 
+This makes TAMs high value targets. A TAM could be compromised without impacting its certificate or 
 raising concern from the TAM's operator.
 
-To mitigate this threat, TEEP Agents and Device Owners have several options, including but potentially not limited to those listed below, for detecting and mitigating a compromised TAM:
+To mitigate this threat, TEEP Agents and Device Owners have several options, 
+including but potentially not limited to those listed below, for detecting and mitigating a compromised TAM:
 
 1. Apply an ACL to the TAM, indicating which TAs it is permitted to install.
 2. Use a transparency log to expose a TAM compromise: TAMs publish an 
@@ -1355,20 +1354,18 @@ delivered against the Trusted Component installs in order to detect a TAM compro
 There are also threats of hostile or abusive TAMs that act out of expectation 
 of Device Administrators, for example, pushing out TAs that contain 
 some data collection or use device resources for distributed jobs for 
-a TAM. All the potential damanges that a compromised TAM can make can be done by a
+a TAM. All the potential damages that a compromised TAM can make can be done by a
 hostile TAM. A hostile TAM differs in intentionally conducting some abusive behavior.
 
-A Device Administrator may find out that the TAM it previously trusted turns out
-to be not trustworthy anymore. In this case, the Device Administrator can remove
+A Device Administrator may find out that the TAM it selected starts to become hostile
+or abusive. In this case, the Device Administrator can remove
 those TAs managed by that TAM from its devices, and stop trusting the TAM by
 changing its TA's TAM. It can switch to use another TAM that can deliver legitimate
 TAs it needs. In some cases, a Device Administrator may want to remove the 
 Trust Anchor entry in its devices that specifically gives trust to the hostile TAM.
 
-There could be a remedy scenario where Device Administrators work with a TAM that 
-voilated the good deed but changed to correct its behavior to restore the trust.
-In such cases, the TAs may be uninstalled and updated by the TAM proactively
-or upon the Device Administrator's request.
+A new hostile TAM may be introduced if the Trust Anchor in a TEEP Agent is compromised.
+See Section {{#trust-anchor-compromise}} above for Trust Anchor protection.
 
 ## Malicious TA Removal
 
