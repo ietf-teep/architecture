@@ -371,7 +371,8 @@ of a society and economy. It is desirable that IoT devices can prevent malware
 from manipulating actuators (e.g., unlocking a door), or
 stealing or modifying sensitive data, such as authentication credentials
 in the device. A TEE can be one of the best ways to implement such IoT
-security functions.
+security functions. For example, {{GPTEE}} uses the term "trusted peripheral" to refer to such things being
+accessible only from the TEE, and this concept is used, and this concept is used in some GlobalPlatform-compliant devices today.
 
 
 ## Confidential Cloud Computing
