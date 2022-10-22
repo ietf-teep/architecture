@@ -1335,15 +1335,15 @@ Information on devices that the TAM manages may be leaked to a bad actor.
 A compromised TAM can also install many TAs to launch a DoS attack on devices,
 for example, by filling up a device's TEE resources reserved for TAs such that 
 other TAs may not get resources to be installed or properly function. It may
-also install malicious TAs to, potentially, many devices, if it can also 
-get or access a Trusted Component signer key that is trusted by the TEEs. 
+also install malicious TAs to potentially many devices under the condition that 
+it also has a Trusted Component signer key that is trusted by the TEEs.
 This makes TAMs high value targets. A TAM could be compromised without impacting its certificate or 
 raising concern from the TAM's operator.
 
 To mitigate this threat, TEEP Agents and Device Owners have several options, 
 including but potentially not limited to those listed below, for detecting and mitigating a compromised TAM:
 
-1. Apply an ACL to the TAM, indicating which TAs it is permitted to install.
+1. Apply an ACL to the TAM, indicating which TAs the TAM is permitted to install.
 2. Use a transparency log to expose a TAM compromise: TAMs publish an 
 out-of-band record of Trusted Component releases, allowing a TEE to cross-check the Trusted Components
 delivered against the Trusted Component installs in order to detect a TAM compromise.
