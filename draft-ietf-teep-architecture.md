@@ -263,7 +263,7 @@ The following terms are used:
     owner. A Device Owner may or may not have control over Untrusted Applications 
     and TAs into the device depending on whether it is also a Device Administrator.
     It is a Device Administrator's responsibility and privilege in general for
-    deciding to trust or reject a TA or equivalently a Trust Component Signer.
+    deciding to trust or reject a TA or equivalently a Trusted Component Signer.
 
   - Device User: A human being that uses a device. Many devices have
     a single device user. Some devices have a primary device user with
