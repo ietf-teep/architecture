@@ -1331,7 +1331,7 @@ may need to be updated.
 Device TEEs are responsible for validating the supplied TAM certificates
 to determine that the TAM is trustworthy. A compromised TAM may bring multiple threats 
 and damage to user devices that it can manage and thus to the Device Owners. 
-In one hand, the device information of many devices that the TAM manages and 
+Information on devices that the TAM manages 
 therefore have in its system may be leaked to a bad actor. On the other hand,
 a compromised TAM can install many TAs to launch somee DoS attack to devices,
 for example, by filling up a device's TEE resources reserved for TAs such that 
