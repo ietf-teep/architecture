@@ -1329,12 +1329,21 @@ may need to be updated.
 ## Compromised TAM
 
 Device TEEs are responsible for validating the supplied TAM certificates
-to determine that the TAM is trustworthy. A compromised TAM can install
-arbitrary TAs to, potentially, many devices, which makes TAMs high value
-targets. An advanced, persistent threat actor could potentially compromise
-a TAM without impacting its certificate or raising concern from the TAM's
-operator. To mitigate this threat, TEEs have several options for 
-detecting and mitigating a compromised TAM:
+to determine that the TAM is trustworthy. A compromised TAM may bring multiple threats 
+and damage to user devices that it can managee and the device owners. 
+In one hand, the device information of many devices that the TAM manages and 
+therefore have in its system may be leaked to a bad actor. On the other hand,
+a compromised TAM can install many TAs to launch somee DoS attack to devices,
+for example, by filling up a device's TEE resources reserved for TAs such that 
+other TAs may not get resource to be installed or properly function. It may
+also install malicious TAs to, potentially, many devices, if it can also 
+get or access a Trusted Component signer key that is trusted by the TEEs. 
+This makes TAMs high value targets. An advanced, persistent threat actor 
+could potentially compromise a TAM without impacting its certificate or 
+raising concern from the TAM's operator.
+
+To mitigate this threat, TEE Agents have several options as listed below but 
+not limit to these for detecting and mitigating a compromised TAM:
 
 1. Apply an ACL to the TAM, indicating which TAs it is permitted to install.
 2. Use a transparency log to expose a TA compromise: TAMs publish an 
@@ -1342,27 +1351,25 @@ out-of-band record of TA releases, allowing a TEE to cross-check the TAs
 delivered against the TA releases in order to detect a TAM compromise.
 3. Use remote attestation of the TAM to prove trustworthiness.
 
-While TAs are signed by the creator and delivered by the TAM, there is
-still a threat present in allowing a potentially compromised TAM to install
-any TA it wants; for example, a known-compromised TA or an explicitly
-malicious TA.
-
 ## Hostile TAM
 
-There are also threats of hostile or abusive TAMs where a TAM is compromised and thus turns to act out of 
-expectation of Device Administrators, for example, pushing out TAs that contain 
-some data collection or use users' device resources for distributed jobs for a TAM. 
-To mitigate this threat, TEEs and Device Administrators have several options for 
-detecting and mitigating a hostile TAM:
+There are also threats of hostile or abusive TAMs that act out of expectation 
+of Device Administrators, for example, pushing out TAs that contain 
+some data collection or use users' device resources for distributed jobs for 
+a TAM. All the potential damanges that a compromised TAM can make can be done by a
+hostile TAM. A hostile TAM differs in knowingly launch some abusive behavior.
 
-1. Trust Anchor update: when a Trust Anchor entry in the TEE Trust Anchor list is specific to 
-the hostile TAM, a Trust Anchor update process may be used to remove the Trust Anchor as a way 
-to stop the TAM from installing TAs to the TEE.
-2. TAM certificate revocation: the certificate issuing authority of the TAM certificate is 
-requested to revoke the TAM's certificate. TEEP Agents that support a certificate revocation 
-status check will be able to stop the TAM, and further decide to remove those hostile TAs from that TAM.
-3. TA removal by the Device Administrator upon detection of a hostile TAM and any abusive TA.
-The detection can be the result of 1) above, and some other out-of-band detection technique.
+A Device Administrator may find out that the TAM it previously trusted turns out
+to be not trustworthy anymore. In this case, the Device Administrator can remove
+those TAs managed by that TAM from its devices, and stop trusting the TAM by
+changing its TA's TAM. It can switch to use another TAM that can deliver legitimate
+TAs it needs. In some cases, a Device Administrator may want to remove the 
+Trust Anchor entry in its devices that specifically gives trust to the hostile TAM.
+
+There could be a remedy scenario where Device Administrators work with a TAM that 
+voilated the good deed but changed to correct its behavior to restore the trust.
+In such cases, the TAs may be uninstalled and updated by the TAM proactively
+or upon the Device Administrator's request.
 
 ## Malicious TA Removal
 
