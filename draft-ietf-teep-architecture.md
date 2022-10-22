@@ -260,7 +260,10 @@ The following terms are used:
     it is more common for the enterprise to own the device, and for any device
     user to have no or limited administration rights. In this case, the
     enterprise appoints a Device Administrator that is not the device
-    owner.
+    owner. A Device Owner may or may not have control over Untrusted Applications 
+    and TAs into the device depending on whether it is also a Device Administrator.
+    It is a Device Administrator's responsibility and privilege in general for
+    deciding to trust or reject a TA or precisely the Trust Component Signer.
 
   - Device User: A human being that uses a device. Many devices have
     a single device user. Some devices have a primary device user with
