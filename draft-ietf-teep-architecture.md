@@ -1349,23 +1349,6 @@ out-of-band record of Trusted Component releases, allowing a TEE to cross-check 
 delivered against the Trusted Component installs in order to detect a TAM compromise.
 3. Use remote attestation of the TAM to prove trustworthiness.
 
-## Hostile TAM
-
-There are also threats of hostile or abusive TAMs that act out of expectation 
-of Device Administrators, for example, pushing out TAs that contain 
-some data collection or use device resources for distributed jobs for 
-a TAM. All the potential damages that a compromised TAM can make can be done by a
-hostile TAM. A hostile TAM differs in intentionally conducting some abusive behavior.
-
-A Device Administrator may find out that the TAM it selected starts to become hostile
-or abusive. In this case, the Device Administrator can remove
-those TAs managed by that TAM from its devices, and stop trusting the TAM by
-updating the TEEP Agent's trust anchor store to use another TAM that can deliver legitimate
-TAs it needs.
-
-A new hostile TAM may be introduced if the Trust Anchor store in a TEEP Agent is compromised.
-See Section {{#trust-anchor-compromise}} above for Trust Anchor protection.
-
 ## Malicious TA Removal
 
 It is possible that a rogue developer distributes a malicious Untrusted 
