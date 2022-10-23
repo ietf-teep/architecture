@@ -1364,7 +1364,7 @@ changing its TA's TAM. It can switch to use another TAM that can deliver legitim
 TAs it needs. In some cases, a Device Administrator may want to remove the 
 Trust Anchor entry in its devices that specifically gives trust to the hostile TAM.
 
-A new hostile TAM may be introduced if the Trust Anchor in a TEEP Agent is compromised.
+A new hostile TAM may be introduced if the Trust Anchor store in a TEEP Agent is compromised.
 See Section {{#trust-anchor-compromise}} above for Trust Anchor protection.
 
 ## Malicious TA Removal
