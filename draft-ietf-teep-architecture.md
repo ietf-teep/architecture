@@ -1360,7 +1360,7 @@ hostile TAM. A hostile TAM differs in intentionally conducting some abusive beha
 A Device Administrator may find out that the TAM it selected starts to become hostile
 or abusive. In this case, the Device Administrator can remove
 those TAs managed by that TAM from its devices, and stop trusting the TAM by
-changing its TA's TAM. It can switch to use another TAM that can deliver legitimate
+updating the TEEP Agent's trust anchor store to use another TAM that can deliver legitimate
 TAs it needs.
 
 A new hostile TAM may be introduced if the Trust Anchor store in a TEEP Agent is compromised.
