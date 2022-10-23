@@ -1343,7 +1343,7 @@ raising concern from the TAM's operator.
 To mitigate this threat, TEEP Agents and Device Owners have several options, 
 including but potentially not limited to those listed below, for detecting and mitigating a compromised TAM:
 
-1. Apply an ACL to the TAM key, indicating which TAs the TAM is permitted to install.
+1. Apply an ACL to the TAM key, limiting which Trusted Components the TAM is permitted to install or update.
 2. Use a transparency log to expose a TAM compromise: TAMs publish an 
 out-of-band record of Trusted Component releases, allowing a TEE to cross-check the Trusted Components
 delivered against the Trusted Component installs in order to detect a TAM compromise.
