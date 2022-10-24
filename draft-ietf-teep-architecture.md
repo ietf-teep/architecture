@@ -1302,7 +1302,7 @@ request. A TEEP Agent implementation is responsible for ensuring that it
 can recognize and decline such repeated requests. It is also responsible
 for protecting the resource usage allocated for Trusted Component management.
 
-## CA Compromise or Expiry of CA Certificate
+## CA Compromise or Expiry of CA Certificate {#trust-anchor-compromise}
 
 A root CA for TAM certificates might get compromised, or its certificate might
 expire, or a Trust Anchor other than a root CA certificate may also expire or
@@ -1340,24 +1340,26 @@ may need to be updated.
 
 ## Compromised TAM
 
-Device TEEs are responsible for validating the supplied TAM certificates
-to determine that the TAM is trustworthy. A compromised TAM can install
-arbitrary TAs to, potentially, many devices, which makes TAMs high value
-targets. An advanced, persistent threat actor could potentially compromise
-a TAM without impacting its certificate or raising concern from the TAM's
-operator. To mitigate this threat, TEEs have several options for 
-detecting and mitigating a compromised TAM:
+Device TEEs are responsible for validating the supplied TAM certificates.
+A compromised TAM may bring multiple threats 
+and damage to user devices that it can manage and thus to the Device Owners. 
+Information on devices that the TAM manages may be leaked to a bad actor.
+A compromised TAM can also install many TAs to launch a DoS attack on devices,
+for example, by filling up a device's TEE resources reserved for TAs such that 
+other TAs may not get resources to be installed or properly function. It may
+also install malicious TAs to potentially many devices under the condition that 
+it also has a Trusted Component signer key that is trusted by the TEEs.
+This makes TAMs high value targets. A TAM could be compromised without impacting its certificate or 
+raising concern from the TAM's operator.
 
-1. Apply an ACL to the TAM, indicating which TAs it is permitted to install.
-2. Use a transparency log to expose a TA compromise: TAMs publish an 
-out-of-band record of TA releases, allowing a TEE to cross-check the TAs
-delivered against the TA releases in order to detect a TAM compromise.
+To mitigate this threat, TEEP Agents and Device Owners have several options, 
+including but potentially not limited to those listed below, for detecting and mitigating a compromised TAM:
+
+1. Apply an ACL to the TAM key, limiting which Trusted Components the TAM is permitted to install or update.
+2. Use a transparency log to expose a TAM compromise: TAMs publish an 
+out-of-band record of Trusted Component releases, allowing a TEE to cross-check the Trusted Components
+delivered against the Trusted Component installs in order to detect a TAM compromise.
 3. Use remote attestation of the TAM to prove trustworthiness.
-
-While TAs are signed by the creator and delivered by the TAM, there is
-still a threat present in allowing a potentially compromised TAM to install
-any TA it wants; for example, a known-compromised TA or an explicitly
-malicious TA.
 
 ## Malicious TA Removal
 
@@ -1455,6 +1457,6 @@ This document does not require actions by IANA.
 
 # Acknowledgements
 
-We would like to thank Nick Cook, Minho Yoo, Brian Witten, Tyler Kim, Alin Mutu, Juergen Schoenwaelder, Nicolae Paladi, Sorin Faibish, Ned Smith, Russ Housley, Jeremy O'Donoghue, and Anders Rundgren for their feedback.
+We would like to thank Nick Cook, Minho Yoo, Brian Witten, Tyler Kim, Alin Mutu, Juergen Schoenwaelder, Nicolae Paladi, Sorin Faibish, Ned Smith, Russ Housley, Jeremy O'Donoghue, Anders Rundgren, and Brendan Moran for their feedback.
 
 --- back
