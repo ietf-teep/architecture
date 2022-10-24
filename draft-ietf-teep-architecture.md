@@ -680,7 +680,8 @@ Such cases include (possibly among others):
 
   5. Encrypted Personalization Data is bundled into a package distributed with the Untrusted
      Application, while the TA(s) and key material needed to decrypt and install the Personalization Data
-     are in a separate package provided by a TAM.
+     are in a separate package provided by a TAM. Personalization Data is encrypted with a key
+     unique to that specific TEE, as discussed in {{trustanchors}}.
 
 The TEEP protocol can treat each TA, any dependencies the TA has, and Personalization Data as
 separate Trusted Components with separate installation steps that are expressed in SUIT manifests,
@@ -866,7 +867,8 @@ and what their security requirements are.
 TEEP requests from a TAM to a TEEP Agent are signed with the TAM
 private key (for authentication and integrity protection). 
 Personalization Data and TA binaries can be encrypted with a key 
-that is established with a content-encryption key established with 
+unique that specific TEE,
+established with a content-encryption key established with 
 the TEE public key (to provide confidentiality). Conversely, 
 TEEP responses from a TEEP Agent to a TAM can be signed with the TEE 
 private key.
@@ -1016,7 +1018,7 @@ model A, the model with the smallest TEE footprint, only the TEEP implementation
 the TEE, whereas the TEEP/HTTP implementation is in the TEEP Broker outside the TEE.
 
 ~~~~
-                        Model:    A      B      C     ...
+                        Model:    A      B      C
 
                                  TEE    TEE    TEE
      +----------------+           |      |      |
