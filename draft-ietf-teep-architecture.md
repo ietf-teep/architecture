@@ -867,7 +867,7 @@ and what their security requirements are.
 TEEP requests from a TAM to a TEEP Agent are signed with the TAM
 private key (for authentication and integrity protection). 
 Personalization Data and TA binaries can be encrypted with a key 
-unique that specific TEE,
+unique to that specific TEE,
 established with a content-encryption key established with 
 the TEE public key (to provide confidentiality). Conversely, 
 TEEP responses from a TEEP Agent to a TAM can be signed with the TEE 
