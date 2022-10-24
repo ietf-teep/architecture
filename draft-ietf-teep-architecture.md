@@ -397,8 +397,8 @@ all components are further explained in the following paragraphs.
 
 ~~~~
    +---------------------------------------------+
-   | Device                                      |      Trusted Component
-   |                          +--------+         |                Signer
+   | Device                                      |       Trusted Component
+   |                          +--------+         |                 Signer
    |    +---------------+     |        |--------------+               |
    |    | TEE-1         |     | TEEP   |-----------+  |               |
    |    | +--------+    |  +--| Broker |         | |  |   +--------+  |
@@ -409,8 +409,8 @@ all components are further explained in the following paragraphs.
    |    | +----+ +----+ |                   | |  |      | TAM-2  |    |
    |  +-->|TA-1| |TA-2| |        +-------+  | |  |      +--------+    |
    |  | | |    | |    |<---------| UA-2  |--+ |  |                    |
-   |  | | +----+ +----+ |  +-------+     |    |  |    Device Administrator
-   |  | +---------------+  | UA-1  |     |    |  |
+   |  | | +----+ +----+ |  +-------+     |    |  |                 Device 
+   |  | +---------------+  | UA-1  |     |    |  |             Administrator
    |  |                    |       |     |    |  |
    |  +--------------------|       |-----+    |  |
    |                       |       |----------+  |
@@ -525,9 +525,9 @@ For brevity, TEEP Broker 2 is shown interacting with only one TAM and Untrusted 
 no such limitations are intended to be implied in the architecture.
 
 ~~~~
-   +-------------------------------------------+            Trusted
-   | Device                                    |          Component
-   |                                           |             Signer
+   +-------------------------------------------+            
+   | Device                                    |     Trusted Component
+   |                                           |               Signer     
    |    +---------------+                      |                  |
    |    | TEE-1         |                      |                  |
    |    | +-------+     |     +--------+       |      +--------+  |
@@ -536,7 +536,7 @@ no such limitations are intended to be implied in the architecture.
    |    | | 1     |     |     | 1      |---------+    |        |
    |    | +-------+     |     |        |       | |    |        |
    |    |               |     |        |<---+  | |    |        |
-   |    | +----+ +----+ |     |        |    |  | |  +-|  TAM-1 |Policy
+   |    | +----+ +----+ |     |        |    |  | |  +-|  TAM-1 | Policy
    |    | |TA-1| |TA-2| |     |        |<-+ |  | +->| |        |<-+
    |  +-->|    | |    |<---+  +--------+  | |  |    | +--------+  |
    |  | | +----+ +----+ |  |              | |  |    | TAM-2  |    |
