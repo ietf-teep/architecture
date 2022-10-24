@@ -1328,8 +1328,8 @@ may need to be updated.
 
 ## Compromised TAM
 
-Device TEEs are responsible for validating the supplied TAM certificates
-. A compromised TAM may bring multiple threats 
+Device TEEs are responsible for validating the supplied TAM certificates.
+A compromised TAM may bring multiple threats 
 and damage to user devices that it can manage and thus to the Device Owners. 
 Information on devices that the TAM manages may be leaked to a bad actor.
 A compromised TAM can also install many TAs to launch a DoS attack on devices,
